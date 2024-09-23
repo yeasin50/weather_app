@@ -1,10 +1,31 @@
 import 'package:flutter/material.dart';
+import 'package:weather_app/gen/assets.gen.dart';
 
 enum WeatherMood {
   midRain,
   fastWind,
   showers,
   tornado;
+}
+
+extension WeatherMoodExt on WeatherMood {
+  String get imagePath {
+    return switch (this) {
+      WeatherMood.midRain => Assets.images.sunCloudRain.path,
+      WeatherMood.fastWind => Assets.images.moonCloudFastRain.path,
+      WeatherMood.showers => Assets.images.sunCloudAngelRain.path,
+      WeatherMood.tornado => Assets.images.tornado.path,
+    };
+  }
+
+  String get label {
+    return switch (this) {
+      WeatherMood.midRain => "Mind Rain",
+      WeatherMood.fastWind => "Fast Wind",
+      WeatherMood.showers => "Showers",
+      WeatherMood.tornado => "Tornado",
+    };
+  }
 }
 
 class WeatherCard extends StatelessWidget {
@@ -28,33 +49,67 @@ class WeatherCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
 
+    debugPrint("path  ${mode.imagePath}");
+
     return AspectRatio(
       aspectRatio: 342 / 148,
       child: CustomPaint(
         painter: WeatherCardShape(),
-        child: Row(
-          children: [
-            Expanded(
-              child: Column(
-                children: [
-                  Text(
-                    temp.toStringAsFixed(0),
-                    style: textTheme.headlineLarge,
-                  ),
-                  const SizedBox(height: 24),
-                  Text("H:$humidity L:$rain")
-                ],
+        child: Padding(
+          padding: const EdgeInsets.only(bottom: 24.0),
+          child: Row(
+            children: [
+              const SizedBox(width: 24),
+              Expanded(
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Text(
+                      "${temp.toStringAsFixed(0)}\u00B0",
+                      style: textTheme.displayMedium?.copyWith(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      "H:$humidity\u00B0 L:$rain\u00B0",
+                      style: textTheme.bodyMedium?.copyWith(
+                        color: Colors.white60,
+                      ),
+                    ),
+                    Text(
+                      location,
+                      style: textTheme.titleMedium?.copyWith(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-            const Expanded(
-              child: Column(
-                children: [
-                  Expanded(child: Placeholder()),
-                  Text("midRain"),
-                ],
-              ),
-            )
-          ],
+              Expanded(
+                child: Column(
+                  children: [
+                    Expanded(
+                      child: Image.asset(
+                        mode.imagePath,
+                        fit: BoxFit.contain,
+                      ),
+                    ),
+                    Text(
+                      mode.label,
+                      style: textTheme.bodyMedium?.copyWith(
+                        color: Colors.white,
+                      ),
+                    ),
+                  ],
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );
@@ -64,8 +119,6 @@ class WeatherCard extends StatelessWidget {
 class WeatherCardShape extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
-    //left  5936B4 , right 362A84
-
     final Path path = Path();
 
     final double radiusGap = size.height / 10;
@@ -75,9 +128,12 @@ class WeatherCardShape extends CustomPainter {
           Color(0xFF5936B4),
           Color(0xFF362A84),
         ],
+        stops: [0, 1],
         begin: Alignment(-1, .5),
         end: Alignment(1, .5),
-      ).createShader(Rect.largest);
+      ).createShader(
+        Rect.fromLTWH(0, 0, size.width, size.height),
+      );
 
     path
       ..moveTo(0, size.height - radiusGap) //bottomLeft
