@@ -24,7 +24,7 @@ class ForecastRowTile extends StatelessWidget {
     final textTheme = Theme.of(context).textTheme;
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 4),
+      padding: const EdgeInsets.symmetric(horizontal: 6),
       child: DecoratedBox(
         decoration: ShapeDecoration(
           color: isActive ? const Color(0xFF48319D) : const Color.fromRGBO(72, 49, 157, .2),
@@ -35,7 +35,7 @@ class ForecastRowTile extends StatelessWidget {
           ),
         ),
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 12),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
@@ -43,10 +43,7 @@ class ForecastRowTile extends StatelessWidget {
                 label,
                 style: textTheme.titleLarge,
               ),
-              Image.asset(
-                mood.imagePath,
-                width: 48,
-              ),
+              Image.asset(mood.imagePath, width: 48),
               Text(
                 "$temp\u00B0",
                 style: textTheme.titleLarge,

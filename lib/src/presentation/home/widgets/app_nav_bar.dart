@@ -5,14 +5,14 @@ import 'package:flutter_svg/flutter_svg.dart';
 class AppNavBar extends StatelessWidget {
   const AppNavBar({
     super.key,
-    required this.onTap, 
+    required this.onTap,
   });
 
   final ValueChanged<int> onTap;
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 120,
+      height: 85,
       child: DecoratedBox(
         decoration: ShapeDecoration(
           shape: BottomAppBarShape(),

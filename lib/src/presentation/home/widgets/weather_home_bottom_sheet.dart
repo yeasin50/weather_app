@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 
 import '../../widgets/weather_card_view.dart';
@@ -14,7 +13,7 @@ class HomeWeatherBottomSheet extends StatelessWidget {
     return SingleChildScrollView(
       child: Column(
         children: [
-          SizedBox(height: height * .55),
+          SizedBox(height: height * .6),
           const _ForecastView(),
         ],
       ),
@@ -66,7 +65,7 @@ class _ForecastViewState extends State<_ForecastView> {
               widthFactor: .25,
               child: Divider(),
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: 16),
             Row(
               children: [
                 Expanded(
@@ -96,12 +95,12 @@ class _ForecastViewState extends State<_ForecastView> {
                 ),
               ],
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: 16),
             IndexedStack(
               index: isHourlyForecastTab ? 0 : 1,
               children: [
                 SizedBox(
-                  height: 200,
+                  height: 172,
                   child: ScrollConfiguration(
                     behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
                     child: SingleChildScrollView(
@@ -120,7 +119,7 @@ class _ForecastViewState extends State<_ForecastView> {
                   ),
                 ),
                 SizedBox(
-                  height: 200,
+                  height: 172,
                   child: ScrollConfiguration(
                     behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
                     child: SingleChildScrollView(

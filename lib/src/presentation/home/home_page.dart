@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:weather_app/src/app/route_config.dart';
 import 'package:weather_app/src/presentation/home/widgets/app_nav_bar.dart';
+import 'package:weather_app/src/presentation/saved_city/widgets/saved_city_appbar.dart';
 
 import '../../domain/domain.dart';
 import '../widgets/gradient_background.dart';
@@ -16,7 +19,12 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   List<MetroApiResponse> items = [];
 
-  void onTabChange(int index) {}
+  void onTabChange(int index) {
+    if (index == 2) {
+      context.push(AppRoute.savedPage);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,28 +39,22 @@ class _HomePageState extends State<HomePage> {
         children: [
           const GradientBackground(isImage: true, child: SizedBox.expand()),
           Align(
-            alignment: const Alignment(0, -.45),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                const TodaysWeather(
-                  temp: 33,
-                  humidity: 23,
-                  rain: 12,
-                  location: "location",
-                  mood: "mode",
-                ),
-                Align(
-                  child: FractionallySizedBox(
-                    widthFactor: .75,
-                    child: Image.asset(
-                      "assets/images/house.png",
-                      fit: BoxFit.fitWidth,
-                    ),
-                  ),
-                ),
-              ],
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 450),
+              child: Image.asset(
+                "assets/images/house.png",
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
+          const Align(
+            alignment: Alignment(0, -.75),
+            child: TodaysWeather(
+              temp: 33,
+              humidity: 23,
+              rain: 12,
+              location: "location",
+              mood: "mode",
             ),
           ),
           const Align(
