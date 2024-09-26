@@ -14,9 +14,9 @@ class MetroApiResponse {
   final String timeZone;
   final String timeZoneAbbreviation;
 
-  final HourlyData hourlyData;
+  final HourlyData? hourlyData;
 
-  final Daily daily;
+  final Daily? daily;
 
   factory MetroApiResponse.fromMap(Map<String, dynamic> map) {
     return MetroApiResponse(
@@ -24,8 +24,10 @@ class MetroApiResponse {
       longitude: map['longitude']?.toDouble() ?? 0.0,
       timeZone: map['timeZone'] ?? '',
       timeZoneAbbreviation: map['timezone_abbreviation'] ?? '',
-      hourlyData: HourlyData.fromMap(map['hourly']),
-      daily: Daily.fromMap(map['daily']),
+      hourlyData: null,
+      // : HourlyData.fromMap(map['hourly']),
+      daily: null,
+      // Daily.fromMap(map['daily']),
     );
   }
 }

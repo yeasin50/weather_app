@@ -18,7 +18,7 @@ class CityInfo {
       latitude: map['latitude']?.toDouble() ?? 0.0,
       longitude: map['longitude']?.toDouble() ?? 0.0,
       name: map['name'] ?? '',
-      country: map['country	'] ?? "",
+      country: map['country'] ?? "",
       countryCode: map['country_code'] ?? "",
     );
   }

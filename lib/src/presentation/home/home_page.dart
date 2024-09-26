@@ -22,6 +22,8 @@ class _HomePageState extends State<HomePage> {
   void onTabChange(int index) {
     if (index == 2) {
       context.push(AppRoute.savedPage);
+    } else if (index == 0) {
+      context.push(AppRoute.searchCity);
     }
   }
 

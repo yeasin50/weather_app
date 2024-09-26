@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:weather_app/src/app/route_config.dart';
 
 import '../../../domain/entity/city_info.dart';
 
@@ -13,7 +15,11 @@ class SearchedCityTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      title: Text("${cityInfo.name},${cityInfo.country}"),
+      onTap: () {
+        context.push(AppRoute.cityWeatherDetails, extra: cityInfo);
+      },
+      title: Text("${cityInfo.name}, ${cityInfo.countryCode}"),
+      subtitle: Text("Lat:${cityInfo.latitude} Lon:${cityInfo.longitude}, ${cityInfo.country}"),
     );
   }
 }
