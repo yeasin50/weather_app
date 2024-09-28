@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 import '../../../infrastructure/infrastructure.dart';
-import 'hourly_forecast_tile.dart';
+import 'forecast_horizontal_listview.dart';
+import 'forecast_list_tile.dart';
 
 class HomeWeatherBottomSheet extends StatelessWidget {
   const HomeWeatherBottomSheet({
@@ -118,41 +119,11 @@ class _ForecastViewState extends State<_ForecastView> {
             IndexedStack(
               index: isHourlyForecastTab ? 0 : 1,
               children: [
-                SizedBox(
-                  height: 172,
-                  child: ScrollConfiguration(
-                    behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
-                    child: SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: Row(
-                        children: [
-                          for (int i = 0; i < hourlyForecast.length; i++)
-                            ForecastRowTile(
-                              label: "${hourlyForecast[i].date.hour}",
-                              info: hourlyForecast.elementAt(i),
-                            ),
-                        ],
-                      ),
-                    ),
-                  ),
+                ForecastHorizontalListview.hourly(
+                  data: hourlyForecast,
                 ),
-                SizedBox(
-                  height: 172,
-                  child: ScrollConfiguration(
-                    behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
-                    child: SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: Row(
-                        children: [
-                          for (int i = 0; i < weeklyForecast.length; i++)
-                            ForecastRowTile(
-                              label: weeklyForecast.elementAt(i).date.day.toString(),
-                              info: weeklyForecast.elementAt(i),
-                            ),
-                        ],
-                      ),
-                    ),
-                  ),
+                ForecastHorizontalListview.weekly(
+                  data: weeklyForecast,
                 ),
               ],
             ),

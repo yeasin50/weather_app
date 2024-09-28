@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import '../../../infrastructure/infrastructure.dart';
 
-class ForecastRowTile extends StatelessWidget {
-  const ForecastRowTile({
+class ForecastListTile extends StatelessWidget {
+  const ForecastListTile({
     super.key,
     required this.label,
     required this.info,
@@ -17,9 +17,6 @@ class ForecastRowTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // final bool isNow = time.hour == DateTime.now().hour;
-    // String hour = isNow ? "Now" : time.hour.toString();
-
     final textTheme = Theme.of(context).textTheme;
 
     return Padding(
@@ -34,7 +31,7 @@ class ForecastRowTile extends StatelessWidget {
           ),
         ),
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 12),
+          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 16),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
@@ -42,7 +39,9 @@ class ForecastRowTile extends StatelessWidget {
                 label,
                 style: textTheme.titleLarge,
               ),
+              const SizedBox(height: 8),
               Image.asset(info.mood.imagePath, width: 48),
+              const SizedBox(height: 8),
               Text(
                 " ${info.temperature.toStringAsFixed(0)}\u00B0",
                 style: textTheme.titleLarge,
