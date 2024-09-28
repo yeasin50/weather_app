@@ -1,20 +1,10 @@
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
+import 'package:http/http.dart' as http;
 
 import '../../domain/domain.dart';
 
-import 'package:http/http.dart' as http;
-
-class MetroWeatherPayload {
-  const MetroWeatherPayload({
-    required this.latitude,
-    required this.longitude,
-  });
-
-  final double latitude;
-  final double longitude;
-}
 
 class MetroWeatherRepo {
   final uri = Uri(
@@ -27,14 +17,7 @@ class MetroWeatherRepo {
     try {
       final url = uri.replace(
         path: "/v1/forecast",
-        queryParameters: {
-          "latitude": payload.latitude.toString(),
-          "longitude": payload.longitude.toString(),
-          "hourly": "temperature_2m",
-          "daily": "sunrise",
-          "timezone": "Asia/Singapore",
-          "past_days": "1"
-        },
+        queryParameters: payload.toMap(),
       );
 
       final response = await http.get(url);

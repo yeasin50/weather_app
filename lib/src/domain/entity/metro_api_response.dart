@@ -24,10 +24,8 @@ class MetroApiResponse {
       longitude: map['longitude']?.toDouble() ?? 0.0,
       timeZone: map['timeZone'] ?? '',
       timeZoneAbbreviation: map['timezone_abbreviation'] ?? '',
-      hourlyData: null,
-      // : HourlyData.fromMap(map['hourly']),
-      daily: null,
-      // Daily.fromMap(map['daily']),
+      hourlyData: HourlyData.fromMap(map['hourly']),
+      daily: Daily.fromMap(map['daily']),
     );
   }
 }

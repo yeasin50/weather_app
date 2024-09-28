@@ -1,10 +1,17 @@
 import 'package:flutter/material.dart';
 
-import '../../widgets/weather_card_view.dart';
+import '../../../infrastructure/infrastructure.dart';
 import 'hourly_forecast_tile.dart';
 
 class HomeWeatherBottomSheet extends StatelessWidget {
-  const HomeWeatherBottomSheet({super.key});
+  const HomeWeatherBottomSheet({
+    super.key,
+    required this.hourlyForecast,
+    required this.weeklyForecast,
+  });
+
+  final List<HourlyWeatherInfo> hourlyForecast;
+  final List<HourlyWeatherInfo> weeklyForecast;
 
   @override
   Widget build(BuildContext context) {
@@ -31,6 +38,17 @@ class _ForecastView extends StatefulWidget {
 class _ForecastViewState extends State<_ForecastView> {
   bool isHourlyForecastTab = true;
 
+  List<HourlyWeatherInfo> get hourlyForecast =>
+      context.findAncestorWidgetOfExactType<HomeWeatherBottomSheet>()?.hourlyForecast ?? [];
+
+  List<HourlyWeatherInfo> get weeklyForecast =>
+      context.findAncestorWidgetOfExactType<HomeWeatherBottomSheet>()?.weeklyForecast ?? [];
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     final activeTabStyle = TextButton.styleFrom(
@@ -42,21 +60,22 @@ class _ForecastViewState extends State<_ForecastView> {
       ),
     );
 
-    return DecoratedBox(
-      decoration: const BoxDecoration(
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(16),
-          topRight: Radius.circular(16),
-        ),
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [
-            Color.fromRGBO(46, 51, 90, .52),
-            Color.fromRGBO(28, 27, 51, .52),
-          ],
-        ),
+    const decoration = BoxDecoration(
+      borderRadius: BorderRadius.only(
+        topLeft: Radius.circular(16),
+        topRight: Radius.circular(16),
       ),
+      gradient: LinearGradient(
+        begin: Alignment.topLeft,
+        end: Alignment.bottomRight,
+        colors: [
+          Color.fromRGBO(46, 51, 90, .52),
+          Color.fromRGBO(28, 27, 51, .52),
+        ],
+      ),
+    );
+    return DecoratedBox(
+      decoration: decoration,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 12),
         child: Column(
@@ -107,11 +126,10 @@ class _ForecastViewState extends State<_ForecastView> {
                       scrollDirection: Axis.horizontal,
                       child: Row(
                         children: [
-                          for (int i = -1; i < 6; i++)
-                            const ForecastRowTile(
-                              label: "12",
-                              mood: WeatherMood.midRain,
-                              temp: 12,
+                          for (int i = 0; i < hourlyForecast.length; i++)
+                            ForecastRowTile(
+                              label: "${hourlyForecast[i].date.hour}",
+                              info: hourlyForecast.elementAt(i),
                             ),
                         ],
                       ),
@@ -126,11 +144,10 @@ class _ForecastViewState extends State<_ForecastView> {
                       scrollDirection: Axis.horizontal,
                       child: Row(
                         children: [
-                          for (int i = -1; i < 6; i++)
-                            const ForecastRowTile(
-                              label: "Sun",
-                              mood: WeatherMood.midRain,
-                              temp: 12,
+                          for (int i = 0; i < weeklyForecast.length; i++)
+                            ForecastRowTile(
+                              label: "12",
+                              info: weeklyForecast.elementAt(i),
                             ),
                         ],
                       ),

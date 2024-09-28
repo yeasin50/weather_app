@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:weather_app/src/infrastructure/repository/metro_weather_repo.dart';
-import '../../domain/domain.dart';
-import '../widgets/gradient_background.dart';
 
+import '../../domain/domain.dart';
+import '../../infrastructure/repository/metro_weather_repo.dart';
 import '../home/widgets/todays_weather_card.dart';
+import '../widgets/gradient_background.dart';
 
 class CityWeatherPage extends StatefulWidget {
   const CityWeatherPage({
@@ -19,7 +19,7 @@ class CityWeatherPage extends StatefulWidget {
 class _CityWeatherPageState extends State<CityWeatherPage> {
   final weatherRepo = MetroWeatherRepo();
 
-  late (MetroApiResponse?, String?)? result = null;
+  late (MetroApiResponse?, String?)? result;
 
   @override
   void initState() {
@@ -27,7 +27,9 @@ class _CityWeatherPageState extends State<CityWeatherPage> {
     final payload = MetroWeatherPayload(
       latitude: widget.city.latitude,
       longitude: widget.city.longitude,
+      hourlyItems: HourlyItem.defaultItems,
     );
+    debugPrint("payload ${payload.toString()}");
     weatherRepo.fetchWeather(payload).then(
           (value) => setState(
             () {
@@ -38,6 +40,7 @@ class _CityWeatherPageState extends State<CityWeatherPage> {
   }
 
   String get location => widget.city.name;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -46,7 +49,7 @@ class _CityWeatherPageState extends State<CityWeatherPage> {
         child: ListView(
           children: [
             if (result == null)
-              const CircularProgressIndicator() //
+              const Center(child: CircularProgressIndicator()) //
             else if (result!.$2 != null)
               Text("${result!.$2}")
             else

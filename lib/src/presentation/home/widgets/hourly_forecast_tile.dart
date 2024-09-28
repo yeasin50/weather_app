@@ -1,19 +1,18 @@
 import 'package:flutter/material.dart';
-import '../../widgets/weather_card_view.dart';
+import '../../../infrastructure/infrastructure.dart';
 
 class ForecastRowTile extends StatelessWidget {
   const ForecastRowTile({
     super.key,
     required this.label,
-    required this.mood,
-    required this.temp,
+    required this.info,
     this.isActive = false,
   });
 
   /// dayName / hour/ now
   final String label;
-  final WeatherMood mood;
-  final int temp;
+  final HourlyWeatherInfo info;
+
   final bool isActive;
 
   @override
@@ -43,9 +42,9 @@ class ForecastRowTile extends StatelessWidget {
                 label,
                 style: textTheme.titleLarge,
               ),
-              Image.asset(mood.imagePath, width: 48),
+              Image.asset(info.mood.imagePath, width: 48),
               Text(
-                "$temp\u00B0",
+                " ${info.temperature.toStringAsFixed(0)}\u00B0",
                 style: textTheme.titleLarge,
               )
             ],
