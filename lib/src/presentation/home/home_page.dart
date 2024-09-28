@@ -83,6 +83,7 @@ class _HomePageState extends State<HomePage> {
           Align(
             alignment: Alignment.bottomCenter,
             child: HomeWeatherBottomSheet(
+              key: ValueKey(weatherData?.hourlyData?.time.first),
               hourlyForecast: weatherData?.todaysHourlyForecast ?? [],
               weeklyForecast: weatherData?.weeklyForecast ?? [],
             ),

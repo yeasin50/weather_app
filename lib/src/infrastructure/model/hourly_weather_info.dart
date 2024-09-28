@@ -32,4 +32,18 @@ class HourlyWeatherInfo {
   WeatherMood get mood {
     return WeatherMood.fastWind;
   }
+
+  HourlyWeatherInfo copyWith({
+    DateTime? date,
+    double? temperature,
+    int? humidity,
+    double? rain,
+  }) {
+    return HourlyWeatherInfo(
+      date: date ?? this.date,
+      temperature: temperature ?? this.temperature,
+      humidity: humidity ?? this.humidity,
+      rain: rain ?? this.rain,
+    );
+  }
 }

@@ -146,7 +146,7 @@ class _ForecastViewState extends State<_ForecastView> {
                         children: [
                           for (int i = 0; i < weeklyForecast.length; i++)
                             ForecastRowTile(
-                              label: "12",
+                              label: weeklyForecast.elementAt(i).date.day.toString(),
                               info: weeklyForecast.elementAt(i),
                             ),
                         ],

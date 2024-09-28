@@ -1,5 +1,4 @@
 import '../../domain/domain.dart';
-import 'weather_mood.dart';
 
 import '../model/hourly_weather_info.dart';
 
@@ -21,16 +20,18 @@ extension MetroApiResponseExt on MetroApiResponse {
   List<HourlyWeatherInfo> get todaysHourlyForecast {
     final today = DateTime.now();
 
-    final result = List.generate(
-      24,
-      (index) => getWeather(today..copyWith(hour: index)) ?? HourlyWeatherInfo.none,
-    );
+    final result = List.generate(24, (index) {
+      final date = today.copyWith(hour: index);
+      return getWeather(date) ?? HourlyWeatherInfo.none;
+    });
 
     return result;
   }
 
   List<HourlyWeatherInfo> get weeklyForecast {
-    if (hourlyData != null) return [];
+    if (hourlyData == null) return [];
+
+    assert(hourlyData!.time.isNotEmpty, "time can't be empty for weeklyForecast");
 
     /// <day, data>
     final Map<int, HourlyWeatherInfo> result = {};
@@ -47,9 +48,18 @@ extension MetroApiResponseExt on MetroApiResponse {
       if (result.containsKey(day)) {
         result[day] = result[day]! + data;
       } else {
-        result[day] = data;
+        result.putIfAbsent(day, () => data);
       }
     }
-    return result.values.toList();
+
+    return result.values
+        .map(
+          (e) => e.copyWith(
+            humidity: e.humidity ~/ 24,
+            rain: e.rain / 24,
+            temperature: e.temperature / 24,
+          ),
+        )
+        .toList();
   }
 }
