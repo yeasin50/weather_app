@@ -1,9 +1,9 @@
 import 'package:go_router/go_router.dart';
-import 'package:weather_app/src/domain/domain.dart';
-import 'package:weather_app/src/presentation/home/home_page.dart';
-import 'package:weather_app/src/presentation/saved_city/saved_city_page.dart';
-import 'package:weather_app/src/presentation/search_city/city_weather_page.dart';
-import 'package:weather_app/src/presentation/search_city/search_city_page.dart';
+import '../domain/domain.dart';
+import '../presentation/home/home_page.dart';
+import '../presentation/saved_city/saved_city_page.dart';
+import '../presentation/search_city/city_weather_page.dart';
+import '../presentation/search_city/search_city_page.dart';
 
 class AppRoute {
   static const String home = '/';
@@ -13,7 +13,7 @@ class AppRoute {
 
   static GoRouter routeConfig() {
     return GoRouter(
-      initialLocation: home,
+      initialLocation: cityWeatherDetails,
       routes: [
         GoRoute(
           path: home,
@@ -30,7 +30,8 @@ class AppRoute {
         GoRoute(
           path: cityWeatherDetails,
           builder: (context, state) => CityWeatherPage(
-            city: state.extra as CityInfo,
+            // city: state.extra as CityInfo,
+            city: CityInfo(latitude: 12.3, longitude: 34.3, name: "name", country: "country", countryCode: "DB"),
           ),
         ),
       ],

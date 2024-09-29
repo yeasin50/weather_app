@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:weather_app/src/presentation/search_city/widgets/searched_city_details_view.dart';
 
 import '../../domain/domain.dart';
 import '../../infrastructure/repository/metro_weather_repo.dart';
@@ -19,25 +20,17 @@ class CityWeatherPage extends StatefulWidget {
 class _CityWeatherPageState extends State<CityWeatherPage> {
   final weatherRepo = MetroWeatherRepo();
 
-  late (MetroApiResponse?, String?)? result;
-
-  @override
-  void initState() {
-    super.initState();
+  Future<(MetroApiResponse?, String?)?> _loadData() async {
     final payload = MetroWeatherPayload(
       latitude: widget.city.latitude,
       longitude: widget.city.longitude,
       hourlyItems: HourlyItem.defaultItems,
     );
     debugPrint("payload ${payload.toString()}");
-    weatherRepo.fetchWeather(payload).then(
-          (value) => setState(
-            () {
-              result = value;
-            },
-          ),
-        );
+    return await weatherRepo.fetchWeather(payload);
   }
+
+  late Future<(MetroApiResponse?, String?)?> future = _loadData();
 
   String get location => widget.city.name;
 
@@ -46,26 +39,34 @@ class _CityWeatherPageState extends State<CityWeatherPage> {
     return Scaffold(
       body: GradientBackground(
         isImage: false,
-        child: ListView(
-          children: [
-            if (result == null)
-              const Center(child: CircularProgressIndicator()) //
-            else if (result!.$2 != null)
-              Text("${result!.$2}")
-            else
-              Column(
-                children: [
-                  TodaysWeather(
-                    temp: 33,
-                    humidity: 23,
-                    rain: 12,
-                    location: location,
-                    mood: "mode",
-                  ),
-                  Text("${result!.$1!.timeZone}")
-                ],
-              ),
-          ],
+        child: FutureBuilder(
+          future: future,
+          builder: (context, snapshot) {
+            if (snapshot.hasError) {
+              return Text("${snapshot.error.toString()}");
+            }
+
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+
+            if (snapshot.hasData == true) {
+              final result = snapshot.data!;
+
+              if (result.$2 != null || result.$1 == null) return Text(result.$2?.toString() ?? "something went wrong");
+
+              return SearchedCityDetailsView(
+                data: result.$1!,
+                cityInfo: widget.city,
+              );
+            }
+
+            return const Center(
+              child: Text("Ugh..Na state"),
+            );
+          },
         ),
       ),
     );

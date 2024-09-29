@@ -16,6 +16,7 @@ class WeatherApp extends StatelessWidget {
       darkTheme: ThemeData.dark(),
       scrollBehavior: ScrollBehavior().copyWith(dragDevices: {
         PointerDeviceKind.mouse,
+        PointerDeviceKind.touch,
       }),
     );
   }

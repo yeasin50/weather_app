@@ -71,15 +71,15 @@ class _SearchCityPageState extends State<SearchCityPage> {
                     ),
                   );
                 }
-
+                final items = snapshot.data ?? [];
                 return SliverPadding(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   sliver: SliverList.builder(
-                    itemCount: snapshot.data?.length,
+                    itemCount: items.length,
                     itemBuilder: (context, index) => SearchedCityTile(
-                      cityInfo: snapshot.data![index],
+                      cityInfo: items[index],
                       onTap: () {
-                        context.push(AppRoute.cityWeatherDetails, extra: snapshot.data![index]);
+                        context.push(AppRoute.cityWeatherDetails, extra: items[index]);
                       },
                     ),
                   ),

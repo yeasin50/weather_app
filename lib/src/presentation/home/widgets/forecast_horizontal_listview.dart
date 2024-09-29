@@ -34,10 +34,6 @@ class _ForecastHorizontalListviewState extends State<ForecastHorizontalListview>
 
   void moveToIndex() {
     final time = DateTime.now();
-
-    
-     
-      
   }
 
   @override
