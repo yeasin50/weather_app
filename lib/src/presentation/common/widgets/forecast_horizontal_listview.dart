@@ -14,7 +14,8 @@ class ForecastHorizontalListview extends StatefulWidget {
 
   const ForecastHorizontalListview.hourly({
     super.key,
-    required this.data,this.padding,
+    required this.data,
+    this.padding,
   }) : isHourly = true;
 
   const ForecastHorizontalListview.weekly({
@@ -39,11 +40,14 @@ class _ForecastHorizontalListviewState extends State<ForecastHorizontalListview>
   List<GlobalKey> tileKeys = [];
   final ScrollController controller = ScrollController();
 
+  int? activeIndex;
+
   @override
   void initState() {
     super.initState();
     tileKeys = List.generate(widget.data.length, (_) => GlobalKey());
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (tileKeys.isEmpty) return;
       int index = 0;
       final today = DateTime.now();
       if (widget.isHourly) {
@@ -53,6 +57,9 @@ class _ForecastHorizontalListviewState extends State<ForecastHorizontalListview>
           (element) => element.date.day == today.day,
         );
       }
+      setState(() {
+        activeIndex = index;
+      });
       moveToIndex(index);
     });
   }
@@ -85,6 +92,7 @@ class _ForecastHorizontalListviewState extends State<ForecastHorizontalListview>
           children: [
             for (int i = 0; i < widget.data.length; i++)
               ForecastListTile(
+                isActive: activeIndex == i,
                 key: tileKeys.elementAt(i),
                 label: label(i),
                 info: widget.data.elementAt(i),

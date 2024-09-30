@@ -13,7 +13,7 @@ class AppRoute {
 
   static GoRouter routeConfig() {
     return GoRouter(
-      initialLocation: cityWeatherDetails,
+      initialLocation: home,
       routes: [
         GoRoute(
           path: home,
@@ -30,8 +30,8 @@ class AppRoute {
         GoRoute(
           path: cityWeatherDetails,
           builder: (context, state) => CityWeatherPage(
-            // city: state.extra as CityInfo,
-            city: CityInfo(latitude: 12.3, longitude: 34.3, name: "name", country: "country", countryCode: "DB"),
+            city: state.extra as CityInfo,
+            // city: CityInfo(latitude: 12.3, longitude: 34.3, name: "name", country: "country", countryCode: "DB"),
           ),
         ),
       ],
