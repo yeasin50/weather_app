@@ -9,21 +9,25 @@ class ForecastHorizontalListview extends StatefulWidget {
     super.key,
     required this.data,
     required this.isHourly,
+    this.padding,
   });
 
   const ForecastHorizontalListview.hourly({
     super.key,
-    required this.data,
+    required this.data,this.padding,
   }) : isHourly = true;
 
   const ForecastHorizontalListview.weekly({
     super.key,
     required this.data,
+    this.padding,
   }) : isHourly = false;
 
   /// handle hour/weekly preview
   final bool isHourly;
   final List<HourlyWeatherInfo> data;
+
+  final EdgeInsets? padding;
 
   @override
   State<ForecastHorizontalListview> createState() => _ForecastHorizontalListviewState();
@@ -76,6 +80,7 @@ class _ForecastHorizontalListviewState extends State<ForecastHorizontalListview>
       child: SingleChildScrollView(
         controller: controller,
         scrollDirection: Axis.horizontal,
+        padding: widget.padding,
         child: Row(
           children: [
             for (int i = 0; i < widget.data.length; i++)

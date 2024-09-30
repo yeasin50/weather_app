@@ -33,6 +33,8 @@ class _SearchedCityDetailsViewState extends State<SearchedCityDetailsView> {
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
 
+    final padding = EdgeInsets.only(left: 16);
+
     return ListView(
       padding: EdgeInsets.only(top: 36),
       children: [
@@ -44,37 +46,45 @@ class _SearchedCityDetailsViewState extends State<SearchedCityDetailsView> {
           mood: todayWeather.mood.label,
         ),
         const SizedBox(height: 32),
-        Text(
-          "Today's Weather ",
-          style: textTheme.titleMedium,
+        Padding(
+          padding: padding,
+          child: Text(
+            "Today's Weather ",
+            style: textTheme.titleMedium,
+          ),
         ),
         const SizedBox(height: 12),
         ForecastHorizontalListview.hourly(
+          padding: padding,
           data: weatherData.todaysHourlyForecast,
         ),
         const SizedBox(height: 24),
-        Text(
-          "This week weather",
-          style: textTheme.titleMedium,
+        Padding(
+          padding: padding,
+          child: Text(
+            "This week weather",
+            style: textTheme.titleMedium,
+          ),
         ),
         const SizedBox(height: 12),
         ForecastHorizontalListview.weekly(
+          padding: padding,
           data: weatherData.weeklyForecast,
         ),
         const SizedBox(height: 24),
         Align(
           child: ElevatedButton.icon(
-            icon: Icon(Icons.add),
+            icon: const Icon(Icons.add),
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.white,
               foregroundColor: Colors.black,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
               ),
-              fixedSize: Size(164, 48),
+              fixedSize: const Size(164, 48),
             ),
             onPressed: () {},
-            label: Text("Save"),
+            label: const Text("Save"),
           ),
         )
       ],
