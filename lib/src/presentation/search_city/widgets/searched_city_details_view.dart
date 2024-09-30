@@ -3,9 +3,9 @@ import 'package:weather_app/src/domain/domain.dart';
 import 'package:weather_app/src/infrastructure/extension/metro_api_response_ext.dart';
 import 'package:weather_app/src/infrastructure/infrastructure.dart';
 
-import '../../home/widgets/forecast_horizontal_listview.dart';
-import '../../home/widgets/hourly_weekly_forecast_view.dart';
-import '../../home/widgets/todays_weather_card.dart';
+import '../../common/widgets/forecast_horizontal_listview.dart';
+import '../../common/widgets/hourly_weekly_forecast_view.dart';
+import '../../common/widgets/todays_weather_card.dart';
 import '../../home/widgets/weather_home_bottom_sheet.dart';
 
 class SearchedCityDetailsView extends StatefulWidget {

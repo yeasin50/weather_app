@@ -6,7 +6,7 @@ import 'widgets/app_nav_bar.dart';
 
 import '../../domain/domain.dart';
 import '../widgets/gradient_background.dart';
-import 'widgets/todays_weather_card.dart';
+import '../common/widgets/todays_weather_card.dart';
 import 'widgets/weather_home_bottom_sheet.dart';
 
 class HomePage extends StatefulWidget {

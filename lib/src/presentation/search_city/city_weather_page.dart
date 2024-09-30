@@ -3,7 +3,7 @@ import 'package:weather_app/src/presentation/search_city/widgets/searched_city_d
 
 import '../../domain/domain.dart';
 import '../../infrastructure/repository/metro_weather_repo.dart';
-import '../home/widgets/todays_weather_card.dart';
+import '../common/widgets/todays_weather_card.dart';
 import '../widgets/gradient_background.dart';
 
 class CityWeatherPage extends StatefulWidget {

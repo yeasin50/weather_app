@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../infrastructure/infrastructure.dart';
 
-import 'hourly_weekly_forecast_view.dart';
+import '../../common/widgets/hourly_weekly_forecast_view.dart';
 
 class HomeWeatherBottomSheet extends StatelessWidget {
   const HomeWeatherBottomSheet({
