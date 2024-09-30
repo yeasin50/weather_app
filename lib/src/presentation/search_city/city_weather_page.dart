@@ -39,34 +39,42 @@ class _CityWeatherPageState extends State<CityWeatherPage> {
     return Scaffold(
       body: GradientBackground(
         isImage: false,
-        child: FutureBuilder(
-          future: future,
-          builder: (context, snapshot) {
-            if (snapshot.hasError) {
-              return Text("${snapshot.error.toString()}");
-            }
+        child: Column(
+          children: [
+            AppBar(backgroundColor: Colors.transparent),
+            Expanded(
+              child: FutureBuilder(
+                future: future,
+                builder: (context, snapshot) {
+                  if (snapshot.hasError) {
+                    return Text("${snapshot.error.toString()}");
+                  }
 
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            }
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
 
-            if (snapshot.hasData == true) {
-              final result = snapshot.data!;
+                  if (snapshot.hasData == true) {
+                    final result = snapshot.data!;
 
-              if (result.$2 != null || result.$1 == null) return Text(result.$2?.toString() ?? "something went wrong");
+                    if (result.$2 != null || result.$1 == null)
+                      return Text(result.$2?.toString() ?? "something went wrong");
 
-              return SearchedCityDetailsView(
-                data: result.$1!,
-                cityInfo: widget.city,
-              );
-            }
+                    return SearchedCityDetailsView(
+                      data: result.$1!,
+                      cityInfo: widget.city,
+                    );
+                  }
 
-            return const Center(
-              child: Text("Ugh..Na state"),
-            );
-          },
+                  return const Center(
+                    child: Text("Ugh..Na state"),
+                  );
+                },
+              ),
+            ),
+          ],
         ),
       ),
     );
