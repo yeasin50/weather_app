@@ -58,7 +58,7 @@ class _SearchedCityDetailsViewState extends State<SearchedCityDetailsView> {
           style: textTheme.titleMedium,
         ),
         const SizedBox(height: 12),
-        ForecastHorizontalListview.hourly(
+        ForecastHorizontalListview.weekly(
           data: weatherData.weeklyForecast,
         ),
         const SizedBox(height: 24),
