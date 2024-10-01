@@ -4,7 +4,7 @@ import '../model/hourly_weather_info.dart';
 
 extension MetroApiResponseExt on MetroApiResponse {
   /// current hour data
-  HourlyWeatherInfo? getWeather(DateTime date) {
+  HourlyWeatherInfo? getCurrentHourWeather(DateTime date) {
     int? hourIndex = hourlyData?.time.indexWhere((e) => e.day == date.day && e.hour == date.hour);
 
     if (hourIndex == null || hourIndex < 0) return null;
@@ -22,7 +22,7 @@ extension MetroApiResponseExt on MetroApiResponse {
 
     final result = List.generate(24, (index) {
       final date = today.copyWith(hour: index);
-      return getWeather(date) ?? HourlyWeatherInfo.none;
+      return getCurrentHourWeather(date) ?? HourlyWeatherInfo.none;
     });
 
     return result;

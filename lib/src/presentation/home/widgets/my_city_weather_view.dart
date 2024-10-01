@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:weather_app/src/domain/domain.dart';
-import 'package:weather_app/src/infrastructure/infrastructure.dart';
 
+import '../../../domain/domain.dart';
+import '../../../infrastructure/infrastructure.dart';
 import '../../common/common.dart';
 import 'weather_home_bottom_sheet.dart';
 
@@ -45,7 +45,7 @@ class _MyCityWeatherViewState extends State<MyCityWeatherView> {
             );
           }
           final weatherData = snapshot.data!.$1;
-          final todaysWeather = weatherData!.getWeather(DateTime.now());
+          final todaysWeather = weatherData!.getCurrentHourWeather(DateTime.now());
 
           return Stack(
             children: [
@@ -55,7 +55,7 @@ class _MyCityWeatherViewState extends State<MyCityWeatherView> {
                   temp: todaysWeather?.temperature ?? 0,
                   humidity: todaysWeather?.humidity ?? 0,
                   rain: todaysWeather?.rain.toInt() ?? 0,
-                  location: "location",
+                  location: widget.city.name,
                   mood: todaysWeather?.mood.label ?? "",
                 ),
               ),
@@ -63,8 +63,8 @@ class _MyCityWeatherViewState extends State<MyCityWeatherView> {
                 alignment: Alignment.bottomCenter,
                 child: HomeWeatherBottomSheet(
                   key: ValueKey(weatherData.hourlyData?.time.first),
-                  hourlyForecast: weatherData.todaysHourlyForecast ,
-                  weeklyForecast: weatherData.weeklyForecast ,
+                  hourlyForecast: weatherData.todaysHourlyForecast,
+                  weeklyForecast: weatherData.weeklyForecast,
                 ),
               )
             ],

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import 'infrastructure.dart';
-import 'repository/local_db.dart';
 
 extension WeatherRepoExt on BuildContext {
   WeatherRepo get repo => WeatherInheritedWidget.of(this, listen: false);
@@ -58,7 +57,7 @@ class WeatherRepo {
   static Future<WeatherRepo> init() async {
     final db = await LocationLocalDatabase.openDB();
 
-   await db.myCity();
+    await db.myCity();
     final weather = MetroWeatherRepo();
     final geo = LocationRepo();
 

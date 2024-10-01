@@ -24,7 +24,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   MetroApiResponse? weatherData;
-  HourlyWeatherInfo? get todaysWeather => weatherData?.getWeather(DateTime.now());
+  HourlyWeatherInfo? get todaysWeather => weatherData?.getCurrentHourWeather(DateTime.now());
 
   void onTabChange(int index) async {
     if (index == 1) {

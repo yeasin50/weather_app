@@ -27,7 +27,7 @@ class _SearchedCityDetailsViewState extends State<SearchedCityDetailsView> {
   ///
   MetroApiResponse get weatherData => widget.data;
 
-  HourlyWeatherInfo get todayWeather => widget.data.getWeather(DateTime.now()) ?? HourlyWeatherInfo.none;
+  HourlyWeatherInfo get todayWeather => widget.data.getCurrentHourWeather(DateTime.now()) ?? HourlyWeatherInfo.none;
 
   @override
   Widget build(BuildContext context) {
@@ -97,7 +97,7 @@ class _ActionButton extends StatelessWidget {
           ),
           onPressed: () async {
             await context.localDB.saveCity(city);
-             if (context.mounted) context.pop(false);
+            if (context.mounted) context.pop(false);
           },
           child: const Text("Save"),
         ),

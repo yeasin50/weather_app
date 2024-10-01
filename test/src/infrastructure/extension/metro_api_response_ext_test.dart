@@ -15,7 +15,7 @@ void main() {
     final model = MetroApiResponse.fromMap(jsonData);
 
     test('HourlyWeatherInfo shouldn\'t be null ...', () async {
-      final todayWeather = model.getWeather(DateTime.now());
+      final todayWeather = model.getCurrentHourWeather(DateTime.now());
 
       expect(todayWeather != null, true);
       expect(todayWeather, isA<HourlyWeatherInfo>());

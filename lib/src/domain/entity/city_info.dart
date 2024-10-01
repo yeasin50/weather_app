@@ -26,7 +26,7 @@ class CityInfo {
 
   factory CityInfo.fromMap(Map<String, dynamic> map) {
     return CityInfo(
-      id: DateTime.now().millisecondsSinceEpoch,
+      id: DateTime.now().microsecondsSinceEpoch,
       latitude: map['latitude']?.toDouble() ?? 0.0,
       longitude: map['longitude']?.toDouble() ?? 0.0,
       name: map['name'] ?? '',

@@ -2,21 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-class SavedCityAppBar extends StatefulWidget {
-  const SavedCityAppBar({super.key});
-
-  @override
-  State<SavedCityAppBar> createState() => _SavedCityAppBarState();
-}
-
-class _SavedCityAppBarState extends State<SavedCityAppBar> {
-  final searchController = TextEditingController();
-
-  @override
-  void dispose() {
-    searchController.dispose();
-    super.dispose();
-  }
+class SavedCityAppBar extends StatelessWidget {
+  const SavedCityAppBar({super.key,  });
+ 
 
   @override
   Widget build(BuildContext context) {
@@ -37,10 +25,7 @@ class _SavedCityAppBarState extends State<SavedCityAppBar> {
             icon: const Icon(Icons.more_horiz_rounded),
           )
         ]),
-        const SizedBox(height: 16),
-        CupertinoSearchTextField(
-          controller: searchController,
-        ),
+        
       ],
     );
   }
