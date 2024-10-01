@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:weather_app/src/domain/domain.dart';
-import 'package:weather_app/src/infrastructure/infrastructure.dart';
+import 'package:go_router/go_router.dart';
+import 'package:weather_app/src/app/route_config.dart';
+import '../../../domain/domain.dart';
+import '../../../infrastructure/infrastructure.dart';
+import '../../../infrastructure/weather_repo.dart';
 
 import '../../common/widgets/forecast_horizontal_listview.dart';
 import '../../common/widgets/todays_weather_card.dart';
@@ -30,10 +33,10 @@ class _SearchedCityDetailsViewState extends State<SearchedCityDetailsView> {
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
 
-    final padding = EdgeInsets.only(left: 16);
+    const padding = EdgeInsets.only(left: 16);
 
     return ListView(
-      padding: EdgeInsets.only(top: 36),
+      padding: const EdgeInsets.only(top: 36),
       children: [
         TodaysWeather(
           temp: todayWeather.temperature,
@@ -69,21 +72,55 @@ class _SearchedCityDetailsViewState extends State<SearchedCityDetailsView> {
           data: weatherData.weeklyForecast,
         ),
         const SizedBox(height: 24),
-        Align(
-          child: ElevatedButton.icon(
-            icon: const Icon(Icons.add),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.white,
-              foregroundColor: Colors.black,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-              fixedSize: const Size(164, 48),
+        _ActionButton(city: widget.cityInfo),
+      ],
+    );
+  }
+}
+
+class _ActionButton extends StatelessWidget {
+  const _ActionButton({required this.city});
+  final CityInfo city;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            foregroundColor: Colors.white,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
             ),
-            onPressed: () {},
-            label: const Text("Save"),
+            fixedSize: const Size(164, 48),
           ),
-        )
+          onPressed: () async {
+            await context.localDB.saveCity(city);
+             if (context.mounted) context.pop(false);
+          },
+          child: const Text("Save"),
+        ),
+        const SizedBox(width: 24),
+        ElevatedButton.icon(
+          icon: const Icon(Icons.home),
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.cyanAccent,
+            foregroundColor: Colors.black,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+            fixedSize: const Size(164, 48),
+          ),
+          onPressed: () async {
+            await context.localDB.saveCity(city.copyWith(isPrimaryCity: true));
+            if (context.mounted) context.pop(true);
+          },
+          label: const Text(
+            "My Place",
+            style: TextStyle(fontWeight: FontWeight.w500),
+          ),
+        ),
       ],
     );
   }

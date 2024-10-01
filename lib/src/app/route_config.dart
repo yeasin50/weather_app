@@ -31,7 +31,8 @@ class AppRoute {
           path: cityWeatherDetails,
           builder: (context, state) => CityWeatherPage(
             city: state.extra as CityInfo,
-            // city: CityInfo(latitude: 12.3, longitude: 34.3, name: "name", country: "country", countryCode: "DB"),
+            // city:
+            // CityInfo(latitude: 12.3, longitude: 34.3, name: "name", country: "country", countryCode: "DB", id: 123),
           ),
         ),
       ],

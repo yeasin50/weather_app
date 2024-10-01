@@ -59,8 +59,9 @@ class _CityWeatherPageState extends State<CityWeatherPage> {
                   if (snapshot.hasData == true) {
                     final result = snapshot.data!;
 
-                    if (result.$2 != null || result.$1 == null)
-                      return Text(result.$2?.toString() ?? "something went wrong");
+                    if (result.$2 != null || result.$1 == null) {
+                      return  Text(result.$2?.toString() ?? "something went wrong");
+                    }
 
                     return SearchedCityDetailsView(
                       data: result.$1!,

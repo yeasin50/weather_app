@@ -78,8 +78,10 @@ class _SearchCityPageState extends State<SearchCityPage> {
                     itemCount: items.length,
                     itemBuilder: (context, index) => SearchedCityTile(
                       cityInfo: items[index],
-                      onTap: () {
-                        context.push(AppRoute.cityWeatherDetails, extra: items[index]);
+                      onTap: ()async  {
+                      final isMyCitySaved = await  context.push(AppRoute.cityWeatherDetails, extra: items[index]);
+
+                      
                       },
                     ),
                   ),
