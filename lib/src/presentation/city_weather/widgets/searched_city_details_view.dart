@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:weather_app/src/app/route_config.dart';
 import '../../../domain/domain.dart';
 import '../../../infrastructure/infrastructure.dart';
-import '../../../infrastructure/weather_repo.dart';
 
 import '../../common/widgets/forecast_horizontal_listview.dart';
 import '../../common/widgets/todays_weather_card.dart';
@@ -13,10 +11,12 @@ class SearchedCityDetailsView extends StatefulWidget {
     super.key,
     required this.data,
     required this.cityInfo,
+    required this.showDeleteButton,
   });
 
   final MetroApiResponse data;
   final CityInfo cityInfo;
+  final bool showDeleteButton;
 
   @override
   State<SearchedCityDetailsView> createState() => _SearchedCityDetailsViewState();
@@ -84,43 +84,57 @@ class _ActionButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool showDeleteButton = context.findAncestorWidgetOfExactType<SearchedCityDetailsView>()!.showDeleteButton;
+
+    final bool isMyCity = context.localDB.myHomeCity?.id == city.id;
+    final myCityButtonStyle = ElevatedButton.styleFrom(
+      backgroundColor: Colors.cyanAccent,
+      foregroundColor: Colors.black,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+      ),
+      fixedSize: const Size(164, 48),
+    );
+
+    final saveOrDeleteCityButtonStyle = ElevatedButton.styleFrom(
+      foregroundColor: Colors.white,
+      backgroundColor: showDeleteButton ? Colors.red.shade300 : Colors.blueGrey.shade300,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+      ),
+      fixedSize: const Size(164, 48),
+    );
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            foregroundColor: Colors.white,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
-            fixedSize: const Size(164, 48),
-          ),
+          style: saveOrDeleteCityButtonStyle,
           onPressed: () async {
-            await context.localDB.saveCity(city);
-            if (context.mounted) context.pop(false);
+            if (showDeleteButton) {
+              await context.localDB.deleteCity(city);
+            } else {
+              await context.localDB.saveCity(city);
+            }
+
+            if (context.mounted) context.pop(showDeleteButton);
           },
-          child: const Text("Save"),
+          child: Text(showDeleteButton ? "Delete" : "Save"),
         ),
         const SizedBox(width: 24),
-        ElevatedButton.icon(
-          icon: const Icon(Icons.home),
-          style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.cyanAccent,
-            foregroundColor: Colors.black,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
+        if (!isMyCity)
+          ElevatedButton.icon(
+            icon: const Icon(Icons.home),
+            style: myCityButtonStyle,
+            onPressed: () async {
+              await context.localDB.saveCity(city.copyWith(isPrimaryCity: true));
+              if (context.mounted) context.pop();
+            },
+            label: const Text(
+              "My Place",
+              style: TextStyle(fontWeight: FontWeight.w500),
             ),
-            fixedSize: const Size(164, 48),
           ),
-          onPressed: () async {
-            await context.localDB.saveCity(city.copyWith(isPrimaryCity: true));
-            if (context.mounted) context.pop(true);
-          },
-          label: const Text(
-            "My Place",
-            style: TextStyle(fontWeight: FontWeight.w500),
-          ),
-        ),
       ],
     );
   }

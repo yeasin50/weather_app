@@ -10,12 +10,14 @@ class WeatherCard extends StatelessWidget {
     required this.rain,
     required this.location,
     required this.mode,
+    this.onTap,
   });
 
   final double temp;
   final int humidity;
   final int rain;
   final String location;
+  final VoidCallback? onTap;
 
   final WeatherMood mode;
 
@@ -29,60 +31,63 @@ class WeatherCard extends StatelessWidget {
       aspectRatio: 342 / 148,
       child: CustomPaint(
         painter: WeatherCardShape(),
-        child: Padding(
-          padding: const EdgeInsets.only(bottom: 24.0),
-          child: Row(
-            children: [
-              const SizedBox(width: 24),
-              Expanded(
-                child: Column(
-                  mainAxisSize: MainAxisSize.max,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Text(
-                      "${temp.toStringAsFixed(0)}\u00B0",
-                      style: textTheme.displayMedium?.copyWith(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
+        child: InkWell(
+          onTap: onTap,
+          child: Padding(
+            padding: const EdgeInsets.only(bottom: 24.0),
+            child: Row(
+              children: [
+                const SizedBox(width: 24),
+                Expanded(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.max,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Text(
+                        "${temp.toStringAsFixed(0)}\u00B0",
+                        style: textTheme.displayMedium?.copyWith(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      "H:$humidity\u00B0 L:$rain\u00B0",
-                      style: textTheme.bodyMedium?.copyWith(
-                        color: Colors.white60,
+                      const SizedBox(height: 8),
+                      Text(
+                        "H:$humidity\u00B0 L:$rain\u00B0",
+                        style: textTheme.bodyMedium?.copyWith(
+                          color: Colors.white60,
+                        ),
                       ),
-                    ),
-                    Text(
-                      location,
-                      style: textTheme.titleMedium?.copyWith(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w500,
+                      Text(
+                        location,
+                        style: textTheme.titleMedium?.copyWith(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-              Expanded(
-                child: Column(
-                  children: [
-                    Expanded(
-                      child: Image.asset(
-                        mode.imagePath,
-                        fit: BoxFit.contain,
+                Expanded(
+                  child: Column(
+                    children: [
+                      Expanded(
+                        child: Image.asset(
+                          mode.imagePath,
+                          fit: BoxFit.contain,
+                        ),
                       ),
-                    ),
-                    Text(
-                      mode.label,
-                      style: textTheme.bodyMedium?.copyWith(
-                        color: Colors.white,
+                      Text(
+                        mode.label,
+                        style: textTheme.bodyMedium?.copyWith(
+                          color: Colors.white,
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-              )
-            ],
+                    ],
+                  ),
+                )
+              ],
+            ),
           ),
         ),
       ),

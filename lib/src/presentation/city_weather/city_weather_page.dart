@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:weather_app/src/presentation/search_city/widgets/searched_city_details_view.dart';
+import 'package:go_router/go_router.dart';
+import 'widgets/searched_city_details_view.dart';
 
 import '../../domain/domain.dart';
 import '../../infrastructure/repository/metro_weather_repo.dart';
-import '../common/widgets/todays_weather_card.dart';
 import '../widgets/gradient_background.dart';
 
 class CityWeatherPage extends StatefulWidget {
   const CityWeatherPage({
     super.key,
     required this.city,
+    required this.showDeleteButton, 
   });
   final CityInfo city;
+  final bool showDeleteButton; 
 
   @override
   State<CityWeatherPage> createState() => _CityWeatherPageState();
@@ -36,6 +38,10 @@ class _CityWeatherPageState extends State<CityWeatherPage> {
 
   @override
   Widget build(BuildContext context) {
+    // Get the extra data, safely casting to the expected type
+    final route = GoRouter.of(context);
+    final extra = route.routerDelegate.currentConfiguration.extra;
+    print("extra ${extra} ${route.routerDelegate.currentConfiguration.fullPath}");
     return Scaffold(
       body: GradientBackground(
         isImage: false,
@@ -60,12 +66,13 @@ class _CityWeatherPageState extends State<CityWeatherPage> {
                     final result = snapshot.data!;
 
                     if (result.$2 != null || result.$1 == null) {
-                      return  Text(result.$2?.toString() ?? "something went wrong");
+                      return Text(result.$2?.toString() ?? "something went wrong");
                     }
 
                     return SearchedCityDetailsView(
                       data: result.$1!,
                       cityInfo: widget.city,
+                      showDeleteButton : widget.showDeleteButton,
                     );
                   }
 

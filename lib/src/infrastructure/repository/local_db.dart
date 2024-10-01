@@ -13,6 +13,8 @@ class LocationLocalDatabase {
   final Isar _db;
 
   CityInfo? _myCity;
+  CityInfo? get myHomeCity => _myCity;
+
   late StreamController<CityInfo?> _controller;
 
   Stream<CityInfo?> get myCityInfo => _controller.stream;
@@ -79,6 +81,12 @@ class LocationLocalDatabase {
         return isar.cityInfos.put(city);
       });
     }
+  }
+
+  Future<void> deleteCity(CityInfo city) async {
+    await _db.writeAsync((isar) {
+      return isar.cityInfos.delete(city.id);
+    });
   }
 
   Future<CityInfo?> myCity() async {

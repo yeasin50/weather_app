@@ -1,6 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:weather_app/src/app/route_config.dart';
 import 'package:weather_app/src/infrastructure/infrastructure.dart';
+import 'package:weather_app/src/presentation/city_weather/widgets/searched_city_details_view.dart';
 
 import '../../../domain/domain.dart';
 import '../../widgets/weather_card_view.dart';
@@ -59,8 +62,9 @@ class _LoadCityWeatherListViewState extends State<LoadCityWeatherListView> {
         ),
         const SizedBox(height: 8),
         Expanded(
-            child: ListView.builder(
+            child: ListView.separated(
           itemCount: filterData.length,
+          separatorBuilder: (context, index) => SizedBox(height: 8),
           itemBuilder: (context, index) {
             final currentHourData = filterData[index].$2.getCurrentHourWeather(DateTime.now());
             return WeatherCard(
@@ -68,8 +72,16 @@ class _LoadCityWeatherListViewState extends State<LoadCityWeatherListView> {
               humidity: currentHourData.humidity,
               rain: currentHourData.rain.toInt(),
               location: filterData[index].$1.name,
-              // location: cities.elementAt(index).name,
               mode: currentHourData.mood,
+              onTap: () {
+                context.push(
+                  AppRoute.cityWeatherDetails,
+                  extra: {
+                    "city": filterData[index].$1,
+                    "isFromSaved": true,
+                  },
+                );
+              },
             );
           },
         )),

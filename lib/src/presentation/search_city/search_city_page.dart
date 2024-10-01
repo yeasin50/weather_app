@@ -6,7 +6,7 @@ import 'package:weather_app/src/infrastructure/repository/location_repo.dart';
 import 'package:weather_app/src/presentation/widgets/gradient_background.dart';
 
 import '../../app/route_config.dart';
-import 'widgets/search_city_tile.dart';
+import '../city_weather/widgets/search_city_tile.dart';
 
 class SearchCityPage extends StatefulWidget {
   const SearchCityPage({super.key});
@@ -78,10 +78,11 @@ class _SearchCityPageState extends State<SearchCityPage> {
                     itemCount: items.length,
                     itemBuilder: (context, index) => SearchedCityTile(
                       cityInfo: items[index],
-                      onTap: ()async  {
-                      final isMyCitySaved = await  context.push(AppRoute.cityWeatherDetails, extra: items[index]);
-
-                      
+                      onTap: () async {
+                        await context.push(
+                          AppRoute.cityWeatherDetails,
+                          extra: {"city": items[index]},
+                        );
                       },
                     ),
                   ),

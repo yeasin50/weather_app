@@ -2,7 +2,7 @@ import 'package:go_router/go_router.dart';
 import '../domain/domain.dart';
 import '../presentation/home/home_page.dart';
 import '../presentation/saved_city/saved_city_page.dart';
-import '../presentation/search_city/city_weather_page.dart';
+import '../presentation/city_weather/city_weather_page.dart';
 import '../presentation/search_city/search_city_page.dart';
 
 class AppRoute {
@@ -28,13 +28,17 @@ class AppRoute {
           builder: (context, state) => const SearchCityPage(),
         ),
         GoRoute(
-          path: cityWeatherDetails,
-          builder: (context, state) => CityWeatherPage(
-            city: state.extra as CityInfo,
-            // city:
-            // CityInfo(latitude: 12.3, longitude: 34.3, name: "name", country: "country", countryCode: "DB", id: 123),
-          ),
-        ),
+            path: cityWeatherDetails,
+            builder: (context, state) {
+              final data = state.extra as Map<String, dynamic>;
+
+              final city = data['city'];
+              final isFromSaved = data['isFromSaved'] ?? false;
+              return CityWeatherPage(
+                city: city,
+                showDeleteButton: isFromSaved,
+              );
+            }),
       ],
     );
   }

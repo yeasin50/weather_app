@@ -13,7 +13,7 @@ class LocationRepo {
   final StreamController _queryController = StreamController<String>();
 
   late final Stream<List<CityInfo>> dataStream = _queryController.stream
-      .debounce(const Duration(seconds: 1)) //
+      .debounce(const Duration(milliseconds: 300)) //
       .asyncMap<List<CityInfo>>(
     (q) async {
       final result = await searchCity(q);
