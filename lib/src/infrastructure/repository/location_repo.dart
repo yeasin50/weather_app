@@ -60,9 +60,4 @@ class LocationRepo {
       return [];
     }
   }
-
-  /// saved from local db
-  Future<List<CityInfo>> _savedCity() async {
-    return [];
-  }
 }

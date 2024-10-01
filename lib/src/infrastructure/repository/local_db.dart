@@ -64,11 +64,20 @@ class LocationLocalDatabase {
   }
 
   Future<void> saveCity(CityInfo city) async {
-    await _db.writeAsync((isar) {
-      return isar.cityInfos.put(city);
-    });
     if (city.isPrimaryCity) {
+      final currentCities = _db.cityInfos
+          .where()
+          .isPrimaryCityEqualTo(true) //
+          .findAll()
+          .map((e) => e.copyWith(isPrimaryCity: false));
+      await _db.writeAsync((isar) {
+        return isar.cityInfos.putAll([city, ...currentCities]);
+      });
       _updateState(city);
+    } else {
+      await _db.writeAsync((isar) {
+        return isar.cityInfos.put(city);
+      });
     }
   }
 

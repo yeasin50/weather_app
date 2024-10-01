@@ -30,6 +30,17 @@ class HourlyWeatherInfo {
   }
 
   WeatherMood get mood {
+    if (rain > 50) {
+      if (humidity > 80) {
+        return WeatherMood.tornado;
+      }
+      return WeatherMood.showers;
+    } else if (rain > 20) {
+      // Moderate rain
+      return WeatherMood.midRain;
+    } else if (temperature < 10) {
+      return WeatherMood.fastWind;
+    }
     return WeatherMood.fastWind;
   }
 
