@@ -89,13 +89,13 @@ class BottomAppBarShape extends OutlinedBorder {
       ..lineTo(rect.topLeft.dx, rect.topLeft.dy);
 
     final paint = Paint()
-      ..shader = const LinearGradient(
+      ..shader = LinearGradient(
         colors: [
-          Color(0xFF3A3A6A),
-          Color(0xFF25244C),
+          Color(0xFF3A3A6A).withOpacity(.26),
+          Color(0xFF25244C).withOpacity(.26),
         ],
-        begin: Alignment.topCenter,
-        end: Alignment.bottomCenter,
+        begin: Alignment(.5, -1),
+        end: Alignment(.5, 1),
       ).createShader(rect);
 
     canvas.drawPath(path, paint);

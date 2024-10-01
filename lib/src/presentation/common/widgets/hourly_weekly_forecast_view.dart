@@ -49,15 +49,19 @@ class _HourWeeklyForecastViewState extends State<HourWeeklyForecastView> {
         begin: Alignment.topLeft,
         end: Alignment.bottomRight,
         colors: [
-          Color.fromRGBO(46, 51, 90, .52),
-          Color.fromRGBO(28, 27, 51, .52),
+          Color.fromRGBO(46, 51, 90, .26),
+          Color.fromRGBO(28, 27, 51, .26),
         ],
       ),
     );
     return DecoratedBox(
       decoration: decoration,
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 12),
+        padding: const EdgeInsets.only(
+          left: 12,
+          right: 12,
+          bottom: 84,
+        ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [

@@ -46,10 +46,9 @@ class MyCityWeatherView extends StatelessWidget {
                   mood: todaysWeather?.mood.label ?? "",
                 ),
               ),
-              Positioned(
-                bottom: 72,
-                left: 0,
-                right: 0,
+              //bottom part
+              Align(
+                alignment: Alignment.bottomCenter,
                 child: HourWeeklyForecastView(
                   hourlyForecast: weatherData.todaysHourlyForecast,
                   weeklyForecast: weatherData.weeklyForecast,
