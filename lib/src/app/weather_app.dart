@@ -21,9 +21,7 @@ class _WeatherAppState extends State<WeatherApp> {
         future: future,
         builder: (context, snapshot) {
           if (snapshot.connectionState != ConnectionState.done) {
-            return const Center(
-              child: Placeholder(),
-            );
+            return const _LoadingView();
           }
           return WeatherInheritedWidget(
             repo: snapshot.requireData,
@@ -32,12 +30,23 @@ class _WeatherAppState extends State<WeatherApp> {
               debugShowCheckedModeBanner: false,
               themeMode: ThemeMode.dark,
               darkTheme: ThemeData.dark(),
-              scrollBehavior: ScrollBehavior().copyWith(dragDevices: {
-                PointerDeviceKind.mouse,
-                PointerDeviceKind.touch,
-              }),
+              scrollBehavior: ScrollBehavior().copyWith(dragDevices: PointerDeviceKind.values.toSet()),
             ),
           );
         });
+  }
+}
+
+class _LoadingView extends StatelessWidget {
+  const _LoadingView({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Material(
+      color: Color.fromARGB(255, 28, 45, 74),
+      child: Center(
+        child: CircularProgressIndicator(),
+      ),
+    );
   }
 }

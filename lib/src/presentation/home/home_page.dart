@@ -70,22 +70,13 @@ class _HomePageState extends State<HomePage> {
           StreamBuilder(
             stream: localDB.myCityInfo,
             builder: (context, snapshot) {
-              // if (snapshot.connectionState == ConnectionState.waiting) {
-              //   return const Center(child: CircularProgressIndicator());
-              // }
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(child: CircularProgressIndicator());
+              }
 
-              // return snapshot.data == null //
-              //     ? addMyCityButton
-              //     :
-
-              return MyCityWeatherView(
-                  city: CityInfo(
-                      id: 1,
-                      latitude: 12.3,
-                      longitude: 12.3,
-                      name: "name",
-                      country: "country",
-                      countryCode: "countryCode"));
+              return snapshot.data == null //
+                  ? addMyCityButton
+                  : MyCityWeatherView(city: snapshot.data!);
             },
           )
         ],
