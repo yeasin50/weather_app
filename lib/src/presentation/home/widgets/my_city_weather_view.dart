@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import '../../../domain/domain.dart';
 import '../../../infrastructure/infrastructure.dart';
 import '../../common/common.dart';
-import 'weather_home_bottom_sheet.dart';
 
 class MyCityWeatherView extends StatelessWidget {
   const MyCityWeatherView({
@@ -47,10 +46,11 @@ class MyCityWeatherView extends StatelessWidget {
                   mood: todaysWeather?.mood.label ?? "",
                 ),
               ),
-              Align(
-                alignment: Alignment.bottomCenter,
-                child: HomeWeatherBottomSheet(
-                  key: ValueKey(weatherData.hourlyData?.time.first),
+              Positioned(
+                bottom: 72,
+                left: 0,
+                right: 0,
+                child: HourWeeklyForecastView(
                   hourlyForecast: weatherData.todaysHourlyForecast,
                   weeklyForecast: weatherData.weeklyForecast,
                 ),

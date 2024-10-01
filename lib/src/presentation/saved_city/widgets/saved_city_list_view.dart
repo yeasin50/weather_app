@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:weather_app/src/app/route_config.dart';
 import 'package:weather_app/src/infrastructure/infrastructure.dart';
-import 'package:weather_app/src/presentation/city_weather/widgets/searched_city_details_view.dart';
 
 import '../../../domain/domain.dart';
 import '../../widgets/weather_card_view.dart';
@@ -27,6 +26,10 @@ class _LoadCityWeatherListViewState extends State<LoadCityWeatherListView> {
   @override
   void initState() {
     super.initState();
+    initDB();
+  }
+
+  void initDB() {
     for (int i = 0; i < widget.cities.length; i++) {
       data.add((widget.cities[i], widget.data![i]!));
     }
@@ -73,14 +76,20 @@ class _LoadCityWeatherListViewState extends State<LoadCityWeatherListView> {
               rain: currentHourData.rain.toInt(),
               location: filterData[index].$1.name,
               mode: currentHourData.mood,
-              onTap: () {
-                context.push(
-                  AppRoute.cityWeatherDetails,
-                  extra: {
-                    "city": filterData[index].$1,
-                    "isFromSaved": true,
-                  },
-                );
+              onTap: () async {
+                final bool hasRemoved = await context.push(
+                      AppRoute.cityWeatherDetails,
+                      extra: {
+                        "city": filterData[index].$1,
+                        "isFromSaved": true,
+                      },
+                    ) ??
+                    false;
+                if (hasRemoved) {
+                  data.removeAt(index);
+                  filterData = [...data];
+                  setState(() {});
+                }
               },
             );
           },

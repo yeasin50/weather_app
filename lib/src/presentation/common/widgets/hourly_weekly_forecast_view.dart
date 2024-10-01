@@ -59,6 +59,7 @@ class _HourWeeklyForecastViewState extends State<HourWeeklyForecastView> {
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 12),
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
             const FractionallySizedBox(
               widthFactor: .25,
@@ -106,7 +107,6 @@ class _HourWeeklyForecastViewState extends State<HourWeeklyForecastView> {
                 ),
               ],
             ),
-            const SizedBox(height: 150)
           ],
         ),
       ),

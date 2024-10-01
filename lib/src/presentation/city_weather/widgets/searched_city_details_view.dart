@@ -113,11 +113,11 @@ class _ActionButton extends StatelessWidget {
           onPressed: () async {
             if (showDeleteButton) {
               await context.localDB.deleteCity(city);
+              if (context.mounted) context.pop(showDeleteButton);
             } else {
               await context.localDB.saveCity(city);
+              if (context.mounted) context.pop();
             }
-
-            if (context.mounted) context.pop(showDeleteButton);
           },
           child: Text(showDeleteButton ? "Delete" : "Save"),
         ),
