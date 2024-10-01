@@ -4,7 +4,6 @@ import 'package:weather_app/src/infrastructure/infrastructure.dart';
 
 import '../../../domain/domain.dart';
 import '../../widgets/weather_card_view.dart';
-import 'saved_city_appbar.dart';
 
 class LoadCityWeatherListView extends StatefulWidget {
   const LoadCityWeatherListView({

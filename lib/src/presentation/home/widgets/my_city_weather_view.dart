@@ -5,7 +5,7 @@ import '../../../infrastructure/infrastructure.dart';
 import '../../common/common.dart';
 import 'weather_home_bottom_sheet.dart';
 
-class MyCityWeatherView extends StatefulWidget {
+class MyCityWeatherView extends StatelessWidget {
   const MyCityWeatherView({
     super.key,
     required this.city,
@@ -13,26 +13,14 @@ class MyCityWeatherView extends StatefulWidget {
   final CityInfo city;
 
   @override
-  State<MyCityWeatherView> createState() => _MyCityWeatherViewState();
-}
-
-class _MyCityWeatherViewState extends State<MyCityWeatherView> {
-  //
-  Future<(MetroApiResponse?, String?)> getWeather() async {
+  Widget build(BuildContext context) {
     final payload = MetroWeatherPayload(
-      latitude: widget.city.latitude,
-      longitude: widget.city.longitude,
+      latitude: city.latitude,
+      longitude: city.longitude,
       hourlyItems: HourlyItem.defaultItems,
     );
-    final result = await weatherService.fetchWeather(payload);
-    return result;
-  }
-
-  late Future<(MetroApiResponse?, String?)> future = getWeather();
-  @override
-  Widget build(BuildContext context) {
     return FutureBuilder<(MetroApiResponse?, String?)>(
-        future: future,
+        future: context.weatherService.fetchWeather(payload),
         builder: (context, snapshot) {
           if (snapshot.connectionState != ConnectionState.done) {
             return const Center(
@@ -55,7 +43,7 @@ class _MyCityWeatherViewState extends State<MyCityWeatherView> {
                   temp: todaysWeather?.temperature ?? 0,
                   humidity: todaysWeather?.humidity ?? 0,
                   rain: todaysWeather?.rain.toInt() ?? 0,
-                  location: widget.city.name,
+                  location: city.name,
                   mood: todaysWeather?.mood.label ?? "",
                 ),
               ),
