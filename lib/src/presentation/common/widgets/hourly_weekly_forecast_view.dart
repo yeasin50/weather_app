@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 
 import '../../../infrastructure/infrastructure.dart';
@@ -40,37 +42,13 @@ class _HourWeeklyForecastViewState extends State<HourWeeklyForecastView> {
       ),
     );
 
-    const decoration = BoxDecoration(
-      borderRadius: BorderRadius.only(
-        topLeft: Radius.circular(16),
-        topRight: Radius.circular(16),
-      ),
-      gradient: LinearGradient(
-        begin: Alignment.topLeft,
-        end: Alignment.bottomRight,
-        colors: [
-          Color.fromRGBO(46, 51, 90, .26),
-          Color.fromRGBO(28, 27, 51, .26),
-        ],
-      ),
-    );
-    return DecoratedBox(
-      decoration: decoration,
-      child: Padding(
-        padding: const EdgeInsets.only(
-          left: 12,
-          right: 12,
-          bottom: 84,
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const FractionallySizedBox(
-              widthFactor: .25,
-              child: Divider(),
-            ),
-            const SizedBox(height: 16),
-            Row(
+    return _BGFilter(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+            child: Row(
               children: [
                 Expanded(
                   child: TextButton(
@@ -84,12 +62,12 @@ class _HourWeeklyForecastViewState extends State<HourWeeklyForecastView> {
                     child: const Text("Hourly Forecast"),
                   ),
                 ),
-                const SizedBox(width: 16),
+                const SizedBox(width: 24),
                 Expanded(
                   child: TextButton(
                     style: activeTabStyle.copyWith(
-                      side: isHourlyForecastTab ? WidgetStateProperty.all(BorderSide.none) : null,
-                    ),
+                        side: isHourlyForecastTab ? WidgetStateProperty.all(BorderSide.none) : null,
+                        shape: WidgetStatePropertyAll(StarBorder())),
                     onPressed: () {
                       isHourlyForecastTab = false;
                       setState(() {});
@@ -99,19 +77,48 @@ class _HourWeeklyForecastViewState extends State<HourWeeklyForecastView> {
                 ),
               ],
             ),
-            const SizedBox(height: 16),
-            IndexedStack(
-              index: isHourlyForecastTab ? 0 : 1,
-              children: [
-                ForecastHorizontalListview.hourly(
-                  data: hourlyForecast,
-                ),
-                ForecastHorizontalListview.weekly(
-                  data: weeklyForecast,
-                ),
-              ],
+          ),
+          IndexedStack(
+            index: isHourlyForecastTab ? 0 : 1,
+            children: [
+              ForecastHorizontalListview.hourly(
+                data: hourlyForecast,
+              ),
+              ForecastHorizontalListview.weekly(
+                data: weeklyForecast,
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _BGFilter extends StatelessWidget {
+  const _BGFilter({
+    required this.child,
+  });
+
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return Align(
+      alignment: Alignment.bottomCenter,
+      child: ClipRRect(
+        borderRadius: const BorderRadius.only(
+          topLeft: Radius.circular(12),
+          topRight: Radius.circular(12),
+        ),
+        child: BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12),
+          child: Padding(
+            padding: const EdgeInsets.only(
+              bottom: 84,
             ),
-          ],
+            child: child,
+          ),
         ),
       ),
     );
