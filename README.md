@@ -4,7 +4,9 @@ localDB: [isar](https://pub.dev/packages/isar)
 api: [open-meteo](https://open-meteo.com/en/docs)  
 state-management: nah,InheritedWidget is ok
 
-[FigmaDesign](<https://www.figma.com/design/8f5YOv66CcekwheMZCPo55/Weather-App-UI-Design-(Community)?node-id=2-4&node-type=canvas&t=CIDhXTozQ2da8LuG-0>)
+- 3D icon Set by PIQO: https://www.figma.com/co mmunity/file/1146367922524307345
+
+- Mikołaj Niżnik :: 3D Weather icons: https://www.figma.com/community/file/1023658389987124693/mikoaj-niznik-3d-weather-icons
 
 A new Flutter project to spends sometime on boredom. Feel free to share the issue with a pr😁 ;
 

@@ -1,8 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:weather_app/src/app/route_config.dart';
-import 'package:weather_app/src/infrastructure/infrastructure.dart';
+import '../../../app/route_config.dart';
+import '../../../infrastructure/infrastructure.dart';
+import 'my_city_card_view.dart';
 
 import '../../../domain/domain.dart';
 import '../../widgets/weather_card_view.dart';
@@ -23,6 +24,8 @@ class _LoadCityWeatherListViewState extends State<LoadCityWeatherListView> {
   List<(CityInfo, MetroApiResponse)> data = [];
   List<(CityInfo, MetroApiResponse)> filterData = [];
 
+  (CityInfo, MetroApiResponse)? myCity;
+
   @override
   void initState() {
     super.initState();
@@ -31,7 +34,13 @@ class _LoadCityWeatherListViewState extends State<LoadCityWeatherListView> {
 
   void initDB() {
     for (int i = 0; i < widget.cities.length; i++) {
-      data.add((widget.cities[i], widget.data![i]!));
+      final city = widget.cities[i];
+
+      if (city.isPrimaryCity) {
+        myCity = (city, widget.data![i]!);
+      } else {
+        data.add((city, widget.data![i]!));
+      }
     }
     filterData = [...data];
   }
@@ -42,19 +51,18 @@ class _LoadCityWeatherListViewState extends State<LoadCityWeatherListView> {
       setState(() {});
       return;
     }
-    filterData = data
-        .where(
-          (e) => e.$1.name.toLowerCase().contains(str.toLowerCase()),
-        )
-        .toList();
+    filterData = data.where((e) => e.$1.name.toLowerCase().contains(str.toLowerCase())).toList();
 
     setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+
     return Column(
       mainAxisSize: MainAxisSize.max,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         const SizedBox(height: 16),
         CupertinoSearchTextField(
@@ -64,10 +72,23 @@ class _LoadCityWeatherListViewState extends State<LoadCityWeatherListView> {
           ),
         ),
         const SizedBox(height: 8),
+        MyCityCardView(
+          myCity: myCity,
+          onRemove: () {
+            myCity = null;
+            setState(() {});
+          },
+        ),
+        const SizedBox(height: 24),
+        Text(
+          "Saved city",
+          style: textTheme.titleLarge,
+        ),
+        const SizedBox(height: 8),
         Expanded(
             child: ListView.separated(
           itemCount: filterData.length,
-          separatorBuilder: (context, index) => SizedBox(height: 8),
+          separatorBuilder: (context, index) => const SizedBox(height: 8),
           itemBuilder: (context, index) {
             final currentHourData = filterData[index].$2.getCurrentHourWeather(DateTime.now());
             return WeatherCard(

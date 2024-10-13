@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:weather_app/src/app/theme_config.dart';
 
 import '../infrastructure/weather_repo.dart';
 import 'route_config.dart';
@@ -28,9 +29,10 @@ class _WeatherAppState extends State<WeatherApp> {
             child: MaterialApp.router(
               routerConfig: AppRoute.routeConfig(),
               debugShowCheckedModeBanner: false,
-              themeMode: ThemeMode.dark,
-              darkTheme: ThemeData.dark(),
-              scrollBehavior: ScrollBehavior().copyWith(dragDevices: PointerDeviceKind.values.toSet()),
+              theme: AppTheme.theme,
+              scrollBehavior: const ScrollBehavior().copyWith(
+                dragDevices: PointerDeviceKind.values.toSet(),
+              ),
             ),
           );
         });
