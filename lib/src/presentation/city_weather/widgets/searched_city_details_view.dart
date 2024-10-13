@@ -42,7 +42,6 @@ class _SearchedCityDetailsViewState extends State<SearchedCityDetailsView> {
           temp: todayWeather.temperature,
           humidity: todayWeather.humidity,
           rain: todayWeather.rain.toInt(),
-          location: widget.cityInfo.name,
           mood: todayWeather.mood.label,
         ),
         const SizedBox(height: 32),

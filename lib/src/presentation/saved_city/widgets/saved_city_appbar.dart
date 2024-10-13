@@ -14,7 +14,7 @@ class SavedCityAppBar extends StatelessWidget {
         child: const Row(
           children: [
             Icon(Icons.arrow_back_ios_new_rounded),
-            SizedBox(width: 48),
+            SizedBox(width: 24),
             Expanded(
               child: Text("Weather"),
             ),

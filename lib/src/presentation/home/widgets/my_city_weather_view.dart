@@ -27,7 +27,7 @@ class _MyCityWeatherViewState extends State<MyCityWeatherView> {
 
   @override
   Widget build(BuildContext context) {
-    
+
     return FutureBuilder<(MetroApiResponse?, String?)>(
       future: future,
       builder: (context, snapshot) {
@@ -53,7 +53,6 @@ class _MyCityWeatherViewState extends State<MyCityWeatherView> {
                 temp: todaysWeather?.temperature ?? 0,
                 humidity: todaysWeather?.humidity ?? 0,
                 rain: todaysWeather?.rain.toInt() ?? 0,
-                location: widget.city.name,
                 mood: todaysWeather?.mood.label ?? "",
               ),
               const SizedBox(height: 48),

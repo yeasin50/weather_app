@@ -10,10 +10,10 @@ class CityWeatherPage extends StatefulWidget {
   const CityWeatherPage({
     super.key,
     required this.city,
-    required this.showDeleteButton, 
+    required this.showDeleteButton,
   });
   final CityInfo city;
-  final bool showDeleteButton; 
+  final bool showDeleteButton;
 
   @override
   State<CityWeatherPage> createState() => _CityWeatherPageState();
@@ -47,7 +47,10 @@ class _CityWeatherPageState extends State<CityWeatherPage> {
         isImage: false,
         child: Column(
           children: [
-            AppBar(backgroundColor: Colors.transparent),
+            AppBar(
+              backgroundColor: Colors.transparent,
+              title: Text(widget.city.name),
+            ),
             Expanded(
               child: FutureBuilder(
                 future: future,
@@ -72,7 +75,7 @@ class _CityWeatherPageState extends State<CityWeatherPage> {
                     return SearchedCityDetailsView(
                       data: result.$1!,
                       cityInfo: widget.city,
-                      showDeleteButton : widget.showDeleteButton,
+                      showDeleteButton: widget.showDeleteButton,
                     );
                   }
 

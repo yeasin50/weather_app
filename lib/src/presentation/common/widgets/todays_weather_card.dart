@@ -6,14 +6,13 @@ class TodaysWeather extends StatelessWidget {
     required this.temp,
     required this.humidity,
     required this.rain,
-    required this.location,
     required this.mood,
   });
 
   final double temp;
   final int humidity;
   final int rain;
-  final String location;
+ 
 
   final String mood;
 
@@ -25,11 +24,7 @@ class TodaysWeather extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       mainAxisSize: MainAxisSize.min,
       children: [
-        Text(
-          location,
-          textAlign: TextAlign.center,
-          style: textTheme.headlineMedium?.copyWith(),
-        ),
+       
         Text(
           "${temp.toStringAsFixed(0)}\u00B0",
           textAlign: TextAlign.center,
