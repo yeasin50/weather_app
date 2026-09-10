@@ -6,10 +6,8 @@ import '../../common/common.dart';
 import '../../common/widgets/glassmorphism.dart';
 
 class MyCityWeatherView extends StatefulWidget {
-  const MyCityWeatherView({
-    super.key,
-    required this.city,
-  });
+  const MyCityWeatherView({super.key, required this.city});
+
   final CityInfo city;
 
   @override
@@ -23,11 +21,11 @@ class _MyCityWeatherViewState extends State<MyCityWeatherView> {
     hourlyItems: HourlyItem.defaultItems,
   );
 
-  late Future<(MetroApiResponse?, String?)> future = weatherService.fetchWeather(payload);
+  late Future<(MetroApiResponse?, String?)> future =
+      weatherService.fetchWeather(payload);
 
   @override
   Widget build(BuildContext context) {
-
     return FutureBuilder<(MetroApiResponse?, String?)>(
       future: future,
       builder: (context, snapshot) {
@@ -38,11 +36,13 @@ class _MyCityWeatherViewState extends State<MyCityWeatherView> {
         }
         if (snapshot.hasError || snapshot.data?.$2 != null) {
           return Center(
-            child: Text(snapshot.error?.toString() ?? snapshot.data?.$2 ?? "ugh"),
+            child:
+                Text(snapshot.error?.toString() ?? snapshot.data?.$2 ?? "ugh"),
           );
         }
         final weatherData = snapshot.data!.$1;
-        final todaysWeather = weatherData!.getCurrentHourWeather(DateTime.now());
+        final todaysWeather =
+            weatherData!.getCurrentHourWeather(DateTime.now());
 
         return SingleChildScrollView(
           child: Column(

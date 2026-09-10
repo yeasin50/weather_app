@@ -1,70 +1,84 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:weather_app/src/app/theme_config.dart';
+import 'package:weather_app/src/presentation/saved_city/saved_city_page.dart';
 import '../../../app/route_config.dart';
-import '../../common/widgets/glassmorphism.dart';
+import '../../common/widgets/app_button.dart';
+import '../../widgets/gradient_background.dart';
 
-class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
-  const HomeAppBar({
-    super.key,
-    required this.title,
-  });
+class HomeAppBar extends StatelessWidget {
+  const HomeAppBar({super.key, required this.title});
 
   final String title;
 
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
-
-    return Glassmorphism(
-      borderRadius: BorderRadius.zero,
+    return AppButton.child(
+      onTap: () => Scaffold.of(context).openDrawer(),
       child: Row(
+        spacing: 8,
         children: [
-          const SizedBox(width: 24),
-          Expanded(
-            child: InkWell(
-              customBorder: const StadiumBorder(
-                side: BorderSide(),
-              ),
-              onTap: () {
-                context.push(AppRoute.searchCity);
-              },
-              child: Material(
-                color: AppTheme.appBarBG,
-                shape: const StadiumBorder(side: BorderSide()),
-                child: SizedBox(
-                  height: kToolbarHeight,
-                  child: Row(
-                    children: [
-                      const SizedBox(width: 24),
-                      const Icon(Icons.location_pin),
-                      const SizedBox(width: 24),
-                      Expanded(
-                        child: StreamBuilder<Object>(
-                          stream: null,
-                          builder: (context, snapshot) {
-                            return Text(title, style: textTheme.titleLarge);
-                          }
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          ),
-          IconButton(
-            onPressed: () {
-              context.push(AppRoute.savedPage);
-            },
-            icon: const Icon(Icons.person_3_rounded),
-          ),
-          const SizedBox(width: 24),
+          const Icon(Icons.menu),
+          Expanded(child: Text(title, style: textTheme.titleLarge)),
         ],
       ),
     );
   }
+}
+
+class AppDrawer extends StatefulWidget {
+  const AppDrawer({super.key});
 
   @override
-  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
+  State<AppDrawer> createState() => _AppDrawerState();
+}
+
+class _AppDrawerState extends State<AppDrawer> {
+  @override
+  Widget build(BuildContext context) {
+    final textStyle = TextTheme.of(context);
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return ConstrainedBox(
+          constraints: BoxConstraints.tight(
+            Size.fromWidth(constraints.maxWidth * .85),
+          ),
+          child: GradientBackground(
+            isImage: false,
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                spacing: 16,
+                crossAxisAlignment: .stretch,
+                children: [
+                  Row(
+                    spacing: 16,
+                    children: [
+                      BackButton(onPressed: Scaffold.of(context).closeDrawer),
+                      Text("location", style: textStyle.titleMedium),
+                    ],
+                  ),
+                  Expanded(child: SavedCityPage.view()), //list of saved country
+                  AppButton.child(
+                    onTap: () {
+                      Scaffold.of(context).closeDrawer();
+                      context.push(AppRoute.searchCity);
+                    },
+                    child: Row(
+                      spacing: 8,
+                      mainAxisAlignment: .center,
+                      children: [Icon(Icons.search), Text("Search location")],
+                    ),
+                  ),
+
+                  AppButton.child(child: Center(child: Text("unit"))),
+                  SizedBox(),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
 }

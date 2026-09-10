@@ -35,61 +35,63 @@ class _SearchCityPageState extends State<SearchCityPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: GradientBackground(
-        isImage: false,
-        child: CustomScrollView(
-          slivers: [
-            const SliverAppBar(
-              backgroundColor: Colors.transparent,
-            ),
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: CupertinoSearchTextField(
-                  controller: controller,
-                  onChanged: onQueryChange,
-                  style: const TextStyle(color: Colors.white),
+      body: GestureDetector(
+        onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+        child: GradientBackground(
+          isImage: false,
+          child: CustomScrollView(
+            slivers: [
+              SliverAppBar(),
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: CupertinoSearchTextField(
+                    controller: controller,
+                    onChanged: onQueryChange,
+                    autofocus: true,
+                    style: const TextStyle(color: Colors.white),
+                  ),
                 ),
               ),
-            ),
-            StreamBuilder<List<CityInfo>>(
-              initialData: const [],
-              stream: repo.dataStream,
-              builder: (context, snapshot) {
-                if (snapshot.hasError) {
-                  return SliverToBoxAdapter(
-                    child: Center(
-                      child: Text(snapshot.error.toString()),
-                    ),
-                  );
-                }
+              StreamBuilder<List<CityInfo>>(
+                initialData: const [],
+                stream: repo.dataStream,
+                builder: (context, snapshot) {
+                  if (snapshot.hasError) {
+                    return SliverToBoxAdapter(
+                      child: Center(child: Text(snapshot.error.toString())),
+                    );
+                  }
 
-                if ((snapshot.data ?? []).isEmpty) {
-                  return SliverToBoxAdapter(
-                    child: Center(
-                      child: Text(isEmptySearch ? "" : "No city found, keep searching"),
+                  if ((snapshot.data ?? []).isEmpty) {
+                    return SliverToBoxAdapter(
+                      child: Center(
+                        child: Text(isEmptySearch
+                            ? ""
+                            : "No city found, keep searching"),
+                      ),
+                    );
+                  }
+                  final items = snapshot.data ?? [];
+                  return SliverPadding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    sliver: SliverList.builder(
+                      itemCount: items.length,
+                      itemBuilder: (context, index) => SearchedCityTile(
+                        cityInfo: items[index],
+                        onTap: () async {
+                          await context.push(
+                            AppRoute.cityWeatherDetails,
+                            extra: {"city": items[index]},
+                          );
+                        },
+                      ),
                     ),
                   );
-                }
-                final items = snapshot.data ?? [];
-                return SliverPadding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  sliver: SliverList.builder(
-                    itemCount: items.length,
-                    itemBuilder: (context, index) => SearchedCityTile(
-                      cityInfo: items[index],
-                      onTap: () async {
-                        await context.push(
-                          AppRoute.cityWeatherDetails,
-                          extra: {"city": items[index]},
-                        );
-                      },
-                    ),
-                  ),
-                );
-              },
-            )
-          ],
+                },
+              )
+            ],
+          ),
         ),
       ),
     );

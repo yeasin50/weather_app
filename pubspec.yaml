@@ -1,10 +1,10 @@
 name: weather_app
-description: "A new Flutter project."
+description: "Weather app for personal use"
 publish_to: "none"
 version: 0.1.0
 
 environment:
-  sdk: ^3.5.1
+  sdk: ^3.11.1
 
 dependencies:
   cupertino_icons: ^1.0.8
@@ -21,11 +21,12 @@ dependencies:
   isar: 4.0.0-dev.14
   isar_flutter_libs: ^4.0.0-dev.14
   path_provider: ^2.1.4
+  cached_network_image: ^3.4.1
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^4.0.0
+  flutter_lints: ^6.0.0
   build_runner: ^2.4.12
   flutter_gen_runner: any
 

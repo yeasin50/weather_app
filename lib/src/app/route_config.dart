@@ -15,30 +15,22 @@ class AppRoute {
     return GoRouter(
       initialLocation: home,
       routes: [
-        GoRoute(
-          path: home,
-          builder: (context, state) => const HomePage(),
-        ),
-        GoRoute(
-          path: savedPage,
-          builder: (context, state) => const SavedCityPage(),
-        ),
+        GoRoute(path: home, builder: (context, state) => const HomePage()),
+        GoRoute(path: savedPage, builder: (context, state) => SavedCityPage()),
         GoRoute(
           path: searchCity,
           builder: (context, state) => const SearchCityPage(),
         ),
         GoRoute(
-            path: cityWeatherDetails,
-            builder: (context, state) {
-              final data = state.extra as Map<String, dynamic>;
+          path: cityWeatherDetails,
+          builder: (context, state) {
+            final data = state.extra as Map<String, dynamic>;
 
-              final city = data['city'];
-              final isFromSaved = data['isFromSaved'] ?? false;
-              return CityWeatherPage(
-                city: city,
-                showDeleteButton: isFromSaved,
-              );
-            }),
+            final city = data['city'];
+            final isFromSaved = data['isFromSaved'] ?? false;
+            return CityWeatherPage(city: city, showDeleteButton: isFromSaved);
+          },
+        ),
       ],
     );
   }

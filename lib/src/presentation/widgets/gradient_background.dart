@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class GradientBackground extends StatelessWidget {
   const GradientBackground({
@@ -17,15 +18,12 @@ class GradientBackground extends StatelessWidget {
         image: isImage == false
             ? null
             : DecorationImage(
-                image: const NetworkImage(
+                image: const CachedNetworkImageProvider(
                   "https://images.pexels.com/photos/2469122/pexels-photo-2469122.jpeg",
                 ),
                 colorFilter: ColorFilter.mode(
-                  Colors.black.withAlpha(50),
-                  BlendMode.saturation,
-                ),
-                fit: BoxFit.cover,
-              ),
+                    Colors.black.withAlpha(50), BlendMode.saturation),
+                fit: BoxFit.cover),
         gradient: isImage
             ? null
             : const LinearGradient(
@@ -38,7 +36,7 @@ class GradientBackground extends StatelessWidget {
                 end: Alignment.bottomRight,
               ),
       ),
-      child: child,
+      child: SafeArea(child: child),
     );
   }
 }
