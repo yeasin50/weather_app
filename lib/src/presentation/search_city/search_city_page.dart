@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:weather_app/src/domain/domain.dart';
-import 'package:weather_app/src/infrastructure/repository/location_repo.dart';
+import 'package:weather_app/src/infrastructure/repository/weather_service_impl.dart';
 import 'package:weather_app/src/presentation/widgets/gradient_background.dart';
 
 import '../../app/route_config.dart';
@@ -66,9 +66,9 @@ class _SearchCityPageState extends State<SearchCityPage> {
                   if ((snapshot.data ?? []).isEmpty) {
                     return SliverToBoxAdapter(
                       child: Center(
-                        child: Text(isEmptySearch
-                            ? ""
-                            : "No city found, keep searching"),
+                        child: Text(
+                          isEmptySearch ? "" : "No city found, keep searching",
+                        ),
                       ),
                     );
                   }
@@ -89,7 +89,7 @@ class _SearchCityPageState extends State<SearchCityPage> {
                     ),
                   );
                 },
-              )
+              ),
             ],
           ),
         ),

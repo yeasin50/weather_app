@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:weather_app/src/domain/entity/weather_record.dart';
 import 'widgets/searched_city_details_view.dart';
 
 import '../../domain/domain.dart';
-import '../../infrastructure/repository/metro_weather_repo.dart';
 import '../widgets/gradient_background.dart';
 
 class CityWeatherPage extends StatefulWidget {
@@ -12,7 +12,7 @@ class CityWeatherPage extends StatefulWidget {
     required this.city,
     required this.showDeleteButton,
   });
-  final CityInfo city;
+  final CityRecord city;
   final bool showDeleteButton;
 
   @override
@@ -41,7 +41,9 @@ class _CityWeatherPageState extends State<CityWeatherPage> {
     // Get the extra data, safely casting to the expected type
     final route = GoRouter.of(context);
     final extra = route.routerDelegate.currentConfiguration.extra;
-    print("extra ${extra} ${route.routerDelegate.currentConfiguration.fullPath}");
+    print(
+      "extra ${extra} ${route.routerDelegate.currentConfiguration.fullPath}",
+    );
     return Scaffold(
       body: GradientBackground(
         isImage: false,
@@ -60,16 +62,16 @@ class _CityWeatherPageState extends State<CityWeatherPage> {
                   }
 
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
+                    return const Center(child: CircularProgressIndicator());
                   }
 
                   if (snapshot.hasData == true) {
                     final result = snapshot.data!;
 
                     if (result.$2 != null || result.$1 == null) {
-                      return Text(result.$2?.toString() ?? "something went wrong");
+                      return Text(
+                        result.$2?.toString() ?? "something went wrong",
+                      );
                     }
 
                     return SearchedCityDetailsView(
@@ -79,9 +81,7 @@ class _CityWeatherPageState extends State<CityWeatherPage> {
                     );
                   }
 
-                  return const Center(
-                    child: Text("Ugh..Na state"),
-                  );
+                  return const Center(child: Text("Ugh..Na state"));
                 },
               ),
             ),

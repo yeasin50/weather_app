@@ -31,9 +31,6 @@ class $AssetsIconsGen {
 class $AssetsImagesGen {
   const $AssetsImagesGen();
 
-  /// File path: assets/images/house.png
-  AssetGenImage get house => const AssetGenImage('assets/images/house.png');
-
   /// File path: assets/images/moon_cloud_fast_rain.png
   AssetGenImage get moonCloudFastRain =>
       const AssetGenImage('assets/images/moon_cloud_fast_rain.png');
@@ -55,7 +52,6 @@ class $AssetsImagesGen {
 
   /// List of all assets
   List<AssetGenImage> get values => [
-        house,
         moonCloudFastRain,
         moonCloudMidRain,
         sunCloudAngelRain,
