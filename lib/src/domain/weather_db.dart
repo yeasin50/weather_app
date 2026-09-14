@@ -5,10 +5,25 @@ abstract class IWeatherDatabase {
   const IWeatherDatabase();
   static int primaryHomeWeatherId = 0;
 
-  Future<WeatherRecord> saveRecord(WeatherRecord record);
-  Future<List<WeatherRecord>> getRecords();
-  Future<bool> deleteRecord(WeatherRecord record);
+  Future<CityWeatherRecord> saveRecord(CityWeatherRecord record);
+
+  Future<List<CityWeatherRecord>> getRecords();
+  Future<bool> deleteRecord(int id);
 
   Future<UserPreference> updatePreference(UserPreference pref);
   Future<UserPreference> getPreference();
+}
+
+class CityWeatherRecord {
+  const CityWeatherRecord({
+    required this.date,
+    required this.city,
+    required this.dailyItems,
+    required this.hourlyItems,
+  });
+
+  final DateTime date;
+  final CityRecord city;
+  final List<WeatherMeasurement> dailyItems;
+  final List<WeatherMeasurement> hourlyItems;
 }

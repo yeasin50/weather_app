@@ -3,246 +3,293 @@
 part of 'user_preference.dart';
 
 // **************************************************************************
-// _IsarCollectionGenerator
+// IsarCollectionGenerator
 // **************************************************************************
 
 // coverage:ignore-file
-// ignore_for_file: duplicate_ignore, invalid_use_of_protected_member, lines_longer_than_80_chars, constant_identifier_names, avoid_js_rounded_ints, no_leading_underscores_for_local_identifiers, require_trailing_commas, unnecessary_parenthesis, unnecessary_raw_strings, unnecessary_null_in_if_null_operators, library_private_types_in_public_api, prefer_const_constructors
-// ignore_for_file: type=lint
+// ignore_for_file: duplicate_ignore, non_constant_identifier_names, constant_identifier_names, invalid_use_of_protected_member, unnecessary_cast, prefer_const_constructors, lines_longer_than_80_chars, require_trailing_commas, inference_failure_on_function_invocation, unnecessary_parenthesis, unnecessary_raw_strings, unnecessary_null_checks, join_return_with_assignment, prefer_final_locals, avoid_js_rounded_ints, avoid_positional_boolean_parameters, always_specify_types
 
 extension GetUserPreferenceCollection on Isar {
-  IsarCollection<int, UserPreference> get userPreferences => this.collection();
+  IsarCollection<UserPreference> get userPreferences => this.collection();
 }
 
-const UserPreferenceSchema = IsarGeneratedSchema(
-  schema: IsarSchema(
-    name: 'UserPreference',
-    idName: 'id',
-    embedded: false,
-    properties: [
-      IsarPropertySchema(
-        name: 'homeItemId',
-        type: IsarType.long,
-      ),
-      IsarPropertySchema(
-        name: 'unit',
-        type: IsarType.byte,
-        enumMap: {"degree": 0, "celcius": 1},
-      ),
-    ],
-    indexes: [],
-  ),
-  converter: IsarObjectConverter<int, UserPreference>(
-    serialize: serializeUserPreference,
-    deserialize: deserializeUserPreference,
-    deserializeProperty: deserializeUserPreferenceProp,
-  ),
-  embeddedSchemas: [],
+const UserPreferenceSchema = CollectionSchema(
+  name: r'UserPreference',
+  id: 916664336621196308,
+  properties: {
+    r'homeItemId': PropertySchema(
+      id: 0,
+      name: r'homeItemId',
+      type: IsarType.long,
+    ),
+    r'unit': PropertySchema(
+      id: 1,
+      name: r'unit',
+      type: IsarType.string,
+      enumMap: _UserPreferenceunitEnumValueMap,
+    ),
+    r'updatedAt': PropertySchema(
+      id: 2,
+      name: r'updatedAt',
+      type: IsarType.dateTime,
+    ),
+  },
+
+  estimateSize: _userPreferenceEstimateSize,
+  serialize: _userPreferenceSerialize,
+  deserialize: _userPreferenceDeserialize,
+  deserializeProp: _userPreferenceDeserializeProp,
+  idName: r'id',
+  indexes: {},
+  links: {},
+  embeddedSchemas: {},
+
+  getId: _userPreferenceGetId,
+  getLinks: _userPreferenceGetLinks,
+  attach: _userPreferenceAttach,
+  version: '3.3.0-dev.1',
 );
 
-@isarProtected
-int serializeUserPreference(IsarWriter writer, UserPreference object) {
-  IsarCore.writeLong(writer, 1, object.homeItemId);
-  IsarCore.writeByte(writer, 2, object.unit.index);
-  return object.id;
+int _userPreferenceEstimateSize(
+  UserPreference object,
+  List<int> offsets,
+  Map<Type, List<int>> allOffsets,
+) {
+  var bytesCount = offsets.last;
+  bytesCount += 3 + object.unit.name.length * 3;
+  return bytesCount;
 }
 
-@isarProtected
-UserPreference deserializeUserPreference(IsarReader reader) {
-  final int _homeItemId;
-  {
-    final value = IsarCore.readLong(reader, 1);
-    if (value == -9223372036854775808) {
-      _homeItemId = 0;
-    } else {
-      _homeItemId = value;
-    }
-  }
-  final WeatherUnit _unit;
-  {
-    if (IsarCore.readNull(reader, 2)) {
-      _unit = WeatherUnit.degree;
-    } else {
-      _unit = _userPreferenceUnit[IsarCore.readByte(reader, 2)] ??
-          WeatherUnit.degree;
-    }
-  }
+void _userPreferenceSerialize(
+  UserPreference object,
+  IsarWriter writer,
+  List<int> offsets,
+  Map<Type, List<int>> allOffsets,
+) {
+  writer.writeLong(offsets[0], object.homeItemId);
+  writer.writeString(offsets[1], object.unit.name);
+  writer.writeDateTime(offsets[2], object.updatedAt);
+}
+
+UserPreference _userPreferenceDeserialize(
+  Id id,
+  IsarReader reader,
+  List<int> offsets,
+  Map<Type, List<int>> allOffsets,
+) {
   final object = UserPreference(
-    homeItemId: _homeItemId,
-    unit: _unit,
+    homeItemId: reader.readLongOrNull(offsets[0]) ?? 0,
+    unit:
+        _UserPreferenceunitValueEnumMap[reader.readStringOrNull(offsets[1])] ??
+        WeatherUnit.degree,
+    updatedAt: reader.readDateTimeOrNull(offsets[2]),
   );
   return object;
 }
 
-@isarProtected
-dynamic deserializeUserPreferenceProp(IsarReader reader, int property) {
-  switch (property) {
+P _userPreferenceDeserializeProp<P>(
+  IsarReader reader,
+  int propertyId,
+  int offset,
+  Map<Type, List<int>> allOffsets,
+) {
+  switch (propertyId) {
     case 0:
-      return IsarCore.readId(reader);
+      return (reader.readLongOrNull(offset) ?? 0) as P;
     case 1:
-      {
-        final value = IsarCore.readLong(reader, 1);
-        if (value == -9223372036854775808) {
-          return 0;
-        } else {
-          return value;
-        }
-      }
+      return (_UserPreferenceunitValueEnumMap[reader.readStringOrNull(
+                offset,
+              )] ??
+              WeatherUnit.degree)
+          as P;
     case 2:
-      {
-        if (IsarCore.readNull(reader, 2)) {
-          return WeatherUnit.degree;
-        } else {
-          return _userPreferenceUnit[IsarCore.readByte(reader, 2)] ??
-              WeatherUnit.degree;
-        }
-      }
+      return (reader.readDateTimeOrNull(offset)) as P;
     default:
-      throw ArgumentError('Unknown property: $property');
+      throw IsarError('Unknown property with id $propertyId');
   }
 }
 
-sealed class _UserPreferenceUpdate {
-  bool call({
-    required int id,
-    int? homeItemId,
-    WeatherUnit? unit,
-  });
-}
-
-class _UserPreferenceUpdateImpl implements _UserPreferenceUpdate {
-  const _UserPreferenceUpdateImpl(this.collection);
-
-  final IsarCollection<int, UserPreference> collection;
-
-  @override
-  bool call({
-    required int id,
-    Object? homeItemId = ignore,
-    Object? unit = ignore,
-  }) {
-    return collection.updateProperties([
-          id
-        ], {
-          if (homeItemId != ignore) 1: homeItemId as int?,
-          if (unit != ignore) 2: unit as WeatherUnit?,
-        }) >
-        0;
-  }
-}
-
-sealed class _UserPreferenceUpdateAll {
-  int call({
-    required List<int> id,
-    int? homeItemId,
-    WeatherUnit? unit,
-  });
-}
-
-class _UserPreferenceUpdateAllImpl implements _UserPreferenceUpdateAll {
-  const _UserPreferenceUpdateAllImpl(this.collection);
-
-  final IsarCollection<int, UserPreference> collection;
-
-  @override
-  int call({
-    required List<int> id,
-    Object? homeItemId = ignore,
-    Object? unit = ignore,
-  }) {
-    return collection.updateProperties(id, {
-      if (homeItemId != ignore) 1: homeItemId as int?,
-      if (unit != ignore) 2: unit as WeatherUnit?,
-    });
-  }
-}
-
-extension UserPreferenceUpdate on IsarCollection<int, UserPreference> {
-  _UserPreferenceUpdate get update => _UserPreferenceUpdateImpl(this);
-
-  _UserPreferenceUpdateAll get updateAll => _UserPreferenceUpdateAllImpl(this);
-}
-
-sealed class _UserPreferenceQueryUpdate {
-  int call({
-    int? homeItemId,
-    WeatherUnit? unit,
-  });
-}
-
-class _UserPreferenceQueryUpdateImpl implements _UserPreferenceQueryUpdate {
-  const _UserPreferenceQueryUpdateImpl(this.query, {this.limit});
-
-  final IsarQuery<UserPreference> query;
-  final int? limit;
-
-  @override
-  int call({
-    Object? homeItemId = ignore,
-    Object? unit = ignore,
-  }) {
-    return query.updateProperties(limit: limit, {
-      if (homeItemId != ignore) 1: homeItemId as int?,
-      if (unit != ignore) 2: unit as WeatherUnit?,
-    });
-  }
-}
-
-extension UserPreferenceQueryUpdate on IsarQuery<UserPreference> {
-  _UserPreferenceQueryUpdate get updateFirst =>
-      _UserPreferenceQueryUpdateImpl(this, limit: 1);
-
-  _UserPreferenceQueryUpdate get updateAll =>
-      _UserPreferenceQueryUpdateImpl(this);
-}
-
-class _UserPreferenceQueryBuilderUpdateImpl
-    implements _UserPreferenceQueryUpdate {
-  const _UserPreferenceQueryBuilderUpdateImpl(this.query, {this.limit});
-
-  final QueryBuilder<UserPreference, UserPreference, QOperations> query;
-  final int? limit;
-
-  @override
-  int call({
-    Object? homeItemId = ignore,
-    Object? unit = ignore,
-  }) {
-    final q = query.build();
-    try {
-      return q.updateProperties(limit: limit, {
-        if (homeItemId != ignore) 1: homeItemId as int?,
-        if (unit != ignore) 2: unit as WeatherUnit?,
-      });
-    } finally {
-      q.close();
-    }
-  }
-}
-
-extension UserPreferenceQueryBuilderUpdate
-    on QueryBuilder<UserPreference, UserPreference, QOperations> {
-  _UserPreferenceQueryUpdate get updateFirst =>
-      _UserPreferenceQueryBuilderUpdateImpl(this, limit: 1);
-
-  _UserPreferenceQueryUpdate get updateAll =>
-      _UserPreferenceQueryBuilderUpdateImpl(this);
-}
-
-const _userPreferenceUnit = {
-  0: WeatherUnit.degree,
-  1: WeatherUnit.celcius,
+const _UserPreferenceunitEnumValueMap = {
+  r'degree': r'degree',
+  r'celcius': r'celcius',
 };
+const _UserPreferenceunitValueEnumMap = {
+  r'degree': WeatherUnit.degree,
+  r'celcius': WeatherUnit.celcius,
+};
+
+Id _userPreferenceGetId(UserPreference object) {
+  return object.id;
+}
+
+List<IsarLinkBase<dynamic>> _userPreferenceGetLinks(UserPreference object) {
+  return [];
+}
+
+void _userPreferenceAttach(
+  IsarCollection<dynamic> col,
+  Id id,
+  UserPreference object,
+) {}
+
+extension UserPreferenceQueryWhereSort
+    on QueryBuilder<UserPreference, UserPreference, QWhere> {
+  QueryBuilder<UserPreference, UserPreference, QAfterWhere> anyId() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(const IdWhereClause.any());
+    });
+  }
+}
+
+extension UserPreferenceQueryWhere
+    on QueryBuilder<UserPreference, UserPreference, QWhereClause> {
+  QueryBuilder<UserPreference, UserPreference, QAfterWhereClause> idEqualTo(
+    Id id,
+  ) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(IdWhereClause.between(lower: id, upper: id));
+    });
+  }
+
+  QueryBuilder<UserPreference, UserPreference, QAfterWhereClause> idNotEqualTo(
+    Id id,
+  ) {
+    return QueryBuilder.apply(this, (query) {
+      if (query.whereSort == Sort.asc) {
+        return query
+            .addWhereClause(
+              IdWhereClause.lessThan(upper: id, includeUpper: false),
+            )
+            .addWhereClause(
+              IdWhereClause.greaterThan(lower: id, includeLower: false),
+            );
+      } else {
+        return query
+            .addWhereClause(
+              IdWhereClause.greaterThan(lower: id, includeLower: false),
+            )
+            .addWhereClause(
+              IdWhereClause.lessThan(upper: id, includeUpper: false),
+            );
+      }
+    });
+  }
+
+  QueryBuilder<UserPreference, UserPreference, QAfterWhereClause> idGreaterThan(
+    Id id, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(
+        IdWhereClause.greaterThan(lower: id, includeLower: include),
+      );
+    });
+  }
+
+  QueryBuilder<UserPreference, UserPreference, QAfterWhereClause> idLessThan(
+    Id id, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(
+        IdWhereClause.lessThan(upper: id, includeUpper: include),
+      );
+    });
+  }
+
+  QueryBuilder<UserPreference, UserPreference, QAfterWhereClause> idBetween(
+    Id lowerId,
+    Id upperId, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(
+        IdWhereClause.between(
+          lower: lowerId,
+          includeLower: includeLower,
+          upper: upperId,
+          includeUpper: includeUpper,
+        ),
+      );
+    });
+  }
+}
 
 extension UserPreferenceQueryFilter
     on QueryBuilder<UserPreference, UserPreference, QFilterCondition> {
+  QueryBuilder<UserPreference, UserPreference, QAfterFilterCondition>
+  homeItemIdEqualTo(int value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.equalTo(property: r'homeItemId', value: value),
+      );
+    });
+  }
+
+  QueryBuilder<UserPreference, UserPreference, QAfterFilterCondition>
+  homeItemIdGreaterThan(int value, {bool include = false}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.greaterThan(
+          include: include,
+          property: r'homeItemId',
+          value: value,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<UserPreference, UserPreference, QAfterFilterCondition>
+  homeItemIdLessThan(int value, {bool include = false}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.lessThan(
+          include: include,
+          property: r'homeItemId',
+          value: value,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<UserPreference, UserPreference, QAfterFilterCondition>
+  homeItemIdBetween(
+    int lower,
+    int upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.between(
+          property: r'homeItemId',
+          lower: lower,
+          includeLower: includeLower,
+          upper: upper,
+          includeUpper: includeUpper,
+        ),
+      );
+    });
+  }
+
   QueryBuilder<UserPreference, UserPreference, QAfterFilterCondition> idEqualTo(
-    int value,
+    Id value,
   ) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
-        EqualCondition(
-          property: 0,
+        FilterCondition.equalTo(property: r'id', value: value),
+      );
+    });
+  }
+
+  QueryBuilder<UserPreference, UserPreference, QAfterFilterCondition>
+  idGreaterThan(Id value, {bool include = false}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.greaterThan(
+          include: include,
+          property: r'id',
           value: value,
         ),
       );
@@ -250,55 +297,12 @@ extension UserPreferenceQueryFilter
   }
 
   QueryBuilder<UserPreference, UserPreference, QAfterFilterCondition>
-      idGreaterThan(
-    int value,
-  ) {
+  idLessThan(Id value, {bool include = false}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
-        GreaterCondition(
-          property: 0,
-          value: value,
-        ),
-      );
-    });
-  }
-
-  QueryBuilder<UserPreference, UserPreference, QAfterFilterCondition>
-      idGreaterThanOrEqualTo(
-    int value,
-  ) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(
-        GreaterOrEqualCondition(
-          property: 0,
-          value: value,
-        ),
-      );
-    });
-  }
-
-  QueryBuilder<UserPreference, UserPreference, QAfterFilterCondition>
-      idLessThan(
-    int value,
-  ) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(
-        LessCondition(
-          property: 0,
-          value: value,
-        ),
-      );
-    });
-  }
-
-  QueryBuilder<UserPreference, UserPreference, QAfterFilterCondition>
-      idLessThanOrEqualTo(
-    int value,
-  ) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(
-        LessOrEqualCondition(
-          property: 0,
+        FilterCondition.lessThan(
+          include: include,
+          property: r'id',
           value: value,
         ),
       );
@@ -306,187 +310,233 @@ extension UserPreferenceQueryFilter
   }
 
   QueryBuilder<UserPreference, UserPreference, QAfterFilterCondition> idBetween(
-    int lower,
-    int upper,
-  ) {
+    Id lower,
+    Id upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
-        BetweenCondition(
-          property: 0,
+        FilterCondition.between(
+          property: r'id',
           lower: lower,
+          includeLower: includeLower,
           upper: upper,
+          includeUpper: includeUpper,
         ),
       );
     });
   }
 
   QueryBuilder<UserPreference, UserPreference, QAfterFilterCondition>
-      homeItemIdEqualTo(
-    int value,
-  ) {
+  unitEqualTo(WeatherUnit value, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
-        EqualCondition(
-          property: 1,
+        FilterCondition.equalTo(
+          property: r'unit',
           value: value,
+          caseSensitive: caseSensitive,
         ),
       );
     });
   }
 
   QueryBuilder<UserPreference, UserPreference, QAfterFilterCondition>
-      homeItemIdGreaterThan(
-    int value,
-  ) {
+  unitGreaterThan(
+    WeatherUnit value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
-        GreaterCondition(
-          property: 1,
+        FilterCondition.greaterThan(
+          include: include,
+          property: r'unit',
           value: value,
+          caseSensitive: caseSensitive,
         ),
       );
     });
   }
 
   QueryBuilder<UserPreference, UserPreference, QAfterFilterCondition>
-      homeItemIdGreaterThanOrEqualTo(
-    int value,
-  ) {
+  unitLessThan(
+    WeatherUnit value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
-        GreaterOrEqualCondition(
-          property: 1,
+        FilterCondition.lessThan(
+          include: include,
+          property: r'unit',
           value: value,
+          caseSensitive: caseSensitive,
         ),
       );
     });
   }
 
   QueryBuilder<UserPreference, UserPreference, QAfterFilterCondition>
-      homeItemIdLessThan(
-    int value,
-  ) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(
-        LessCondition(
-          property: 1,
-          value: value,
-        ),
-      );
-    });
-  }
-
-  QueryBuilder<UserPreference, UserPreference, QAfterFilterCondition>
-      homeItemIdLessThanOrEqualTo(
-    int value,
-  ) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(
-        LessOrEqualCondition(
-          property: 1,
-          value: value,
-        ),
-      );
-    });
-  }
-
-  QueryBuilder<UserPreference, UserPreference, QAfterFilterCondition>
-      homeItemIdBetween(
-    int lower,
-    int upper,
-  ) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(
-        BetweenCondition(
-          property: 1,
-          lower: lower,
-          upper: upper,
-        ),
-      );
-    });
-  }
-
-  QueryBuilder<UserPreference, UserPreference, QAfterFilterCondition>
-      unitEqualTo(
-    WeatherUnit value,
-  ) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(
-        EqualCondition(
-          property: 2,
-          value: value.index,
-        ),
-      );
-    });
-  }
-
-  QueryBuilder<UserPreference, UserPreference, QAfterFilterCondition>
-      unitGreaterThan(
-    WeatherUnit value,
-  ) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(
-        GreaterCondition(
-          property: 2,
-          value: value.index,
-        ),
-      );
-    });
-  }
-
-  QueryBuilder<UserPreference, UserPreference, QAfterFilterCondition>
-      unitGreaterThanOrEqualTo(
-    WeatherUnit value,
-  ) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(
-        GreaterOrEqualCondition(
-          property: 2,
-          value: value.index,
-        ),
-      );
-    });
-  }
-
-  QueryBuilder<UserPreference, UserPreference, QAfterFilterCondition>
-      unitLessThan(
-    WeatherUnit value,
-  ) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(
-        LessCondition(
-          property: 2,
-          value: value.index,
-        ),
-      );
-    });
-  }
-
-  QueryBuilder<UserPreference, UserPreference, QAfterFilterCondition>
-      unitLessThanOrEqualTo(
-    WeatherUnit value,
-  ) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(
-        LessOrEqualCondition(
-          property: 2,
-          value: value.index,
-        ),
-      );
-    });
-  }
-
-  QueryBuilder<UserPreference, UserPreference, QAfterFilterCondition>
-      unitBetween(
+  unitBetween(
     WeatherUnit lower,
-    WeatherUnit upper,
-  ) {
+    WeatherUnit upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
-        BetweenCondition(
-          property: 2,
-          lower: lower.index,
-          upper: upper.index,
+        FilterCondition.between(
+          property: r'unit',
+          lower: lower,
+          includeLower: includeLower,
+          upper: upper,
+          includeUpper: includeUpper,
+          caseSensitive: caseSensitive,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<UserPreference, UserPreference, QAfterFilterCondition>
+  unitStartsWith(String value, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.startsWith(
+          property: r'unit',
+          value: value,
+          caseSensitive: caseSensitive,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<UserPreference, UserPreference, QAfterFilterCondition>
+  unitEndsWith(String value, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.endsWith(
+          property: r'unit',
+          value: value,
+          caseSensitive: caseSensitive,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<UserPreference, UserPreference, QAfterFilterCondition>
+  unitContains(String value, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.contains(
+          property: r'unit',
+          value: value,
+          caseSensitive: caseSensitive,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<UserPreference, UserPreference, QAfterFilterCondition>
+  unitMatches(String pattern, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.matches(
+          property: r'unit',
+          wildcard: pattern,
+          caseSensitive: caseSensitive,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<UserPreference, UserPreference, QAfterFilterCondition>
+  unitIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.equalTo(property: r'unit', value: ''),
+      );
+    });
+  }
+
+  QueryBuilder<UserPreference, UserPreference, QAfterFilterCondition>
+  unitIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.greaterThan(property: r'unit', value: ''),
+      );
+    });
+  }
+
+  QueryBuilder<UserPreference, UserPreference, QAfterFilterCondition>
+  updatedAtIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        const FilterCondition.isNull(property: r'updatedAt'),
+      );
+    });
+  }
+
+  QueryBuilder<UserPreference, UserPreference, QAfterFilterCondition>
+  updatedAtIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        const FilterCondition.isNotNull(property: r'updatedAt'),
+      );
+    });
+  }
+
+  QueryBuilder<UserPreference, UserPreference, QAfterFilterCondition>
+  updatedAtEqualTo(DateTime? value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.equalTo(property: r'updatedAt', value: value),
+      );
+    });
+  }
+
+  QueryBuilder<UserPreference, UserPreference, QAfterFilterCondition>
+  updatedAtGreaterThan(DateTime? value, {bool include = false}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.greaterThan(
+          include: include,
+          property: r'updatedAt',
+          value: value,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<UserPreference, UserPreference, QAfterFilterCondition>
+  updatedAtLessThan(DateTime? value, {bool include = false}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.lessThan(
+          include: include,
+          property: r'updatedAt',
+          value: value,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<UserPreference, UserPreference, QAfterFilterCondition>
+  updatedAtBetween(
+    DateTime? lower,
+    DateTime? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.between(
+          property: r'updatedAt',
+          lower: lower,
+          includeLower: includeLower,
+          upper: upper,
+          includeUpper: includeUpper,
         ),
       );
     });
@@ -496,167 +546,154 @@ extension UserPreferenceQueryFilter
 extension UserPreferenceQueryObject
     on QueryBuilder<UserPreference, UserPreference, QFilterCondition> {}
 
+extension UserPreferenceQueryLinks
+    on QueryBuilder<UserPreference, UserPreference, QFilterCondition> {}
+
 extension UserPreferenceQuerySortBy
     on QueryBuilder<UserPreference, UserPreference, QSortBy> {
-  QueryBuilder<UserPreference, UserPreference, QAfterSortBy> sortById() {
+  QueryBuilder<UserPreference, UserPreference, QAfterSortBy>
+  sortByHomeItemId() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(0);
-    });
-  }
-
-  QueryBuilder<UserPreference, UserPreference, QAfterSortBy> sortByIdDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(0, sort: Sort.desc);
+      return query.addSortBy(r'homeItemId', Sort.asc);
     });
   }
 
   QueryBuilder<UserPreference, UserPreference, QAfterSortBy>
-      sortByHomeItemId() {
+  sortByHomeItemIdDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(1);
-    });
-  }
-
-  QueryBuilder<UserPreference, UserPreference, QAfterSortBy>
-      sortByHomeItemIdDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(1, sort: Sort.desc);
+      return query.addSortBy(r'homeItemId', Sort.desc);
     });
   }
 
   QueryBuilder<UserPreference, UserPreference, QAfterSortBy> sortByUnit() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(2);
+      return query.addSortBy(r'unit', Sort.asc);
     });
   }
 
   QueryBuilder<UserPreference, UserPreference, QAfterSortBy> sortByUnitDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(2, sort: Sort.desc);
+      return query.addSortBy(r'unit', Sort.desc);
+    });
+  }
+
+  QueryBuilder<UserPreference, UserPreference, QAfterSortBy> sortByUpdatedAt() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'updatedAt', Sort.asc);
+    });
+  }
+
+  QueryBuilder<UserPreference, UserPreference, QAfterSortBy>
+  sortByUpdatedAtDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'updatedAt', Sort.desc);
     });
   }
 }
 
 extension UserPreferenceQuerySortThenBy
     on QueryBuilder<UserPreference, UserPreference, QSortThenBy> {
+  QueryBuilder<UserPreference, UserPreference, QAfterSortBy>
+  thenByHomeItemId() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'homeItemId', Sort.asc);
+    });
+  }
+
+  QueryBuilder<UserPreference, UserPreference, QAfterSortBy>
+  thenByHomeItemIdDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'homeItemId', Sort.desc);
+    });
+  }
+
   QueryBuilder<UserPreference, UserPreference, QAfterSortBy> thenById() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(0);
+      return query.addSortBy(r'id', Sort.asc);
     });
   }
 
   QueryBuilder<UserPreference, UserPreference, QAfterSortBy> thenByIdDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(0, sort: Sort.desc);
-    });
-  }
-
-  QueryBuilder<UserPreference, UserPreference, QAfterSortBy>
-      thenByHomeItemId() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(1);
-    });
-  }
-
-  QueryBuilder<UserPreference, UserPreference, QAfterSortBy>
-      thenByHomeItemIdDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(1, sort: Sort.desc);
+      return query.addSortBy(r'id', Sort.desc);
     });
   }
 
   QueryBuilder<UserPreference, UserPreference, QAfterSortBy> thenByUnit() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(2);
+      return query.addSortBy(r'unit', Sort.asc);
     });
   }
 
   QueryBuilder<UserPreference, UserPreference, QAfterSortBy> thenByUnitDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(2, sort: Sort.desc);
+      return query.addSortBy(r'unit', Sort.desc);
+    });
+  }
+
+  QueryBuilder<UserPreference, UserPreference, QAfterSortBy> thenByUpdatedAt() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'updatedAt', Sort.asc);
+    });
+  }
+
+  QueryBuilder<UserPreference, UserPreference, QAfterSortBy>
+  thenByUpdatedAtDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'updatedAt', Sort.desc);
     });
   }
 }
 
 extension UserPreferenceQueryWhereDistinct
     on QueryBuilder<UserPreference, UserPreference, QDistinct> {
-  QueryBuilder<UserPreference, UserPreference, QAfterDistinct>
-      distinctByHomeItemId() {
+  QueryBuilder<UserPreference, UserPreference, QDistinct>
+  distinctByHomeItemId() {
     return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(1);
+      return query.addDistinctBy(r'homeItemId');
     });
   }
 
-  QueryBuilder<UserPreference, UserPreference, QAfterDistinct>
-      distinctByUnit() {
+  QueryBuilder<UserPreference, UserPreference, QDistinct> distinctByUnit({
+    bool caseSensitive = true,
+  }) {
     return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(2);
-    });
-  }
-}
-
-extension UserPreferenceQueryProperty1
-    on QueryBuilder<UserPreference, UserPreference, QProperty> {
-  QueryBuilder<UserPreference, int, QAfterProperty> idProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addProperty(0);
+      return query.addDistinctBy(r'unit', caseSensitive: caseSensitive);
     });
   }
 
-  QueryBuilder<UserPreference, int, QAfterProperty> homeItemIdProperty() {
+  QueryBuilder<UserPreference, UserPreference, QDistinct>
+  distinctByUpdatedAt() {
     return QueryBuilder.apply(this, (query) {
-      return query.addProperty(1);
-    });
-  }
-
-  QueryBuilder<UserPreference, WeatherUnit, QAfterProperty> unitProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addProperty(2);
+      return query.addDistinctBy(r'updatedAt');
     });
   }
 }
 
-extension UserPreferenceQueryProperty2<R>
-    on QueryBuilder<UserPreference, R, QAfterProperty> {
-  QueryBuilder<UserPreference, (R, int), QAfterProperty> idProperty() {
+extension UserPreferenceQueryProperty
+    on QueryBuilder<UserPreference, UserPreference, QQueryProperty> {
+  QueryBuilder<UserPreference, int, QQueryOperations> idProperty() {
     return QueryBuilder.apply(this, (query) {
-      return query.addProperty(0);
+      return query.addPropertyName(r'id');
     });
   }
 
-  QueryBuilder<UserPreference, (R, int), QAfterProperty> homeItemIdProperty() {
+  QueryBuilder<UserPreference, int, QQueryOperations> homeItemIdProperty() {
     return QueryBuilder.apply(this, (query) {
-      return query.addProperty(1);
+      return query.addPropertyName(r'homeItemId');
     });
   }
 
-  QueryBuilder<UserPreference, (R, WeatherUnit), QAfterProperty>
-      unitProperty() {
+  QueryBuilder<UserPreference, WeatherUnit, QQueryOperations> unitProperty() {
     return QueryBuilder.apply(this, (query) {
-      return query.addProperty(2);
-    });
-  }
-}
-
-extension UserPreferenceQueryProperty3<R1, R2>
-    on QueryBuilder<UserPreference, (R1, R2), QAfterProperty> {
-  QueryBuilder<UserPreference, (R1, R2, int), QOperations> idProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addProperty(0);
+      return query.addPropertyName(r'unit');
     });
   }
 
-  QueryBuilder<UserPreference, (R1, R2, int), QOperations>
-      homeItemIdProperty() {
+  QueryBuilder<UserPreference, DateTime?, QQueryOperations>
+  updatedAtProperty() {
     return QueryBuilder.apply(this, (query) {
-      return query.addProperty(1);
-    });
-  }
-
-  QueryBuilder<UserPreference, (R1, R2, WeatherUnit), QOperations>
-      unitProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addProperty(2);
+      return query.addPropertyName(r'updatedAt');
     });
   }
 }

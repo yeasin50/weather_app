@@ -5,9 +5,7 @@ import 'package:weather_app/src/infrastructure/weather_provider.dart';
 import 'package:weather_app/src/presentation/common/widgets/app_button.dart';
 import 'package:weather_app/src/presentation/home/widgets/app_bar.dart';
 import '../../app/route_config.dart';
-import '../../infrastructure/infrastructure.dart';
 
-import '../../domain/domain.dart';
 import '../widgets/gradient_background.dart';
 import 'widgets/my_city_weather_view.dart';
 
@@ -28,7 +26,7 @@ class _HomePageState extends State<HomePage> {
           final todayRecord = data.todayWeather;
           final title = todayRecord == null
               ? "Search city"
-              : "${todayRecord.name}, ${todayRecord.country}";
+              : "{todayRecord.name}, {todayRecord.country}";
 
           return Scaffold(
             drawer: AppDrawer(),

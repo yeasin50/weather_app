@@ -49,7 +49,7 @@ class _AppDrawerState extends State<AppDrawer> {
               padding: const EdgeInsets.all(16.0),
               child: Column(
                 spacing: 16,
-                crossAxisAlignment: .stretch,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Row(
                     spacing: 16,
@@ -58,7 +58,7 @@ class _AppDrawerState extends State<AppDrawer> {
                       Text("location", style: textStyle.titleMedium),
                     ],
                   ),
-                  Expanded(child: SavedCityPage.view()), //list of saved country
+                  Expanded(child: SavedCityPage.view()),
                   AppButton.child(
                     onTap: () {
                       Scaffold.of(context).closeDrawer();
@@ -66,13 +66,16 @@ class _AppDrawerState extends State<AppDrawer> {
                     },
                     child: Row(
                       spacing: 8,
-                      mainAxisAlignment: .center,
-                      children: [Icon(Icons.search), Text("Search location")],
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Icon(Icons.search),
+                        const Text("Search location"),
+                      ],
                     ),
                   ),
 
-                  AppButton.child(child: Center(child: Text("unit"))),
-                  SizedBox(),
+                  AppButton.child(child: const Center(child: Text("unit"))),
+                  const SizedBox(),
                 ],
               ),
             ),

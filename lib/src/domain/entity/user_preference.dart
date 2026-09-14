@@ -1,15 +1,27 @@
-import 'package:isar/isar.dart';
+import 'package:isar_community/isar.dart';
 
 part 'user_preference.g.dart';
 
-enum WeatherUnit { degree, celcius }
+enum WeatherUnit {
+  degree(0),
+  celcius(1);
+
+  const WeatherUnit(this.value);
+  final short value;
+}
 
 @collection
 class UserPreference {
-  const UserPreference({this.homeItemId = 0, this.unit = WeatherUnit.degree})
-    : id = 0;
+  UserPreference({
+    this.homeItemId = 0,
+    this.unit = WeatherUnit.degree,
+    this.updatedAt,
+  }) : id = 0;
 
-  final int id;
+  final Id id;
   final int homeItemId;
+  @Enumerated(EnumType.name)
   final WeatherUnit unit;
+
+  DateTime? updatedAt;
 }

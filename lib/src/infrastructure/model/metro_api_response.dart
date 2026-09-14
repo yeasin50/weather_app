@@ -10,6 +10,7 @@ abstract class MetroApiCityInfo with _$MetroApiCityInfo {
   const MetroApiCityInfo._();
 
   const factory MetroApiCityInfo({
+    int? id,
     required double latitude,
     required double longitude,
     required String name,
@@ -27,6 +28,7 @@ abstract class MetroApiCityInfo with _$MetroApiCityInfo {
 
   CityInfo toDB() {
     return CityInfo(
+      id: id ?? DateTime.now().millisecondsSinceEpoch,
       name: name,
       latitude: latitude,
       longitude: longitude,
@@ -56,7 +58,6 @@ class MetroApiResponse with _$MetroApiResponse {
 
 extension MetroApiExt on MetroApiResponse {
   WeatherRecord get record => WeatherRecord(
-    id: DateTime.now().millisecondsSinceEpoch,
     date: DateTime.now(), // ? 0_o
     lastUpdate: DateTime.now(),
   );
@@ -64,8 +65,8 @@ extension MetroApiExt on MetroApiResponse {
   List<WeatherMeasurement> dailyRecords(int weatherId) {
     final List<WeatherMeasurement> result = [];
 
-    final times = daily?["times"];
-    if (times == null || times is! List<String>) {
+    final times = daily?["time"];
+    if (times is! List || (times).isEmpty) {
       throw Exception("time on daily record on should be list");
     }
 
@@ -87,14 +88,15 @@ extension MetroApiExt on MetroApiResponse {
         throw Exception("missing daily_units on daily record for $key");
       }
 
-      WeatherMeasurement(
-        id: DateTime.now().millisecondsSinceEpoch,
-        weatherId: weatherId,
-        time: days[i],
-        unit: unit,
-        value: daily![key]![i], //xd
-        interval: MeasurementInterval.daily,
-        measurementType: _measureFromStr(key),
+      result.add(
+        WeatherMeasurement(
+          weatherId: weatherId,
+          time: days[i],
+          unit: unit,
+          value: daily![key]![i].toString(),
+          interval: MeasurementInterval.daily,
+          measurementType: _measureFromStr(key),
+        ),
       );
     }
 
@@ -104,9 +106,9 @@ extension MetroApiExt on MetroApiResponse {
   List<WeatherMeasurement> hourlyRecords(int weatherId) {
     final List<WeatherMeasurement> result = [];
 
-    final times = hourly?["times"];
-    if (times == null || times is! List<String>) {
-      throw Exception("time on daily record on should be list");
+    final times = hourly?["time"];
+    if (times is! List || (times).isEmpty) {
+      throw Exception("time on daily record should be list");
     }
 
     final List<DateTime> days = [];
@@ -127,14 +129,15 @@ extension MetroApiExt on MetroApiResponse {
         throw Exception("missing hourly_units on daily record for $key");
       }
 
-      WeatherMeasurement(
-        id: DateTime.now().millisecondsSinceEpoch,
-        weatherId: weatherId,
-        time: days[i],
-        unit: unit,
-        value: hourly![key]![i], //xd
-        interval: MeasurementInterval.daily,
-        measurementType: _measureFromStr(key),
+      result.add(
+        WeatherMeasurement(
+          weatherId: weatherId,
+          time: days[i],
+          unit: unit,
+          value: hourly![key]![i].toString(), //xd
+          interval: MeasurementInterval.daily,
+          measurementType: _measureFromStr(key),
+        ),
       );
     }
 

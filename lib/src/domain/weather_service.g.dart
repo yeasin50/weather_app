@@ -8,6 +8,7 @@ part of 'weather_service.dart';
 
 _$CityInfoImpl _$$CityInfoImplFromJson(Map<String, dynamic> json) =>
     _$CityInfoImpl(
+      id: (json['id'] as num?)?.toInt(),
       name: json['name'] as String,
       latitude: (json['latitude'] as num).toDouble(),
       longitude: (json['longitude'] as num).toDouble(),
@@ -17,6 +18,7 @@ _$CityInfoImpl _$$CityInfoImplFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$$CityInfoImplToJson(_$CityInfoImpl instance) =>
     <String, dynamic>{
+      'id': instance.id,
       'name': instance.name,
       'latitude': instance.latitude,
       'longitude': instance.longitude,

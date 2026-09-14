@@ -1,5 +1,5 @@
 import 'dart:ui';
-import 'package:isar/isar.dart';
+import 'package:isar_community/isar.dart';
 import 'package:provider/provider.dart';
 
 import 'package:flutter/material.dart';
@@ -30,7 +30,12 @@ class _WeatherAppState extends State<WeatherApp> {
           return const _LoadingView();
         }
         if (snapshot.data == null) {
-          return Text("gonna update ui");
+          return Directionality(
+            textDirection: TextDirection.ltr,
+            child: Material(
+              child: Center(child: Text("gonna update ui\n ${snapshot.error}")),
+            ),
+          );
         }
 
         return MultiProvider(

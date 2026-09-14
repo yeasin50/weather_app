@@ -18,13 +18,13 @@ dependencies:
   hive: ^2.2.3
   stream_transform: ^2.1.0
 
-  isar: 4.0.0-dev.14
-  isar_flutter_libs: ^4.0.0-dev.14
   path_provider: ^2.1.4
   cached_network_image: ^3.4.1
   freezed_annotation: ^2.4.4
   json_annotation: ^4.9.0
   provider: ^6.1.5+1
+  isar_community: any
+  isar_community_flutter_libs: any
 
 dev_dependencies:
   flutter_test:
@@ -34,6 +34,7 @@ dev_dependencies:
   flutter_gen_runner: any
   freezed: ^2.5.2
   json_serializable: ^6.8.0
+  isar_community_generator: any
 
 flutter_gen:
   output: lib/gen/ # Optional (default: lib/gen/)

@@ -12,7 +12,8 @@ part of 'weather_service.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 CityInfo _$CityInfoFromJson(Map<String, dynamic> json) {
   return _CityInfo.fromJson(json);
@@ -20,14 +21,19 @@ CityInfo _$CityInfoFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$CityInfo {
+  int? get id => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
   double get latitude => throw _privateConstructorUsedError;
   double get longitude => throw _privateConstructorUsedError;
   String get countryCode => throw _privateConstructorUsedError;
   String get location => throw _privateConstructorUsedError;
 
+  /// Serializes this CityInfo to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of CityInfo
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $CityInfoCopyWith<CityInfo> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -37,12 +43,14 @@ abstract class $CityInfoCopyWith<$Res> {
   factory $CityInfoCopyWith(CityInfo value, $Res Function(CityInfo) then) =
       _$CityInfoCopyWithImpl<$Res, CityInfo>;
   @useResult
-  $Res call(
-      {String name,
-      double latitude,
-      double longitude,
-      String countryCode,
-      String location});
+  $Res call({
+    int? id,
+    String name,
+    double latitude,
+    double longitude,
+    String countryCode,
+    String location,
+  });
 }
 
 /// @nodoc
@@ -55,37 +63,47 @@ class _$CityInfoCopyWithImpl<$Res, $Val extends CityInfo>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of CityInfo
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? id = freezed,
     Object? name = null,
     Object? latitude = null,
     Object? longitude = null,
     Object? countryCode = null,
     Object? location = null,
   }) {
-    return _then(_value.copyWith(
-      name: null == name
-          ? _value.name
-          : name // ignore: cast_nullable_to_non_nullable
-              as String,
-      latitude: null == latitude
-          ? _value.latitude
-          : latitude // ignore: cast_nullable_to_non_nullable
-              as double,
-      longitude: null == longitude
-          ? _value.longitude
-          : longitude // ignore: cast_nullable_to_non_nullable
-              as double,
-      countryCode: null == countryCode
-          ? _value.countryCode
-          : countryCode // ignore: cast_nullable_to_non_nullable
-              as String,
-      location: null == location
-          ? _value.location
-          : location // ignore: cast_nullable_to_non_nullable
-              as String,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            id: freezed == id
+                ? _value.id
+                : id // ignore: cast_nullable_to_non_nullable
+                      as int?,
+            name: null == name
+                ? _value.name
+                : name // ignore: cast_nullable_to_non_nullable
+                      as String,
+            latitude: null == latitude
+                ? _value.latitude
+                : latitude // ignore: cast_nullable_to_non_nullable
+                      as double,
+            longitude: null == longitude
+                ? _value.longitude
+                : longitude // ignore: cast_nullable_to_non_nullable
+                      as double,
+            countryCode: null == countryCode
+                ? _value.countryCode
+                : countryCode // ignore: cast_nullable_to_non_nullable
+                      as String,
+            location: null == location
+                ? _value.location
+                : location // ignore: cast_nullable_to_non_nullable
+                      as String,
+          )
+          as $Val,
+    );
   }
 }
 
@@ -93,16 +111,19 @@ class _$CityInfoCopyWithImpl<$Res, $Val extends CityInfo>
 abstract class _$$CityInfoImplCopyWith<$Res>
     implements $CityInfoCopyWith<$Res> {
   factory _$$CityInfoImplCopyWith(
-          _$CityInfoImpl value, $Res Function(_$CityInfoImpl) then) =
-      __$$CityInfoImplCopyWithImpl<$Res>;
+    _$CityInfoImpl value,
+    $Res Function(_$CityInfoImpl) then,
+  ) = __$$CityInfoImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {String name,
-      double latitude,
-      double longitude,
-      String countryCode,
-      String location});
+  $Res call({
+    int? id,
+    String name,
+    double latitude,
+    double longitude,
+    String countryCode,
+    String location,
+  });
 }
 
 /// @nodoc
@@ -110,56 +131,70 @@ class __$$CityInfoImplCopyWithImpl<$Res>
     extends _$CityInfoCopyWithImpl<$Res, _$CityInfoImpl>
     implements _$$CityInfoImplCopyWith<$Res> {
   __$$CityInfoImplCopyWithImpl(
-      _$CityInfoImpl _value, $Res Function(_$CityInfoImpl) _then)
-      : super(_value, _then);
+    _$CityInfoImpl _value,
+    $Res Function(_$CityInfoImpl) _then,
+  ) : super(_value, _then);
 
+  /// Create a copy of CityInfo
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? id = freezed,
     Object? name = null,
     Object? latitude = null,
     Object? longitude = null,
     Object? countryCode = null,
     Object? location = null,
   }) {
-    return _then(_$CityInfoImpl(
-      name: null == name
-          ? _value.name
-          : name // ignore: cast_nullable_to_non_nullable
-              as String,
-      latitude: null == latitude
-          ? _value.latitude
-          : latitude // ignore: cast_nullable_to_non_nullable
-              as double,
-      longitude: null == longitude
-          ? _value.longitude
-          : longitude // ignore: cast_nullable_to_non_nullable
-              as double,
-      countryCode: null == countryCode
-          ? _value.countryCode
-          : countryCode // ignore: cast_nullable_to_non_nullable
-              as String,
-      location: null == location
-          ? _value.location
-          : location // ignore: cast_nullable_to_non_nullable
-              as String,
-    ));
+    return _then(
+      _$CityInfoImpl(
+        id: freezed == id
+            ? _value.id
+            : id // ignore: cast_nullable_to_non_nullable
+                  as int?,
+        name: null == name
+            ? _value.name
+            : name // ignore: cast_nullable_to_non_nullable
+                  as String,
+        latitude: null == latitude
+            ? _value.latitude
+            : latitude // ignore: cast_nullable_to_non_nullable
+                  as double,
+        longitude: null == longitude
+            ? _value.longitude
+            : longitude // ignore: cast_nullable_to_non_nullable
+                  as double,
+        countryCode: null == countryCode
+            ? _value.countryCode
+            : countryCode // ignore: cast_nullable_to_non_nullable
+                  as String,
+        location: null == location
+            ? _value.location
+            : location // ignore: cast_nullable_to_non_nullable
+                  as String,
+      ),
+    );
   }
 }
 
 /// @nodoc
 @JsonSerializable()
 class _$CityInfoImpl implements _CityInfo {
-  const _$CityInfoImpl(
-      {required this.name,
-      required this.latitude,
-      required this.longitude,
-      required this.countryCode,
-      required this.location});
+  const _$CityInfoImpl({
+    this.id,
+    required this.name,
+    required this.latitude,
+    required this.longitude,
+    required this.countryCode,
+    required this.location,
+  });
 
   factory _$CityInfoImpl.fromJson(Map<String, dynamic> json) =>
       _$$CityInfoImplFromJson(json);
 
+  @override
+  final int? id;
   @override
   final String name;
   @override
@@ -173,7 +208,7 @@ class _$CityInfoImpl implements _CityInfo {
 
   @override
   String toString() {
-    return 'CityInfo(name: $name, latitude: $latitude, longitude: $longitude, countryCode: $countryCode, location: $location)';
+    return 'CityInfo(id: $id, name: $name, latitude: $latitude, longitude: $longitude, countryCode: $countryCode, location: $location)';
   }
 
   @override
@@ -181,6 +216,7 @@ class _$CityInfoImpl implements _CityInfo {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$CityInfoImpl &&
+            (identical(other.id, id) || other.id == id) &&
             (identical(other.name, name) || other.name == name) &&
             (identical(other.latitude, latitude) ||
                 other.latitude == latitude) &&
@@ -192,12 +228,21 @@ class _$CityInfoImpl implements _CityInfo {
                 other.location == location));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
-      runtimeType, name, latitude, longitude, countryCode, location);
+    runtimeType,
+    id,
+    name,
+    latitude,
+    longitude,
+    countryCode,
+    location,
+  );
 
-  @JsonKey(ignore: true)
+  /// Create a copy of CityInfo
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$CityInfoImplCopyWith<_$CityInfoImpl> get copyWith =>
@@ -205,23 +250,25 @@ class _$CityInfoImpl implements _CityInfo {
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$CityInfoImplToJson(
-      this,
-    );
+    return _$$CityInfoImplToJson(this);
   }
 }
 
 abstract class _CityInfo implements CityInfo {
-  const factory _CityInfo(
-      {required final String name,
-      required final double latitude,
-      required final double longitude,
-      required final String countryCode,
-      required final String location}) = _$CityInfoImpl;
+  const factory _CityInfo({
+    final int? id,
+    required final String name,
+    required final double latitude,
+    required final double longitude,
+    required final String countryCode,
+    required final String location,
+  }) = _$CityInfoImpl;
 
   factory _CityInfo.fromJson(Map<String, dynamic> json) =
       _$CityInfoImpl.fromJson;
 
+  @override
+  int? get id;
   @override
   String get name;
   @override
@@ -232,8 +279,11 @@ abstract class _CityInfo implements CityInfo {
   String get countryCode;
   @override
   String get location;
+
+  /// Create a copy of CityInfo
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$CityInfoImplCopyWith<_$CityInfoImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -246,7 +296,9 @@ mixin _$WeatherResponse {
   List<WeatherMeasurement> get hourlyRecord =>
       throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of WeatherResponse
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $WeatherResponseCopyWith<WeatherResponse> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -254,13 +306,15 @@ mixin _$WeatherResponse {
 /// @nodoc
 abstract class $WeatherResponseCopyWith<$Res> {
   factory $WeatherResponseCopyWith(
-          WeatherResponse value, $Res Function(WeatherResponse) then) =
-      _$WeatherResponseCopyWithImpl<$Res, WeatherResponse>;
+    WeatherResponse value,
+    $Res Function(WeatherResponse) then,
+  ) = _$WeatherResponseCopyWithImpl<$Res, WeatherResponse>;
   @useResult
-  $Res call(
-      {WeatherRecord record,
-      List<WeatherMeasurement> dailyRecords,
-      List<WeatherMeasurement> hourlyRecord});
+  $Res call({
+    WeatherRecord record,
+    List<WeatherMeasurement> dailyRecords,
+    List<WeatherMeasurement> hourlyRecord,
+  });
 }
 
 /// @nodoc
@@ -273,6 +327,8 @@ class _$WeatherResponseCopyWithImpl<$Res, $Val extends WeatherResponse>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of WeatherResponse
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -280,35 +336,40 @@ class _$WeatherResponseCopyWithImpl<$Res, $Val extends WeatherResponse>
     Object? dailyRecords = null,
     Object? hourlyRecord = null,
   }) {
-    return _then(_value.copyWith(
-      record: null == record
-          ? _value.record
-          : record // ignore: cast_nullable_to_non_nullable
-              as WeatherRecord,
-      dailyRecords: null == dailyRecords
-          ? _value.dailyRecords
-          : dailyRecords // ignore: cast_nullable_to_non_nullable
-              as List<WeatherMeasurement>,
-      hourlyRecord: null == hourlyRecord
-          ? _value.hourlyRecord
-          : hourlyRecord // ignore: cast_nullable_to_non_nullable
-              as List<WeatherMeasurement>,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            record: null == record
+                ? _value.record
+                : record // ignore: cast_nullable_to_non_nullable
+                      as WeatherRecord,
+            dailyRecords: null == dailyRecords
+                ? _value.dailyRecords
+                : dailyRecords // ignore: cast_nullable_to_non_nullable
+                      as List<WeatherMeasurement>,
+            hourlyRecord: null == hourlyRecord
+                ? _value.hourlyRecord
+                : hourlyRecord // ignore: cast_nullable_to_non_nullable
+                      as List<WeatherMeasurement>,
+          )
+          as $Val,
+    );
   }
 }
 
 /// @nodoc
 abstract class _$$WeatherResponseImplCopyWith<$Res>
     implements $WeatherResponseCopyWith<$Res> {
-  factory _$$WeatherResponseImplCopyWith(_$WeatherResponseImpl value,
-          $Res Function(_$WeatherResponseImpl) then) =
-      __$$WeatherResponseImplCopyWithImpl<$Res>;
+  factory _$$WeatherResponseImplCopyWith(
+    _$WeatherResponseImpl value,
+    $Res Function(_$WeatherResponseImpl) then,
+  ) = __$$WeatherResponseImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {WeatherRecord record,
-      List<WeatherMeasurement> dailyRecords,
-      List<WeatherMeasurement> hourlyRecord});
+  $Res call({
+    WeatherRecord record,
+    List<WeatherMeasurement> dailyRecords,
+    List<WeatherMeasurement> hourlyRecord,
+  });
 }
 
 /// @nodoc
@@ -316,9 +377,12 @@ class __$$WeatherResponseImplCopyWithImpl<$Res>
     extends _$WeatherResponseCopyWithImpl<$Res, _$WeatherResponseImpl>
     implements _$$WeatherResponseImplCopyWith<$Res> {
   __$$WeatherResponseImplCopyWithImpl(
-      _$WeatherResponseImpl _value, $Res Function(_$WeatherResponseImpl) _then)
-      : super(_value, _then);
+    _$WeatherResponseImpl _value,
+    $Res Function(_$WeatherResponseImpl) _then,
+  ) : super(_value, _then);
 
+  /// Create a copy of WeatherResponse
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -326,32 +390,34 @@ class __$$WeatherResponseImplCopyWithImpl<$Res>
     Object? dailyRecords = null,
     Object? hourlyRecord = null,
   }) {
-    return _then(_$WeatherResponseImpl(
-      record: null == record
-          ? _value.record
-          : record // ignore: cast_nullable_to_non_nullable
-              as WeatherRecord,
-      dailyRecords: null == dailyRecords
-          ? _value._dailyRecords
-          : dailyRecords // ignore: cast_nullable_to_non_nullable
-              as List<WeatherMeasurement>,
-      hourlyRecord: null == hourlyRecord
-          ? _value._hourlyRecord
-          : hourlyRecord // ignore: cast_nullable_to_non_nullable
-              as List<WeatherMeasurement>,
-    ));
+    return _then(
+      _$WeatherResponseImpl(
+        record: null == record
+            ? _value.record
+            : record // ignore: cast_nullable_to_non_nullable
+                  as WeatherRecord,
+        dailyRecords: null == dailyRecords
+            ? _value._dailyRecords
+            : dailyRecords // ignore: cast_nullable_to_non_nullable
+                  as List<WeatherMeasurement>,
+        hourlyRecord: null == hourlyRecord
+            ? _value._hourlyRecord
+            : hourlyRecord // ignore: cast_nullable_to_non_nullable
+                  as List<WeatherMeasurement>,
+      ),
+    );
   }
 }
 
 /// @nodoc
 
 class _$WeatherResponseImpl implements _WeatherResponse {
-  const _$WeatherResponseImpl(
-      {required this.record,
-      required final List<WeatherMeasurement> dailyRecords,
-      required final List<WeatherMeasurement> hourlyRecord})
-      : _dailyRecords = dailyRecords,
-        _hourlyRecord = hourlyRecord;
+  const _$WeatherResponseImpl({
+    required this.record,
+    required final List<WeatherMeasurement> dailyRecords,
+    required final List<WeatherMeasurement> hourlyRecord,
+  }) : _dailyRecords = dailyRecords,
+       _hourlyRecord = hourlyRecord;
 
   @override
   final WeatherRecord record;
@@ -382,33 +448,42 @@ class _$WeatherResponseImpl implements _WeatherResponse {
         (other.runtimeType == runtimeType &&
             other is _$WeatherResponseImpl &&
             (identical(other.record, record) || other.record == record) &&
-            const DeepCollectionEquality()
-                .equals(other._dailyRecords, _dailyRecords) &&
-            const DeepCollectionEquality()
-                .equals(other._hourlyRecord, _hourlyRecord));
+            const DeepCollectionEquality().equals(
+              other._dailyRecords,
+              _dailyRecords,
+            ) &&
+            const DeepCollectionEquality().equals(
+              other._hourlyRecord,
+              _hourlyRecord,
+            ));
   }
 
   @override
   int get hashCode => Object.hash(
-      runtimeType,
-      record,
-      const DeepCollectionEquality().hash(_dailyRecords),
-      const DeepCollectionEquality().hash(_hourlyRecord));
+    runtimeType,
+    record,
+    const DeepCollectionEquality().hash(_dailyRecords),
+    const DeepCollectionEquality().hash(_hourlyRecord),
+  );
 
-  @JsonKey(ignore: true)
+  /// Create a copy of WeatherResponse
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$WeatherResponseImplCopyWith<_$WeatherResponseImpl> get copyWith =>
       __$$WeatherResponseImplCopyWithImpl<_$WeatherResponseImpl>(
-          this, _$identity);
+        this,
+        _$identity,
+      );
 }
 
 abstract class _WeatherResponse implements WeatherResponse {
-  const factory _WeatherResponse(
-          {required final WeatherRecord record,
-          required final List<WeatherMeasurement> dailyRecords,
-          required final List<WeatherMeasurement> hourlyRecord}) =
-      _$WeatherResponseImpl;
+  const factory _WeatherResponse({
+    required final WeatherRecord record,
+    required final List<WeatherMeasurement> dailyRecords,
+    required final List<WeatherMeasurement> hourlyRecord,
+  }) = _$WeatherResponseImpl;
 
   @override
   WeatherRecord get record;
@@ -416,8 +491,11 @@ abstract class _WeatherResponse implements WeatherResponse {
   List<WeatherMeasurement> get dailyRecords;
   @override
   List<WeatherMeasurement> get hourlyRecord;
+
+  /// Create a copy of WeatherResponse
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$WeatherResponseImplCopyWith<_$WeatherResponseImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

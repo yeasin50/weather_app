@@ -12,7 +12,8 @@ part of 'metro_api_payload.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 MetroWeatherPayload _$MetroWeatherPayloadFromJson(Map<String, dynamic> json) {
   return _MetroWeatherPayload.fromJson(json);
@@ -27,8 +28,12 @@ mixin _$MetroWeatherPayload {
   String get timezone => throw _privateConstructorUsedError;
   int get pastDays => throw _privateConstructorUsedError;
 
+  /// Serializes this MetroWeatherPayload to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of MetroWeatherPayload
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $MetroWeatherPayloadCopyWith<MetroWeatherPayload> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -36,16 +41,18 @@ mixin _$MetroWeatherPayload {
 /// @nodoc
 abstract class $MetroWeatherPayloadCopyWith<$Res> {
   factory $MetroWeatherPayloadCopyWith(
-          MetroWeatherPayload value, $Res Function(MetroWeatherPayload) then) =
-      _$MetroWeatherPayloadCopyWithImpl<$Res, MetroWeatherPayload>;
+    MetroWeatherPayload value,
+    $Res Function(MetroWeatherPayload) then,
+  ) = _$MetroWeatherPayloadCopyWithImpl<$Res, MetroWeatherPayload>;
   @useResult
-  $Res call(
-      {double latitude,
-      double longitude,
-      List<HourlyItem> hourlyItems,
-      List<DailyItem> dailyItems,
-      String timezone,
-      int pastDays});
+  $Res call({
+    double latitude,
+    double longitude,
+    List<HourlyItem> hourlyItems,
+    List<DailyItem> dailyItems,
+    String timezone,
+    int pastDays,
+  });
 }
 
 /// @nodoc
@@ -58,6 +65,8 @@ class _$MetroWeatherPayloadCopyWithImpl<$Res, $Val extends MetroWeatherPayload>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of MetroWeatherPayload
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -68,60 +77,68 @@ class _$MetroWeatherPayloadCopyWithImpl<$Res, $Val extends MetroWeatherPayload>
     Object? timezone = null,
     Object? pastDays = null,
   }) {
-    return _then(_value.copyWith(
-      latitude: null == latitude
-          ? _value.latitude
-          : latitude // ignore: cast_nullable_to_non_nullable
-              as double,
-      longitude: null == longitude
-          ? _value.longitude
-          : longitude // ignore: cast_nullable_to_non_nullable
-              as double,
-      hourlyItems: null == hourlyItems
-          ? _value.hourlyItems
-          : hourlyItems // ignore: cast_nullable_to_non_nullable
-              as List<HourlyItem>,
-      dailyItems: null == dailyItems
-          ? _value.dailyItems
-          : dailyItems // ignore: cast_nullable_to_non_nullable
-              as List<DailyItem>,
-      timezone: null == timezone
-          ? _value.timezone
-          : timezone // ignore: cast_nullable_to_non_nullable
-              as String,
-      pastDays: null == pastDays
-          ? _value.pastDays
-          : pastDays // ignore: cast_nullable_to_non_nullable
-              as int,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            latitude: null == latitude
+                ? _value.latitude
+                : latitude // ignore: cast_nullable_to_non_nullable
+                      as double,
+            longitude: null == longitude
+                ? _value.longitude
+                : longitude // ignore: cast_nullable_to_non_nullable
+                      as double,
+            hourlyItems: null == hourlyItems
+                ? _value.hourlyItems
+                : hourlyItems // ignore: cast_nullable_to_non_nullable
+                      as List<HourlyItem>,
+            dailyItems: null == dailyItems
+                ? _value.dailyItems
+                : dailyItems // ignore: cast_nullable_to_non_nullable
+                      as List<DailyItem>,
+            timezone: null == timezone
+                ? _value.timezone
+                : timezone // ignore: cast_nullable_to_non_nullable
+                      as String,
+            pastDays: null == pastDays
+                ? _value.pastDays
+                : pastDays // ignore: cast_nullable_to_non_nullable
+                      as int,
+          )
+          as $Val,
+    );
   }
 }
 
 /// @nodoc
 abstract class _$$MetroWeatherPayloadImplCopyWith<$Res>
     implements $MetroWeatherPayloadCopyWith<$Res> {
-  factory _$$MetroWeatherPayloadImplCopyWith(_$MetroWeatherPayloadImpl value,
-          $Res Function(_$MetroWeatherPayloadImpl) then) =
-      __$$MetroWeatherPayloadImplCopyWithImpl<$Res>;
+  factory _$$MetroWeatherPayloadImplCopyWith(
+    _$MetroWeatherPayloadImpl value,
+    $Res Function(_$MetroWeatherPayloadImpl) then,
+  ) = __$$MetroWeatherPayloadImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {double latitude,
-      double longitude,
-      List<HourlyItem> hourlyItems,
-      List<DailyItem> dailyItems,
-      String timezone,
-      int pastDays});
+  $Res call({
+    double latitude,
+    double longitude,
+    List<HourlyItem> hourlyItems,
+    List<DailyItem> dailyItems,
+    String timezone,
+    int pastDays,
+  });
 }
 
 /// @nodoc
 class __$$MetroWeatherPayloadImplCopyWithImpl<$Res>
     extends _$MetroWeatherPayloadCopyWithImpl<$Res, _$MetroWeatherPayloadImpl>
     implements _$$MetroWeatherPayloadImplCopyWith<$Res> {
-  __$$MetroWeatherPayloadImplCopyWithImpl(_$MetroWeatherPayloadImpl _value,
-      $Res Function(_$MetroWeatherPayloadImpl) _then)
-      : super(_value, _then);
+  __$$MetroWeatherPayloadImplCopyWithImpl(
+    _$MetroWeatherPayloadImpl _value,
+    $Res Function(_$MetroWeatherPayloadImpl) _then,
+  ) : super(_value, _then);
 
+  /// Create a copy of MetroWeatherPayload
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -132,48 +149,50 @@ class __$$MetroWeatherPayloadImplCopyWithImpl<$Res>
     Object? timezone = null,
     Object? pastDays = null,
   }) {
-    return _then(_$MetroWeatherPayloadImpl(
-      latitude: null == latitude
-          ? _value.latitude
-          : latitude // ignore: cast_nullable_to_non_nullable
-              as double,
-      longitude: null == longitude
-          ? _value.longitude
-          : longitude // ignore: cast_nullable_to_non_nullable
-              as double,
-      hourlyItems: null == hourlyItems
-          ? _value._hourlyItems
-          : hourlyItems // ignore: cast_nullable_to_non_nullable
-              as List<HourlyItem>,
-      dailyItems: null == dailyItems
-          ? _value._dailyItems
-          : dailyItems // ignore: cast_nullable_to_non_nullable
-              as List<DailyItem>,
-      timezone: null == timezone
-          ? _value.timezone
-          : timezone // ignore: cast_nullable_to_non_nullable
-              as String,
-      pastDays: null == pastDays
-          ? _value.pastDays
-          : pastDays // ignore: cast_nullable_to_non_nullable
-              as int,
-    ));
+    return _then(
+      _$MetroWeatherPayloadImpl(
+        latitude: null == latitude
+            ? _value.latitude
+            : latitude // ignore: cast_nullable_to_non_nullable
+                  as double,
+        longitude: null == longitude
+            ? _value.longitude
+            : longitude // ignore: cast_nullable_to_non_nullable
+                  as double,
+        hourlyItems: null == hourlyItems
+            ? _value._hourlyItems
+            : hourlyItems // ignore: cast_nullable_to_non_nullable
+                  as List<HourlyItem>,
+        dailyItems: null == dailyItems
+            ? _value._dailyItems
+            : dailyItems // ignore: cast_nullable_to_non_nullable
+                  as List<DailyItem>,
+        timezone: null == timezone
+            ? _value.timezone
+            : timezone // ignore: cast_nullable_to_non_nullable
+                  as String,
+        pastDays: null == pastDays
+            ? _value.pastDays
+            : pastDays // ignore: cast_nullable_to_non_nullable
+                  as int,
+      ),
+    );
   }
 }
 
 /// @nodoc
 @JsonSerializable()
 class _$MetroWeatherPayloadImpl extends _MetroWeatherPayload {
-  _$MetroWeatherPayloadImpl(
-      {required this.latitude,
-      required this.longitude,
-      required final List<HourlyItem> hourlyItems,
-      required final List<DailyItem> dailyItems,
-      this.timezone = "auto",
-      this.pastDays = 7})
-      : _hourlyItems = hourlyItems,
-        _dailyItems = dailyItems,
-        super._();
+  _$MetroWeatherPayloadImpl({
+    required this.latitude,
+    required this.longitude,
+    required final List<HourlyItem> hourlyItems,
+    required final List<DailyItem> dailyItems,
+    this.timezone = "auto",
+    this.pastDays = 7,
+  }) : _hourlyItems = hourlyItems,
+       _dailyItems = dailyItems,
+       super._();
 
   factory _$MetroWeatherPayloadImpl.fromJson(Map<String, dynamic> json) =>
       _$$MetroWeatherPayloadImplFromJson(json);
@@ -219,50 +238,58 @@ class _$MetroWeatherPayloadImpl extends _MetroWeatherPayload {
                 other.latitude == latitude) &&
             (identical(other.longitude, longitude) ||
                 other.longitude == longitude) &&
-            const DeepCollectionEquality()
-                .equals(other._hourlyItems, _hourlyItems) &&
-            const DeepCollectionEquality()
-                .equals(other._dailyItems, _dailyItems) &&
+            const DeepCollectionEquality().equals(
+              other._hourlyItems,
+              _hourlyItems,
+            ) &&
+            const DeepCollectionEquality().equals(
+              other._dailyItems,
+              _dailyItems,
+            ) &&
             (identical(other.timezone, timezone) ||
                 other.timezone == timezone) &&
             (identical(other.pastDays, pastDays) ||
                 other.pastDays == pastDays));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
-      runtimeType,
-      latitude,
-      longitude,
-      const DeepCollectionEquality().hash(_hourlyItems),
-      const DeepCollectionEquality().hash(_dailyItems),
-      timezone,
-      pastDays);
+    runtimeType,
+    latitude,
+    longitude,
+    const DeepCollectionEquality().hash(_hourlyItems),
+    const DeepCollectionEquality().hash(_dailyItems),
+    timezone,
+    pastDays,
+  );
 
-  @JsonKey(ignore: true)
+  /// Create a copy of MetroWeatherPayload
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$MetroWeatherPayloadImplCopyWith<_$MetroWeatherPayloadImpl> get copyWith =>
       __$$MetroWeatherPayloadImplCopyWithImpl<_$MetroWeatherPayloadImpl>(
-          this, _$identity);
+        this,
+        _$identity,
+      );
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$MetroWeatherPayloadImplToJson(
-      this,
-    );
+    return _$$MetroWeatherPayloadImplToJson(this);
   }
 }
 
 abstract class _MetroWeatherPayload extends MetroWeatherPayload {
-  factory _MetroWeatherPayload(
-      {required final double latitude,
-      required final double longitude,
-      required final List<HourlyItem> hourlyItems,
-      required final List<DailyItem> dailyItems,
-      final String timezone,
-      final int pastDays}) = _$MetroWeatherPayloadImpl;
+  factory _MetroWeatherPayload({
+    required final double latitude,
+    required final double longitude,
+    required final List<HourlyItem> hourlyItems,
+    required final List<DailyItem> dailyItems,
+    final String timezone,
+    final int pastDays,
+  }) = _$MetroWeatherPayloadImpl;
   _MetroWeatherPayload._() : super._();
 
   factory _MetroWeatherPayload.fromJson(Map<String, dynamic> json) =
@@ -280,8 +307,11 @@ abstract class _MetroWeatherPayload extends MetroWeatherPayload {
   String get timezone;
   @override
   int get pastDays;
+
+  /// Create a copy of MetroWeatherPayload
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$MetroWeatherPayloadImplCopyWith<_$MetroWeatherPayloadImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

@@ -14,6 +14,7 @@ abstract class IWeatherService {
 @freezed
 sealed class CityInfo with _$CityInfo {
   const factory CityInfo({
+    int? id,
     required String name,
     required double latitude,
     required double longitude,

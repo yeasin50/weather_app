@@ -41,10 +41,7 @@ class ForecastListTile extends StatelessWidget {
               const SizedBox(height: 8),
               Image.asset(info.imagePath, width: 48),
               const SizedBox(height: 8),
-              Text(
-                " ${info.value.toStringAsFixed(0)}\u00B0",
-                style: textTheme.titleLarge,
-              ),
+              Text(" ${info.value}\u00B0", style: textTheme.titleLarge),
             ],
           ),
         ),
