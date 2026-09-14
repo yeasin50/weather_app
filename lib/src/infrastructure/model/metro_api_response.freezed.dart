@@ -26,6 +26,10 @@ mixin _$MetroApiCityInfo {
   String get country => throw _privateConstructorUsedError;
   String get countryCode => throw _privateConstructorUsedError;
 
+  /// location parts,why  customConverter for simple
+  String? get admin1 => throw _privateConstructorUsedError;
+  String? get admin2 => throw _privateConstructorUsedError;
+
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
   $MetroApiCityInfoCopyWith<MetroApiCityInfo> get copyWith =>
@@ -43,7 +47,9 @@ abstract class $MetroApiCityInfoCopyWith<$Res> {
       double longitude,
       String name,
       String country,
-      String countryCode});
+      String countryCode,
+      String? admin1,
+      String? admin2});
 }
 
 /// @nodoc
@@ -64,6 +70,8 @@ class _$MetroApiCityInfoCopyWithImpl<$Res, $Val extends MetroApiCityInfo>
     Object? name = null,
     Object? country = null,
     Object? countryCode = null,
+    Object? admin1 = freezed,
+    Object? admin2 = freezed,
   }) {
     return _then(_value.copyWith(
       latitude: null == latitude
@@ -86,6 +94,14 @@ class _$MetroApiCityInfoCopyWithImpl<$Res, $Val extends MetroApiCityInfo>
           ? _value.countryCode
           : countryCode // ignore: cast_nullable_to_non_nullable
               as String,
+      admin1: freezed == admin1
+          ? _value.admin1
+          : admin1 // ignore: cast_nullable_to_non_nullable
+              as String?,
+      admin2: freezed == admin2
+          ? _value.admin2
+          : admin2 // ignore: cast_nullable_to_non_nullable
+              as String?,
     ) as $Val);
   }
 }
@@ -103,7 +119,9 @@ abstract class _$$MetroApiCityInfoImplCopyWith<$Res>
       double longitude,
       String name,
       String country,
-      String countryCode});
+      String countryCode,
+      String? admin1,
+      String? admin2});
 }
 
 /// @nodoc
@@ -122,6 +140,8 @@ class __$$MetroApiCityInfoImplCopyWithImpl<$Res>
     Object? name = null,
     Object? country = null,
     Object? countryCode = null,
+    Object? admin1 = freezed,
+    Object? admin2 = freezed,
   }) {
     return _then(_$MetroApiCityInfoImpl(
       latitude: null == latitude
@@ -144,6 +164,14 @@ class __$$MetroApiCityInfoImplCopyWithImpl<$Res>
           ? _value.countryCode
           : countryCode // ignore: cast_nullable_to_non_nullable
               as String,
+      admin1: freezed == admin1
+          ? _value.admin1
+          : admin1 // ignore: cast_nullable_to_non_nullable
+              as String?,
+      admin2: freezed == admin2
+          ? _value.admin2
+          : admin2 // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -156,7 +184,9 @@ class _$MetroApiCityInfoImpl extends _MetroApiCityInfo {
       required this.longitude,
       required this.name,
       required this.country,
-      required this.countryCode})
+      required this.countryCode,
+      this.admin1,
+      this.admin2})
       : super._();
 
   factory _$MetroApiCityInfoImpl.fromJson(Map<String, dynamic> json) =>
@@ -173,9 +203,15 @@ class _$MetroApiCityInfoImpl extends _MetroApiCityInfo {
   @override
   final String countryCode;
 
+  /// location parts,why  customConverter for simple
+  @override
+  final String? admin1;
+  @override
+  final String? admin2;
+
   @override
   String toString() {
-    return 'MetroApiCityInfo(latitude: $latitude, longitude: $longitude, name: $name, country: $country, countryCode: $countryCode)';
+    return 'MetroApiCityInfo(latitude: $latitude, longitude: $longitude, name: $name, country: $country, countryCode: $countryCode, admin1: $admin1, admin2: $admin2)';
   }
 
   @override
@@ -190,13 +226,15 @@ class _$MetroApiCityInfoImpl extends _MetroApiCityInfo {
             (identical(other.name, name) || other.name == name) &&
             (identical(other.country, country) || other.country == country) &&
             (identical(other.countryCode, countryCode) ||
-                other.countryCode == countryCode));
+                other.countryCode == countryCode) &&
+            (identical(other.admin1, admin1) || other.admin1 == admin1) &&
+            (identical(other.admin2, admin2) || other.admin2 == admin2));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, latitude, longitude, name, country, countryCode);
+  int get hashCode => Object.hash(runtimeType, latitude, longitude, name,
+      country, countryCode, admin1, admin2);
 
   @JsonKey(ignore: true)
   @override
@@ -219,7 +257,9 @@ abstract class _MetroApiCityInfo extends MetroApiCityInfo {
       required final double longitude,
       required final String name,
       required final String country,
-      required final String countryCode}) = _$MetroApiCityInfoImpl;
+      required final String countryCode,
+      final String? admin1,
+      final String? admin2}) = _$MetroApiCityInfoImpl;
   const _MetroApiCityInfo._() : super._();
 
   factory _MetroApiCityInfo.fromJson(Map<String, dynamic> json) =
@@ -235,6 +275,12 @@ abstract class _MetroApiCityInfo extends MetroApiCityInfo {
   String get country;
   @override
   String get countryCode;
+  @override
+
+  /// location parts,why  customConverter for simple
+  String? get admin1;
+  @override
+  String? get admin2;
   @override
   @JsonKey(ignore: true)
   _$$MetroApiCityInfoImplCopyWith<_$MetroApiCityInfoImpl> get copyWith =>

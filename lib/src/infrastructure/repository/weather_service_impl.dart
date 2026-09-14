@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:stream_transform/stream_transform.dart';
-import 'package:weather_app/src/domain/entity/weather_record.dart';
 
 import '../../domain/weather_service.dart';
 import '../model/metro_api_response.dart';
@@ -12,11 +11,16 @@ import '../model/metro_api_response.dart';
 class MetroApiServce implements IWeatherService {
   List<CityInfo> _lastSearchedCity = [];
 
-  final StreamController _queryController = StreamController<String>();
-  void dispose() => _queryController.close();
+  final StreamController _queryController =
+      StreamController<String>.broadcast(); // I DON"T want it;  FIXME:
 
   @override
-  Stream<List<CityInfo>> searchCity(String query) => _queryController.stream
+  void searchCity(String query) {
+    _queryController.add(query);
+  }
+
+  @override
+  Stream<List<CityInfo>> get searchedCityResult => _queryController.stream
       .debounce(const Duration(milliseconds: 300)) //
       .asyncMap<List<CityInfo>>((q) async {
         try {
@@ -30,7 +34,10 @@ class MetroApiServce implements IWeatherService {
       });
 
   Future<List<CityInfo>> _searchCity(String query) async {
+    if (query.trim().isEmpty) return [];
+
     try {
+      ///  https//:geocoding-api.open-meteo.com/v1/search
       final geoUri = Uri(
         scheme: "https",
         host: "geocoding-api.open-meteo.com",
@@ -48,7 +55,7 @@ class MetroApiServce implements IWeatherService {
 
       final data = jsonDecode(response.body);
       final cityData = data["results"];
-      if (cityData == null) throw Exception("no city found");
+      if (cityData == null) return [];
 
       final cities = List<MetroApiCityInfo>.from(
         cityData.map((e) => MetroApiCityInfo.fromJson(e)),
@@ -57,7 +64,7 @@ class MetroApiServce implements IWeatherService {
       return cities;
     } catch (e, trace) {
       debugPrint("$e\n $trace");
-      return [];
+      throw Exception("failed to get city: ${e.toString()}");
     }
   }
 

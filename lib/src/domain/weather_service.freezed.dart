@@ -23,6 +23,8 @@ mixin _$CityInfo {
   String get name => throw _privateConstructorUsedError;
   double get latitude => throw _privateConstructorUsedError;
   double get longitude => throw _privateConstructorUsedError;
+  String get countryCode => throw _privateConstructorUsedError;
+  String get location => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -35,7 +37,12 @@ abstract class $CityInfoCopyWith<$Res> {
   factory $CityInfoCopyWith(CityInfo value, $Res Function(CityInfo) then) =
       _$CityInfoCopyWithImpl<$Res, CityInfo>;
   @useResult
-  $Res call({String name, double latitude, double longitude});
+  $Res call(
+      {String name,
+      double latitude,
+      double longitude,
+      String countryCode,
+      String location});
 }
 
 /// @nodoc
@@ -54,6 +61,8 @@ class _$CityInfoCopyWithImpl<$Res, $Val extends CityInfo>
     Object? name = null,
     Object? latitude = null,
     Object? longitude = null,
+    Object? countryCode = null,
+    Object? location = null,
   }) {
     return _then(_value.copyWith(
       name: null == name
@@ -68,6 +77,14 @@ class _$CityInfoCopyWithImpl<$Res, $Val extends CityInfo>
           ? _value.longitude
           : longitude // ignore: cast_nullable_to_non_nullable
               as double,
+      countryCode: null == countryCode
+          ? _value.countryCode
+          : countryCode // ignore: cast_nullable_to_non_nullable
+              as String,
+      location: null == location
+          ? _value.location
+          : location // ignore: cast_nullable_to_non_nullable
+              as String,
     ) as $Val);
   }
 }
@@ -80,7 +97,12 @@ abstract class _$$CityInfoImplCopyWith<$Res>
       __$$CityInfoImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String name, double latitude, double longitude});
+  $Res call(
+      {String name,
+      double latitude,
+      double longitude,
+      String countryCode,
+      String location});
 }
 
 /// @nodoc
@@ -97,6 +119,8 @@ class __$$CityInfoImplCopyWithImpl<$Res>
     Object? name = null,
     Object? latitude = null,
     Object? longitude = null,
+    Object? countryCode = null,
+    Object? location = null,
   }) {
     return _then(_$CityInfoImpl(
       name: null == name
@@ -111,6 +135,14 @@ class __$$CityInfoImplCopyWithImpl<$Res>
           ? _value.longitude
           : longitude // ignore: cast_nullable_to_non_nullable
               as double,
+      countryCode: null == countryCode
+          ? _value.countryCode
+          : countryCode // ignore: cast_nullable_to_non_nullable
+              as String,
+      location: null == location
+          ? _value.location
+          : location // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
@@ -119,7 +151,11 @@ class __$$CityInfoImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$CityInfoImpl implements _CityInfo {
   const _$CityInfoImpl(
-      {required this.name, required this.latitude, required this.longitude});
+      {required this.name,
+      required this.latitude,
+      required this.longitude,
+      required this.countryCode,
+      required this.location});
 
   factory _$CityInfoImpl.fromJson(Map<String, dynamic> json) =>
       _$$CityInfoImplFromJson(json);
@@ -130,10 +166,14 @@ class _$CityInfoImpl implements _CityInfo {
   final double latitude;
   @override
   final double longitude;
+  @override
+  final String countryCode;
+  @override
+  final String location;
 
   @override
   String toString() {
-    return 'CityInfo(name: $name, latitude: $latitude, longitude: $longitude)';
+    return 'CityInfo(name: $name, latitude: $latitude, longitude: $longitude, countryCode: $countryCode, location: $location)';
   }
 
   @override
@@ -145,12 +185,17 @@ class _$CityInfoImpl implements _CityInfo {
             (identical(other.latitude, latitude) ||
                 other.latitude == latitude) &&
             (identical(other.longitude, longitude) ||
-                other.longitude == longitude));
+                other.longitude == longitude) &&
+            (identical(other.countryCode, countryCode) ||
+                other.countryCode == countryCode) &&
+            (identical(other.location, location) ||
+                other.location == location));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, name, latitude, longitude);
+  int get hashCode => Object.hash(
+      runtimeType, name, latitude, longitude, countryCode, location);
 
   @JsonKey(ignore: true)
   @override
@@ -170,7 +215,9 @@ abstract class _CityInfo implements CityInfo {
   const factory _CityInfo(
       {required final String name,
       required final double latitude,
-      required final double longitude}) = _$CityInfoImpl;
+      required final double longitude,
+      required final String countryCode,
+      required final String location}) = _$CityInfoImpl;
 
   factory _CityInfo.fromJson(Map<String, dynamic> json) =
       _$CityInfoImpl.fromJson;
@@ -182,6 +229,10 @@ abstract class _CityInfo implements CityInfo {
   @override
   double get longitude;
   @override
+  String get countryCode;
+  @override
+  String get location;
+  @override
   @JsonKey(ignore: true)
   _$$CityInfoImplCopyWith<_$CityInfoImpl> get copyWith =>
       throw _privateConstructorUsedError;
@@ -190,8 +241,10 @@ abstract class _CityInfo implements CityInfo {
 /// @nodoc
 mixin _$WeatherResponse {
   WeatherRecord get record => throw _privateConstructorUsedError;
-  List<DailyRecord> get dailyRecords => throw _privateConstructorUsedError;
-  List<DailyRecord> get hourlyRecord => throw _privateConstructorUsedError;
+  List<WeatherMeasurement> get dailyRecords =>
+      throw _privateConstructorUsedError;
+  List<WeatherMeasurement> get hourlyRecord =>
+      throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $WeatherResponseCopyWith<WeatherResponse> get copyWith =>
@@ -206,8 +259,8 @@ abstract class $WeatherResponseCopyWith<$Res> {
   @useResult
   $Res call(
       {WeatherRecord record,
-      List<DailyRecord> dailyRecords,
-      List<DailyRecord> hourlyRecord});
+      List<WeatherMeasurement> dailyRecords,
+      List<WeatherMeasurement> hourlyRecord});
 }
 
 /// @nodoc
@@ -235,11 +288,11 @@ class _$WeatherResponseCopyWithImpl<$Res, $Val extends WeatherResponse>
       dailyRecords: null == dailyRecords
           ? _value.dailyRecords
           : dailyRecords // ignore: cast_nullable_to_non_nullable
-              as List<DailyRecord>,
+              as List<WeatherMeasurement>,
       hourlyRecord: null == hourlyRecord
           ? _value.hourlyRecord
           : hourlyRecord // ignore: cast_nullable_to_non_nullable
-              as List<DailyRecord>,
+              as List<WeatherMeasurement>,
     ) as $Val);
   }
 }
@@ -254,8 +307,8 @@ abstract class _$$WeatherResponseImplCopyWith<$Res>
   @useResult
   $Res call(
       {WeatherRecord record,
-      List<DailyRecord> dailyRecords,
-      List<DailyRecord> hourlyRecord});
+      List<WeatherMeasurement> dailyRecords,
+      List<WeatherMeasurement> hourlyRecord});
 }
 
 /// @nodoc
@@ -281,11 +334,11 @@ class __$$WeatherResponseImplCopyWithImpl<$Res>
       dailyRecords: null == dailyRecords
           ? _value._dailyRecords
           : dailyRecords // ignore: cast_nullable_to_non_nullable
-              as List<DailyRecord>,
+              as List<WeatherMeasurement>,
       hourlyRecord: null == hourlyRecord
           ? _value._hourlyRecord
           : hourlyRecord // ignore: cast_nullable_to_non_nullable
-              as List<DailyRecord>,
+              as List<WeatherMeasurement>,
     ));
   }
 }
@@ -295,24 +348,24 @@ class __$$WeatherResponseImplCopyWithImpl<$Res>
 class _$WeatherResponseImpl implements _WeatherResponse {
   const _$WeatherResponseImpl(
       {required this.record,
-      required final List<DailyRecord> dailyRecords,
-      required final List<DailyRecord> hourlyRecord})
+      required final List<WeatherMeasurement> dailyRecords,
+      required final List<WeatherMeasurement> hourlyRecord})
       : _dailyRecords = dailyRecords,
         _hourlyRecord = hourlyRecord;
 
   @override
   final WeatherRecord record;
-  final List<DailyRecord> _dailyRecords;
+  final List<WeatherMeasurement> _dailyRecords;
   @override
-  List<DailyRecord> get dailyRecords {
+  List<WeatherMeasurement> get dailyRecords {
     if (_dailyRecords is EqualUnmodifiableListView) return _dailyRecords;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_dailyRecords);
   }
 
-  final List<DailyRecord> _hourlyRecord;
+  final List<WeatherMeasurement> _hourlyRecord;
   @override
-  List<DailyRecord> get hourlyRecord {
+  List<WeatherMeasurement> get hourlyRecord {
     if (_hourlyRecord is EqualUnmodifiableListView) return _hourlyRecord;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_hourlyRecord);
@@ -352,16 +405,17 @@ class _$WeatherResponseImpl implements _WeatherResponse {
 
 abstract class _WeatherResponse implements WeatherResponse {
   const factory _WeatherResponse(
-      {required final WeatherRecord record,
-      required final List<DailyRecord> dailyRecords,
-      required final List<DailyRecord> hourlyRecord}) = _$WeatherResponseImpl;
+          {required final WeatherRecord record,
+          required final List<WeatherMeasurement> dailyRecords,
+          required final List<WeatherMeasurement> hourlyRecord}) =
+      _$WeatherResponseImpl;
 
   @override
   WeatherRecord get record;
   @override
-  List<DailyRecord> get dailyRecords;
+  List<WeatherMeasurement> get dailyRecords;
   @override
-  List<DailyRecord> get hourlyRecord;
+  List<WeatherMeasurement> get hourlyRecord;
   @override
   @JsonKey(ignore: true)
   _$$WeatherResponseImplCopyWith<_$WeatherResponseImpl> get copyWith =>

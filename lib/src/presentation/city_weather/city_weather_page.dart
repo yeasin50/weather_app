@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:weather_app/src/domain/entity/weather_record.dart';
+import '../../infrastructure/model/metro_api_payload.dart';
 import 'widgets/searched_city_details_view.dart';
 
 import '../../domain/domain.dart';
 import '../widgets/gradient_background.dart';
 
+///Might change the logic of ux
 class CityWeatherPage extends StatefulWidget {
   const CityWeatherPage({
     super.key,
@@ -20,20 +22,6 @@ class CityWeatherPage extends StatefulWidget {
 }
 
 class _CityWeatherPageState extends State<CityWeatherPage> {
-  final weatherRepo = MetroWeatherRepo();
-
-  Future<(MetroApiResponse?, String?)?> _loadData() async {
-    final payload = MetroWeatherPayload(
-      latitude: widget.city.latitude,
-      longitude: widget.city.longitude,
-      hourlyItems: HourlyItem.defaultItems,
-    );
-    debugPrint("payload ${payload.toString()}");
-    return await weatherRepo.fetchWeather(payload);
-  }
-
-  late Future<(MetroApiResponse?, String?)?> future = _loadData();
-
   String get location => widget.city.name;
 
   @override
@@ -53,38 +41,38 @@ class _CityWeatherPageState extends State<CityWeatherPage> {
               backgroundColor: Colors.transparent,
               title: Text(widget.city.name),
             ),
-            Expanded(
-              child: FutureBuilder(
-                future: future,
-                builder: (context, snapshot) {
-                  if (snapshot.hasError) {
-                    return Text("${snapshot.error.toString()}");
-                  }
-
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(child: CircularProgressIndicator());
-                  }
-
-                  if (snapshot.hasData == true) {
-                    final result = snapshot.data!;
-
-                    if (result.$2 != null || result.$1 == null) {
-                      return Text(
-                        result.$2?.toString() ?? "something went wrong",
-                      );
-                    }
-
-                    return SearchedCityDetailsView(
-                      data: result.$1!,
-                      cityInfo: widget.city,
-                      showDeleteButton: widget.showDeleteButton,
-                    );
-                  }
-
-                  return const Center(child: Text("Ugh..Na state"));
-                },
-              ),
-            ),
+            // Expanded(
+            //   child: FutureBuilder(
+            //     future: future,
+            //     builder: (context, snapshot) {
+            //       if (snapshot.hasError) {
+            //         return Text("${snapshot.error.toString()}");
+            //       }
+            //
+            //       if (snapshot.connectionState == ConnectionState.waiting) {
+            //         return const Center(child: CircularProgressIndicator());
+            //       }
+            //
+            //       if (snapshot.hasData == true) {
+            //         final result = snapshot.data!;
+            //
+            //         if (result.$2 != null || result.$1 == null) {
+            //           return Text(
+            //             result.$2?.toString() ?? "something went wrong",
+            //           );
+            //         }
+            //
+            //         return SearchedCityDetailsView(
+            //           data: result.$1!,
+            //           cityInfo: widget.city,
+            //           showDeleteButton: widget.showDeleteButton,
+            //         );
+            //       }
+            //
+            //       return const Center(child: Text("Ugh..Na state"));
+            //     },
+            //   ),
+            // ),
           ],
         ),
       ),

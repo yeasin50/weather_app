@@ -6,16 +6,14 @@ import '../../../domain/domain.dart';
 import '../../../infrastructure/infrastructure.dart';
 import '../../widgets/weather_card_view.dart';
 
+@deprecated
 class MyCityCardView extends StatelessWidget {
-  const MyCityCardView({
-    super.key,
-    required this.myCity,
-    required this.onRemove,
-  });
+  MyCityCardView({super.key, required this.myCity, required this.onRemove});
 
   final VoidCallback? onRemove;
 
-  final (CityInfo, MetroApiResponse)? myCity;
+  // final (CityInfo, MetroApiResponse)? myCity;
+  var myCity;
 
   @override
   Widget build(BuildContext context) {
@@ -28,10 +26,7 @@ class MyCityCardView extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         const SizedBox(height: 16),
-        Text(
-          "My Location",
-          style: textTheme.titleLarge,
-        ),
+        Text("My Location", style: textTheme.titleLarge),
         WeatherCard(
           temp: currentHourData!.temperature,
           humidity: currentHourData.humidity,
@@ -39,12 +34,10 @@ class MyCityCardView extends StatelessWidget {
           location: myCity!.$1.name,
           mode: currentHourData.mood,
           onTap: () async {
-            final bool hasRemoved = await context.push(
+            final bool hasRemoved =
+                await context.push(
                   AppRoute.cityWeatherDetails,
-                  extra: {
-                    "city": myCity!.$1,
-                    "isFromSaved": true,
-                  },
+                  extra: {"city": myCity!.$1, "isFromSaved": true},
                 ) ??
                 false;
             if (hasRemoved) {

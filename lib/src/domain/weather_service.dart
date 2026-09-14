@@ -5,7 +5,9 @@ part 'weather_service.g.dart';
 part 'weather_service.freezed.dart';
 
 abstract class IWeatherService {
-  Stream<List<CityInfo>> searchCity(String query);
+  void searchCity(String query);
+  Stream<List<CityInfo>> get searchedCityResult;
+
   Future<WeatherResponse> fetchWeather(WeatherRequest req);
 }
 
@@ -15,7 +17,8 @@ sealed class CityInfo with _$CityInfo {
     required String name,
     required double latitude,
     required double longitude,
-    // required double latitude,
+    required String countryCode,
+    required String location, //except city
   }) = _CityInfo;
 
   factory CityInfo.fromJson(Map<String, dynamic> json) =>
@@ -26,8 +29,8 @@ sealed class CityInfo with _$CityInfo {
 class WeatherResponse with _$WeatherResponse {
   const factory WeatherResponse({
     required WeatherRecord record,
-    required List<DailyRecord> dailyRecords,
-    required List<DailyRecord> hourlyRecord,
+    required List<WeatherMeasurement> dailyRecords,
+    required List<WeatherMeasurement> hourlyRecord,
   }) = _WeatherResponse;
 }
 

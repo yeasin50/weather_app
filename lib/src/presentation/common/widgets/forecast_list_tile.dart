@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../domain/entity/weather_record.dart';
 import '../../../infrastructure/infrastructure.dart';
 
 class ForecastListTile extends StatelessWidget {
@@ -11,23 +12,24 @@ class ForecastListTile extends StatelessWidget {
 
   /// dayName / hour/ now
   final String label;
-  final HourlyWeatherInfo info;
+  final WeatherMeasurement info;
 
   final bool isActive;
 
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
+    // assert(info.measurementType ==MeasurementType.tempMin );
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 6),
       child: DecoratedBox(
         decoration: ShapeDecoration(
-          color: isActive ? const Color(0xFF48319D) : const Color.fromRGBO(72, 49, 157, .2),
+          color: isActive
+              ? const Color(0xFF48319D)
+              : const Color.fromRGBO(72, 49, 157, .2),
           shape: const StadiumBorder(
-            side: BorderSide(
-              color: Color.fromRGBO(255, 255, 255, .2),
-            ),
+            side: BorderSide(color: Color.fromRGBO(255, 255, 255, .2)),
           ),
         ),
         child: Padding(
@@ -35,17 +37,14 @@ class ForecastListTile extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
+              Text(label, style: textTheme.titleLarge),
+              const SizedBox(height: 8),
+              Image.asset(info.imagePath, width: 48),
+              const SizedBox(height: 8),
               Text(
-                label,
+                " ${info.value.toStringAsFixed(0)}\u00B0",
                 style: textTheme.titleLarge,
               ),
-              const SizedBox(height: 8),
-              Image.asset(info.mood.imagePath, width: 48),
-              const SizedBox(height: 8),
-              Text(
-                " ${info.temperature.toStringAsFixed(0)}\u00B0",
-                style: textTheme.titleLarge,
-              )
             ],
           ),
         ),

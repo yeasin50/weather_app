@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:weather_app/src/app/route_config.dart';
-
-import '../../../domain/entity/weather_record.dart';
+import '/src/domain/weather_service.dart';
 
 class SearchedCityTile extends StatelessWidget {
   const SearchedCityTile({
@@ -11,17 +8,15 @@ class SearchedCityTile extends StatelessWidget {
     required this.onTap,
   });
 
-  final CityRecord cityInfo;
+  final CityInfo cityInfo;
   final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
       onTap: onTap,
-      title: Text("${cityInfo.name}, ${cityInfo.countryCode}"),
-      subtitle: Text(
-        "Lat:${cityInfo.latitude} Lon:${cityInfo.longitude}, ${cityInfo.country}",
-      ),
+      title: Text(cityInfo.name),
+      subtitle: Text(cityInfo.location),
     );
   }
 }

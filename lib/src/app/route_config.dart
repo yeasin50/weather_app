@@ -1,4 +1,7 @@
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
+import 'package:weather_app/src/domain/weather_service.dart';
+import 'package:weather_app/src/infrastructure/weather_provider.dart';
 
 import '../presentation/home/home_page.dart';
 import '../presentation/saved_city/saved_city_page.dart';

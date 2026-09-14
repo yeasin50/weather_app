@@ -40,7 +40,7 @@ class _WeatherAppState extends State<WeatherApp> {
             ),
             Provider<IWeatherService>(create: (_) => MetroApiServce()),
             ChangeNotifierProvider(
-              create: (context) => WeatherProvider(
+              create: (context) => WeatherNotifier(
                 db: context.read<IWeatherDatabase>(),
                 service: context.read<IWeatherService>(),
               ),

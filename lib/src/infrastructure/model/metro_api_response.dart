@@ -15,13 +15,24 @@ abstract class MetroApiCityInfo with _$MetroApiCityInfo {
     required String name,
     required String country,
     required String countryCode,
+
+    /// location parts,why  customConverter for simple
+    String? admin1,
+    String? admin2,
+    // String? admin3,
   }) = _MetroApiCityInfo;
 
   factory MetroApiCityInfo.fromJson(Map<String, dynamic> json) =>
       _$MetroApiCityInfoFromJson(json);
 
   CityInfo toDB() {
-    return CityInfo(name: name, latitude: latitude, longitude: longitude);
+    return CityInfo(
+      name: name,
+      latitude: latitude,
+      longitude: longitude,
+      countryCode: countryCode,
+      location: [admin2, admin1].where((e) => e != null).join(", "),
+    );
   }
 }
 
@@ -50,8 +61,8 @@ extension MetroApiExt on MetroApiResponse {
     lastUpdate: DateTime.now(),
   );
 
-  List<DailyRecord> dailyRecords(int weatherId) {
-    final List<DailyRecord> result = [];
+  List<WeatherMeasurement> dailyRecords(int weatherId) {
+    final List<WeatherMeasurement> result = [];
 
     final times = daily?["times"];
     if (times == null || times is! List<String>) {
@@ -70,27 +81,28 @@ extension MetroApiExt on MetroApiResponse {
     if (entriesToBeRecord.isEmpty) return [];
 
     for (int i = 0; i < entriesToBeRecord.length; i++) {
-      final r = entriesToBeRecord[i];
-      final unit = dailyUnits[r];
+      final key = entriesToBeRecord[i];
+      final unit = dailyUnits[key];
       if (unit == null) {
-        throw Exception("missing daily_units on daily record for $r");
+        throw Exception("missing daily_units on daily record for $key");
       }
 
-      DailyRecord(
+      WeatherMeasurement(
         id: DateTime.now().millisecondsSinceEpoch,
         weatherId: weatherId,
         time: days[i],
         unit: unit,
-        value: daily![r]![i], //xd
-        type: WeatherRecordType.daily,
+        value: daily![key]![i], //xd
+        interval: MeasurementInterval.daily,
+        measurementType: _measureFromStr(key),
       );
     }
 
     return result;
   }
 
-  List<DailyRecord> hourlyRecords(int weatherId) {
-    final List<DailyRecord> result = [];
+  List<WeatherMeasurement> hourlyRecords(int weatherId) {
+    final List<WeatherMeasurement> result = [];
 
     final times = hourly?["times"];
     if (times == null || times is! List<String>) {
@@ -109,22 +121,54 @@ extension MetroApiExt on MetroApiResponse {
     if (entriesToBeRecord.isEmpty) return [];
 
     for (int i = 0; i < entriesToBeRecord.length; i++) {
-      final r = entriesToBeRecord[i];
-      final unit = hourlyUnits[r];
+      final key = entriesToBeRecord[i];
+      final unit = hourlyUnits[key];
       if (unit == null) {
-        throw Exception("missing hourly_units on daily record for $r");
+        throw Exception("missing hourly_units on daily record for $key");
       }
 
-      DailyRecord(
+      WeatherMeasurement(
         id: DateTime.now().millisecondsSinceEpoch,
         weatherId: weatherId,
         time: days[i],
         unit: unit,
-        value: hourly![r]![i], //xd
-        type: WeatherRecordType.hourly,
+        value: hourly![key]![i], //xd
+        interval: MeasurementInterval.daily,
+        measurementType: _measureFromStr(key),
       );
     }
 
     return result;
   }
+}
+
+final Map<String, MeasurementType> _measureTypeMap = {
+  // Hourly strings
+  "temperature_2m": MeasurementType.temperature,
+  "relative_humidity_2m": MeasurementType.relativeHumidity,
+  "rain": MeasurementType.rain,
+  "precipitation_probability": MeasurementType.precipitationProbability,
+  "uv_index": MeasurementType.uvIndex,
+  "wind_speed_10m": MeasurementType.windSpeed,
+
+  // Daily strings
+  "sunrise": MeasurementType.sunrise,
+  "sunset": MeasurementType.sunset,
+  "moon_phase": MeasurementType.moonPhase,
+  "temperature_2m_max": MeasurementType.temperatureMax,
+  "temperature_2m_min": MeasurementType.temperatureMin,
+};
+
+MeasurementType _measureFromStr(String str) {
+  return _measureTypeMap[str] ?? MeasurementType.unknown;
+}
+
+//
+String _strFromMeasure(MeasurementType type) {
+  return _measureTypeMap.entries
+      .firstWhere(
+        (e) => e.value == type,
+        orElse: () => const MapEntry("unknown", MeasurementType.unknown),
+      )
+      .key;
 }

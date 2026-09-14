@@ -14,6 +14,8 @@ _$MetroApiCityInfoImpl _$$MetroApiCityInfoImplFromJson(
       name: json['name'] as String,
       country: json['country'] as String,
       countryCode: json['country_code'] as String,
+      admin1: json['admin1'] as String?,
+      admin2: json['admin2'] as String?,
     );
 
 Map<String, dynamic> _$$MetroApiCityInfoImplToJson(
@@ -24,6 +26,8 @@ Map<String, dynamic> _$$MetroApiCityInfoImplToJson(
       'name': instance.name,
       'country': instance.country,
       'country_code': instance.countryCode,
+      'admin1': instance.admin1,
+      'admin2': instance.admin2,
     };
 
 _$MetroApiResponseImpl _$$MetroApiResponseImplFromJson(

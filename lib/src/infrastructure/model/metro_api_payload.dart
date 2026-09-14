@@ -45,6 +45,7 @@ class MetroWeatherPayload extends WeatherRequest with _$MetroWeatherPayload {
   };
 }
 
+//TODO: merge with db layer and return domain string
 @JsonEnum(valueField: "value")
 enum HourlyItem {
   temperature2m("temperature_2m"),

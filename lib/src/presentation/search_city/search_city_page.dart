@@ -1,11 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:weather_app/src/domain/domain.dart';
-import 'package:weather_app/src/infrastructure/repository/weather_service_impl.dart';
-import 'package:weather_app/src/presentation/widgets/gradient_background.dart';
+import 'package:provider/provider.dart';
+import 'package:weather_app/src/infrastructure/weather_provider.dart';
 
+import '/src/presentation/widgets/gradient_background.dart';
 import '../../app/route_config.dart';
+import '../../domain/weather_service.dart';
 import '../city_weather/widgets/search_city_tile.dart';
 
 class SearchCityPage extends StatefulWidget {
@@ -16,18 +17,15 @@ class SearchCityPage extends StatefulWidget {
 }
 
 class _SearchCityPageState extends State<SearchCityPage> {
-  final LocationRepo repo = LocationRepo();
+  late final repo = context.read<IWeatherService>();
 
   final TextEditingController controller = TextEditingController();
   bool get isEmptySearch => controller.text.trim().isEmpty;
 
-  void onQueryChange(String q) async {
-    repo.searchWithDelay(q);
-  }
+  void onQueryChange(String q) => repo.searchCity(q);
 
   @override
   void dispose() {
-    repo.dispose();
     controller.dispose();
     super.dispose();
   }
@@ -44,7 +42,10 @@ class _SearchCityPageState extends State<SearchCityPage> {
               SliverAppBar(),
               SliverToBoxAdapter(
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 12,
+                  ),
                   child: CupertinoSearchTextField(
                     controller: controller,
                     onChanged: onQueryChange,
@@ -55,16 +56,16 @@ class _SearchCityPageState extends State<SearchCityPage> {
               ),
               StreamBuilder<List<CityInfo>>(
                 initialData: const [],
-                stream: repo.dataStream,
+                stream: repo.searchedCityResult,
                 builder: (context, snapshot) {
                   if (snapshot.hasError) {
-                    return SliverToBoxAdapter(
+                    return SliverFillRemaining(
                       child: Center(child: Text(snapshot.error.toString())),
                     );
                   }
 
                   if ((snapshot.data ?? []).isEmpty) {
-                    return SliverToBoxAdapter(
+                    return SliverFillRemaining(
                       child: Center(
                         child: Text(
                           isEmptySearch ? "" : "No city found, keep searching",
@@ -79,11 +80,9 @@ class _SearchCityPageState extends State<SearchCityPage> {
                       itemCount: items.length,
                       itemBuilder: (context, index) => SearchedCityTile(
                         cityInfo: items[index],
-                        onTap: () async {
-                          await context.push(
-                            AppRoute.cityWeatherDetails,
-                            extra: {"city": items[index]},
-                          );
+                        onTap: () {
+                          context.read<WeatherNotifier>().addCity(items[index]);
+                          context.pop();
                         },
                       ),
                     ),

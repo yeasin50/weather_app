@@ -10,656 +10,6 @@ part of 'weather_record.dart';
 // ignore_for_file: duplicate_ignore, invalid_use_of_protected_member, lines_longer_than_80_chars, constant_identifier_names, avoid_js_rounded_ints, no_leading_underscores_for_local_identifiers, require_trailing_commas, unnecessary_parenthesis, unnecessary_raw_strings, unnecessary_null_in_if_null_operators, library_private_types_in_public_api, prefer_const_constructors
 // ignore_for_file: type=lint
 
-extension GetWeatherRecordCollection on Isar {
-  IsarCollection<int, WeatherRecord> get weatherRecords => this.collection();
-}
-
-const WeatherRecordSchema = IsarGeneratedSchema(
-  schema: IsarSchema(
-    name: 'WeatherRecord',
-    idName: 'id',
-    embedded: false,
-    properties: [
-      IsarPropertySchema(
-        name: 'date',
-        type: IsarType.dateTime,
-      ),
-      IsarPropertySchema(
-        name: 'lastUpdate',
-        type: IsarType.dateTime,
-      ),
-    ],
-    indexes: [],
-  ),
-  converter: IsarObjectConverter<int, WeatherRecord>(
-    serialize: serializeWeatherRecord,
-    deserialize: deserializeWeatherRecord,
-    deserializeProperty: deserializeWeatherRecordProp,
-  ),
-  embeddedSchemas: [],
-);
-
-@isarProtected
-int serializeWeatherRecord(IsarWriter writer, WeatherRecord object) {
-  IsarCore.writeLong(writer, 1, object.date.toUtc().microsecondsSinceEpoch);
-  IsarCore.writeLong(
-      writer, 2, object.lastUpdate.toUtc().microsecondsSinceEpoch);
-  return object.id;
-}
-
-@isarProtected
-WeatherRecord deserializeWeatherRecord(IsarReader reader) {
-  final int _id;
-  _id = IsarCore.readId(reader);
-  final DateTime _date;
-  {
-    final value = IsarCore.readLong(reader, 1);
-    if (value == -9223372036854775808) {
-      _date = DateTime.fromMillisecondsSinceEpoch(0, isUtc: true).toLocal();
-    } else {
-      _date = DateTime.fromMicrosecondsSinceEpoch(value, isUtc: true).toLocal();
-    }
-  }
-  final DateTime _lastUpdate;
-  {
-    final value = IsarCore.readLong(reader, 2);
-    if (value == -9223372036854775808) {
-      _lastUpdate =
-          DateTime.fromMillisecondsSinceEpoch(0, isUtc: true).toLocal();
-    } else {
-      _lastUpdate =
-          DateTime.fromMicrosecondsSinceEpoch(value, isUtc: true).toLocal();
-    }
-  }
-  final object = WeatherRecord(
-    id: _id,
-    date: _date,
-    lastUpdate: _lastUpdate,
-  );
-  return object;
-}
-
-@isarProtected
-dynamic deserializeWeatherRecordProp(IsarReader reader, int property) {
-  switch (property) {
-    case 0:
-      return IsarCore.readId(reader);
-    case 1:
-      {
-        final value = IsarCore.readLong(reader, 1);
-        if (value == -9223372036854775808) {
-          return DateTime.fromMillisecondsSinceEpoch(0, isUtc: true).toLocal();
-        } else {
-          return DateTime.fromMicrosecondsSinceEpoch(value, isUtc: true)
-              .toLocal();
-        }
-      }
-    case 2:
-      {
-        final value = IsarCore.readLong(reader, 2);
-        if (value == -9223372036854775808) {
-          return DateTime.fromMillisecondsSinceEpoch(0, isUtc: true).toLocal();
-        } else {
-          return DateTime.fromMicrosecondsSinceEpoch(value, isUtc: true)
-              .toLocal();
-        }
-      }
-    default:
-      throw ArgumentError('Unknown property: $property');
-  }
-}
-
-sealed class _WeatherRecordUpdate {
-  bool call({
-    required int id,
-    DateTime? date,
-    DateTime? lastUpdate,
-  });
-}
-
-class _WeatherRecordUpdateImpl implements _WeatherRecordUpdate {
-  const _WeatherRecordUpdateImpl(this.collection);
-
-  final IsarCollection<int, WeatherRecord> collection;
-
-  @override
-  bool call({
-    required int id,
-    Object? date = ignore,
-    Object? lastUpdate = ignore,
-  }) {
-    return collection.updateProperties([
-          id
-        ], {
-          if (date != ignore) 1: date as DateTime?,
-          if (lastUpdate != ignore) 2: lastUpdate as DateTime?,
-        }) >
-        0;
-  }
-}
-
-sealed class _WeatherRecordUpdateAll {
-  int call({
-    required List<int> id,
-    DateTime? date,
-    DateTime? lastUpdate,
-  });
-}
-
-class _WeatherRecordUpdateAllImpl implements _WeatherRecordUpdateAll {
-  const _WeatherRecordUpdateAllImpl(this.collection);
-
-  final IsarCollection<int, WeatherRecord> collection;
-
-  @override
-  int call({
-    required List<int> id,
-    Object? date = ignore,
-    Object? lastUpdate = ignore,
-  }) {
-    return collection.updateProperties(id, {
-      if (date != ignore) 1: date as DateTime?,
-      if (lastUpdate != ignore) 2: lastUpdate as DateTime?,
-    });
-  }
-}
-
-extension WeatherRecordUpdate on IsarCollection<int, WeatherRecord> {
-  _WeatherRecordUpdate get update => _WeatherRecordUpdateImpl(this);
-
-  _WeatherRecordUpdateAll get updateAll => _WeatherRecordUpdateAllImpl(this);
-}
-
-sealed class _WeatherRecordQueryUpdate {
-  int call({
-    DateTime? date,
-    DateTime? lastUpdate,
-  });
-}
-
-class _WeatherRecordQueryUpdateImpl implements _WeatherRecordQueryUpdate {
-  const _WeatherRecordQueryUpdateImpl(this.query, {this.limit});
-
-  final IsarQuery<WeatherRecord> query;
-  final int? limit;
-
-  @override
-  int call({
-    Object? date = ignore,
-    Object? lastUpdate = ignore,
-  }) {
-    return query.updateProperties(limit: limit, {
-      if (date != ignore) 1: date as DateTime?,
-      if (lastUpdate != ignore) 2: lastUpdate as DateTime?,
-    });
-  }
-}
-
-extension WeatherRecordQueryUpdate on IsarQuery<WeatherRecord> {
-  _WeatherRecordQueryUpdate get updateFirst =>
-      _WeatherRecordQueryUpdateImpl(this, limit: 1);
-
-  _WeatherRecordQueryUpdate get updateAll =>
-      _WeatherRecordQueryUpdateImpl(this);
-}
-
-class _WeatherRecordQueryBuilderUpdateImpl
-    implements _WeatherRecordQueryUpdate {
-  const _WeatherRecordQueryBuilderUpdateImpl(this.query, {this.limit});
-
-  final QueryBuilder<WeatherRecord, WeatherRecord, QOperations> query;
-  final int? limit;
-
-  @override
-  int call({
-    Object? date = ignore,
-    Object? lastUpdate = ignore,
-  }) {
-    final q = query.build();
-    try {
-      return q.updateProperties(limit: limit, {
-        if (date != ignore) 1: date as DateTime?,
-        if (lastUpdate != ignore) 2: lastUpdate as DateTime?,
-      });
-    } finally {
-      q.close();
-    }
-  }
-}
-
-extension WeatherRecordQueryBuilderUpdate
-    on QueryBuilder<WeatherRecord, WeatherRecord, QOperations> {
-  _WeatherRecordQueryUpdate get updateFirst =>
-      _WeatherRecordQueryBuilderUpdateImpl(this, limit: 1);
-
-  _WeatherRecordQueryUpdate get updateAll =>
-      _WeatherRecordQueryBuilderUpdateImpl(this);
-}
-
-extension WeatherRecordQueryFilter
-    on QueryBuilder<WeatherRecord, WeatherRecord, QFilterCondition> {
-  QueryBuilder<WeatherRecord, WeatherRecord, QAfterFilterCondition> idEqualTo(
-    int value,
-  ) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(
-        EqualCondition(
-          property: 0,
-          value: value,
-        ),
-      );
-    });
-  }
-
-  QueryBuilder<WeatherRecord, WeatherRecord, QAfterFilterCondition>
-      idGreaterThan(
-    int value,
-  ) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(
-        GreaterCondition(
-          property: 0,
-          value: value,
-        ),
-      );
-    });
-  }
-
-  QueryBuilder<WeatherRecord, WeatherRecord, QAfterFilterCondition>
-      idGreaterThanOrEqualTo(
-    int value,
-  ) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(
-        GreaterOrEqualCondition(
-          property: 0,
-          value: value,
-        ),
-      );
-    });
-  }
-
-  QueryBuilder<WeatherRecord, WeatherRecord, QAfterFilterCondition> idLessThan(
-    int value,
-  ) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(
-        LessCondition(
-          property: 0,
-          value: value,
-        ),
-      );
-    });
-  }
-
-  QueryBuilder<WeatherRecord, WeatherRecord, QAfterFilterCondition>
-      idLessThanOrEqualTo(
-    int value,
-  ) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(
-        LessOrEqualCondition(
-          property: 0,
-          value: value,
-        ),
-      );
-    });
-  }
-
-  QueryBuilder<WeatherRecord, WeatherRecord, QAfterFilterCondition> idBetween(
-    int lower,
-    int upper,
-  ) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(
-        BetweenCondition(
-          property: 0,
-          lower: lower,
-          upper: upper,
-        ),
-      );
-    });
-  }
-
-  QueryBuilder<WeatherRecord, WeatherRecord, QAfterFilterCondition> dateEqualTo(
-    DateTime value,
-  ) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(
-        EqualCondition(
-          property: 1,
-          value: value,
-        ),
-      );
-    });
-  }
-
-  QueryBuilder<WeatherRecord, WeatherRecord, QAfterFilterCondition>
-      dateGreaterThan(
-    DateTime value,
-  ) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(
-        GreaterCondition(
-          property: 1,
-          value: value,
-        ),
-      );
-    });
-  }
-
-  QueryBuilder<WeatherRecord, WeatherRecord, QAfterFilterCondition>
-      dateGreaterThanOrEqualTo(
-    DateTime value,
-  ) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(
-        GreaterOrEqualCondition(
-          property: 1,
-          value: value,
-        ),
-      );
-    });
-  }
-
-  QueryBuilder<WeatherRecord, WeatherRecord, QAfterFilterCondition>
-      dateLessThan(
-    DateTime value,
-  ) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(
-        LessCondition(
-          property: 1,
-          value: value,
-        ),
-      );
-    });
-  }
-
-  QueryBuilder<WeatherRecord, WeatherRecord, QAfterFilterCondition>
-      dateLessThanOrEqualTo(
-    DateTime value,
-  ) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(
-        LessOrEqualCondition(
-          property: 1,
-          value: value,
-        ),
-      );
-    });
-  }
-
-  QueryBuilder<WeatherRecord, WeatherRecord, QAfterFilterCondition> dateBetween(
-    DateTime lower,
-    DateTime upper,
-  ) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(
-        BetweenCondition(
-          property: 1,
-          lower: lower,
-          upper: upper,
-        ),
-      );
-    });
-  }
-
-  QueryBuilder<WeatherRecord, WeatherRecord, QAfterFilterCondition>
-      lastUpdateEqualTo(
-    DateTime value,
-  ) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(
-        EqualCondition(
-          property: 2,
-          value: value,
-        ),
-      );
-    });
-  }
-
-  QueryBuilder<WeatherRecord, WeatherRecord, QAfterFilterCondition>
-      lastUpdateGreaterThan(
-    DateTime value,
-  ) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(
-        GreaterCondition(
-          property: 2,
-          value: value,
-        ),
-      );
-    });
-  }
-
-  QueryBuilder<WeatherRecord, WeatherRecord, QAfterFilterCondition>
-      lastUpdateGreaterThanOrEqualTo(
-    DateTime value,
-  ) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(
-        GreaterOrEqualCondition(
-          property: 2,
-          value: value,
-        ),
-      );
-    });
-  }
-
-  QueryBuilder<WeatherRecord, WeatherRecord, QAfterFilterCondition>
-      lastUpdateLessThan(
-    DateTime value,
-  ) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(
-        LessCondition(
-          property: 2,
-          value: value,
-        ),
-      );
-    });
-  }
-
-  QueryBuilder<WeatherRecord, WeatherRecord, QAfterFilterCondition>
-      lastUpdateLessThanOrEqualTo(
-    DateTime value,
-  ) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(
-        LessOrEqualCondition(
-          property: 2,
-          value: value,
-        ),
-      );
-    });
-  }
-
-  QueryBuilder<WeatherRecord, WeatherRecord, QAfterFilterCondition>
-      lastUpdateBetween(
-    DateTime lower,
-    DateTime upper,
-  ) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(
-        BetweenCondition(
-          property: 2,
-          lower: lower,
-          upper: upper,
-        ),
-      );
-    });
-  }
-}
-
-extension WeatherRecordQueryObject
-    on QueryBuilder<WeatherRecord, WeatherRecord, QFilterCondition> {}
-
-extension WeatherRecordQuerySortBy
-    on QueryBuilder<WeatherRecord, WeatherRecord, QSortBy> {
-  QueryBuilder<WeatherRecord, WeatherRecord, QAfterSortBy> sortById() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(0);
-    });
-  }
-
-  QueryBuilder<WeatherRecord, WeatherRecord, QAfterSortBy> sortByIdDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(0, sort: Sort.desc);
-    });
-  }
-
-  QueryBuilder<WeatherRecord, WeatherRecord, QAfterSortBy> sortByDate() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(1);
-    });
-  }
-
-  QueryBuilder<WeatherRecord, WeatherRecord, QAfterSortBy> sortByDateDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(1, sort: Sort.desc);
-    });
-  }
-
-  QueryBuilder<WeatherRecord, WeatherRecord, QAfterSortBy> sortByLastUpdate() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(2);
-    });
-  }
-
-  QueryBuilder<WeatherRecord, WeatherRecord, QAfterSortBy>
-      sortByLastUpdateDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(2, sort: Sort.desc);
-    });
-  }
-}
-
-extension WeatherRecordQuerySortThenBy
-    on QueryBuilder<WeatherRecord, WeatherRecord, QSortThenBy> {
-  QueryBuilder<WeatherRecord, WeatherRecord, QAfterSortBy> thenById() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(0);
-    });
-  }
-
-  QueryBuilder<WeatherRecord, WeatherRecord, QAfterSortBy> thenByIdDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(0, sort: Sort.desc);
-    });
-  }
-
-  QueryBuilder<WeatherRecord, WeatherRecord, QAfterSortBy> thenByDate() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(1);
-    });
-  }
-
-  QueryBuilder<WeatherRecord, WeatherRecord, QAfterSortBy> thenByDateDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(1, sort: Sort.desc);
-    });
-  }
-
-  QueryBuilder<WeatherRecord, WeatherRecord, QAfterSortBy> thenByLastUpdate() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(2);
-    });
-  }
-
-  QueryBuilder<WeatherRecord, WeatherRecord, QAfterSortBy>
-      thenByLastUpdateDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(2, sort: Sort.desc);
-    });
-  }
-}
-
-extension WeatherRecordQueryWhereDistinct
-    on QueryBuilder<WeatherRecord, WeatherRecord, QDistinct> {
-  QueryBuilder<WeatherRecord, WeatherRecord, QAfterDistinct> distinctByDate() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(1);
-    });
-  }
-
-  QueryBuilder<WeatherRecord, WeatherRecord, QAfterDistinct>
-      distinctByLastUpdate() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(2);
-    });
-  }
-}
-
-extension WeatherRecordQueryProperty1
-    on QueryBuilder<WeatherRecord, WeatherRecord, QProperty> {
-  QueryBuilder<WeatherRecord, int, QAfterProperty> idProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addProperty(0);
-    });
-  }
-
-  QueryBuilder<WeatherRecord, DateTime, QAfterProperty> dateProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addProperty(1);
-    });
-  }
-
-  QueryBuilder<WeatherRecord, DateTime, QAfterProperty> lastUpdateProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addProperty(2);
-    });
-  }
-}
-
-extension WeatherRecordQueryProperty2<R>
-    on QueryBuilder<WeatherRecord, R, QAfterProperty> {
-  QueryBuilder<WeatherRecord, (R, int), QAfterProperty> idProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addProperty(0);
-    });
-  }
-
-  QueryBuilder<WeatherRecord, (R, DateTime), QAfterProperty> dateProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addProperty(1);
-    });
-  }
-
-  QueryBuilder<WeatherRecord, (R, DateTime), QAfterProperty>
-      lastUpdateProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addProperty(2);
-    });
-  }
-}
-
-extension WeatherRecordQueryProperty3<R1, R2>
-    on QueryBuilder<WeatherRecord, (R1, R2), QAfterProperty> {
-  QueryBuilder<WeatherRecord, (R1, R2, int), QOperations> idProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addProperty(0);
-    });
-  }
-
-  QueryBuilder<WeatherRecord, (R1, R2, DateTime), QOperations> dateProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addProperty(1);
-    });
-  }
-
-  QueryBuilder<WeatherRecord, (R1, R2, DateTime), QOperations>
-      lastUpdateProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addProperty(2);
-    });
-  }
-}
-
-// coverage:ignore-file
-// ignore_for_file: duplicate_ignore, invalid_use_of_protected_member, lines_longer_than_80_chars, constant_identifier_names, avoid_js_rounded_ints, no_leading_underscores_for_local_identifiers, require_trailing_commas, unnecessary_parenthesis, unnecessary_raw_strings, unnecessary_null_in_if_null_operators, library_private_types_in_public_api, prefer_const_constructors
-// ignore_for_file: type=lint
-
 extension GetCityRecordCollection on Isar {
   IsarCollection<int, CityRecord> get cityRecords => this.collection();
 }
@@ -2235,104 +1585,90 @@ extension CityRecordQueryProperty3<R1, R2>
 // ignore_for_file: duplicate_ignore, invalid_use_of_protected_member, lines_longer_than_80_chars, constant_identifier_names, avoid_js_rounded_ints, no_leading_underscores_for_local_identifiers, require_trailing_commas, unnecessary_parenthesis, unnecessary_raw_strings, unnecessary_null_in_if_null_operators, library_private_types_in_public_api, prefer_const_constructors
 // ignore_for_file: type=lint
 
-extension GetDailyRecordCollection on Isar {
-  IsarCollection<int, DailyRecord> get dailyRecords => this.collection();
+extension GetWeatherRecordCollection on Isar {
+  IsarCollection<int, WeatherRecord> get weatherRecords => this.collection();
 }
 
-const DailyRecordSchema = IsarGeneratedSchema(
+const WeatherRecordSchema = IsarGeneratedSchema(
   schema: IsarSchema(
-    name: 'DailyRecord',
+    name: 'WeatherRecord',
     idName: 'id',
     embedded: false,
     properties: [
       IsarPropertySchema(
-        name: 'weatherId',
-        type: IsarType.long,
-      ),
-      IsarPropertySchema(
-        name: 'time',
+        name: 'date',
         type: IsarType.dateTime,
       ),
       IsarPropertySchema(
-        name: 'unit',
-        type: IsarType.string,
-      ),
-      IsarPropertySchema(
-        name: 'value',
-        type: IsarType.json,
-      ),
-      IsarPropertySchema(
-        name: 'type',
-        type: IsarType.byte,
-        enumMap: {"hourly": 0, "daily": 1},
+        name: 'lastUpdate',
+        type: IsarType.dateTime,
       ),
     ],
     indexes: [],
   ),
-  converter: IsarObjectConverter<int, DailyRecord>(
-    serialize: serializeDailyRecord,
-    deserialize: deserializeDailyRecord,
-    deserializeProperty: deserializeDailyRecordProp,
+  converter: IsarObjectConverter<int, WeatherRecord>(
+    serialize: serializeWeatherRecord,
+    deserialize: deserializeWeatherRecord,
+    deserializeProperty: deserializeWeatherRecordProp,
   ),
   embeddedSchemas: [],
 );
 
 @isarProtected
-int serializeDailyRecord(IsarWriter writer, DailyRecord object) {
-  IsarCore.writeLong(writer, 1, object.weatherId);
-  IsarCore.writeLong(writer, 2, object.time.toUtc().microsecondsSinceEpoch);
-  IsarCore.writeString(writer, 3, object.unit);
-  IsarCore.writeString(writer, 4, isarJsonEncode(object.value));
-  IsarCore.writeByte(writer, 5, object.type.index);
+int serializeWeatherRecord(IsarWriter writer, WeatherRecord object) {
+  IsarCore.writeLong(writer, 1, object.date.toUtc().microsecondsSinceEpoch);
+  IsarCore.writeLong(
+      writer, 2, object.lastUpdate.toUtc().microsecondsSinceEpoch);
   return object.id;
 }
 
 @isarProtected
-DailyRecord deserializeDailyRecord(IsarReader reader) {
+WeatherRecord deserializeWeatherRecord(IsarReader reader) {
   final int _id;
   _id = IsarCore.readId(reader);
-  final int _weatherId;
-  _weatherId = IsarCore.readLong(reader, 1);
-  final DateTime _time;
+  final DateTime _date;
+  {
+    final value = IsarCore.readLong(reader, 1);
+    if (value == -9223372036854775808) {
+      _date = DateTime.fromMillisecondsSinceEpoch(0, isUtc: true).toLocal();
+    } else {
+      _date = DateTime.fromMicrosecondsSinceEpoch(value, isUtc: true).toLocal();
+    }
+  }
+  final DateTime _lastUpdate;
   {
     final value = IsarCore.readLong(reader, 2);
     if (value == -9223372036854775808) {
-      _time = DateTime.fromMillisecondsSinceEpoch(0, isUtc: true).toLocal();
+      _lastUpdate =
+          DateTime.fromMillisecondsSinceEpoch(0, isUtc: true).toLocal();
     } else {
-      _time = DateTime.fromMicrosecondsSinceEpoch(value, isUtc: true).toLocal();
+      _lastUpdate =
+          DateTime.fromMicrosecondsSinceEpoch(value, isUtc: true).toLocal();
     }
   }
-  final String _unit;
-  _unit = IsarCore.readString(reader, 3) ?? '';
-  final dynamic _value;
-  _value = isarJsonDecode(IsarCore.readString(reader, 4) ?? 'null') ?? null;
-  final WeatherRecordType _type;
-  {
-    if (IsarCore.readNull(reader, 5)) {
-      _type = WeatherRecordType.hourly;
-    } else {
-      _type = _dailyRecordType[IsarCore.readByte(reader, 5)] ??
-          WeatherRecordType.hourly;
-    }
-  }
-  final object = DailyRecord(
+  final object = WeatherRecord(
     id: _id,
-    weatherId: _weatherId,
-    time: _time,
-    unit: _unit,
-    value: _value,
-    type: _type,
+    date: _date,
+    lastUpdate: _lastUpdate,
   );
   return object;
 }
 
 @isarProtected
-dynamic deserializeDailyRecordProp(IsarReader reader, int property) {
+dynamic deserializeWeatherRecordProp(IsarReader reader, int property) {
   switch (property) {
     case 0:
       return IsarCore.readId(reader);
     case 1:
-      return IsarCore.readLong(reader, 1);
+      {
+        final value = IsarCore.readLong(reader, 1);
+        if (value == -9223372036854775808) {
+          return DateTime.fromMillisecondsSinceEpoch(0, isUtc: true).toLocal();
+        } else {
+          return DateTime.fromMicrosecondsSinceEpoch(value, isUtc: true)
+              .toLocal();
+        }
+      }
     case 2:
       {
         final value = IsarCore.readLong(reader, 2);
@@ -2343,155 +1679,122 @@ dynamic deserializeDailyRecordProp(IsarReader reader, int property) {
               .toLocal();
         }
       }
-    case 3:
-      return IsarCore.readString(reader, 3) ?? '';
-    case 4:
-      return isarJsonDecode(IsarCore.readString(reader, 4) ?? 'null') ?? null;
-    case 5:
-      {
-        if (IsarCore.readNull(reader, 5)) {
-          return WeatherRecordType.hourly;
-        } else {
-          return _dailyRecordType[IsarCore.readByte(reader, 5)] ??
-              WeatherRecordType.hourly;
-        }
-      }
     default:
       throw ArgumentError('Unknown property: $property');
   }
 }
 
-sealed class _DailyRecordUpdate {
+sealed class _WeatherRecordUpdate {
   bool call({
     required int id,
-    int? weatherId,
-    DateTime? time,
-    String? unit,
-    WeatherRecordType? type,
+    DateTime? date,
+    DateTime? lastUpdate,
   });
 }
 
-class _DailyRecordUpdateImpl implements _DailyRecordUpdate {
-  const _DailyRecordUpdateImpl(this.collection);
+class _WeatherRecordUpdateImpl implements _WeatherRecordUpdate {
+  const _WeatherRecordUpdateImpl(this.collection);
 
-  final IsarCollection<int, DailyRecord> collection;
+  final IsarCollection<int, WeatherRecord> collection;
 
   @override
   bool call({
     required int id,
-    Object? weatherId = ignore,
-    Object? time = ignore,
-    Object? unit = ignore,
-    Object? type = ignore,
+    Object? date = ignore,
+    Object? lastUpdate = ignore,
   }) {
     return collection.updateProperties([
           id
         ], {
-          if (weatherId != ignore) 1: weatherId as int?,
-          if (time != ignore) 2: time as DateTime?,
-          if (unit != ignore) 3: unit as String?,
-          if (type != ignore) 5: type as WeatherRecordType?,
+          if (date != ignore) 1: date as DateTime?,
+          if (lastUpdate != ignore) 2: lastUpdate as DateTime?,
         }) >
         0;
   }
 }
 
-sealed class _DailyRecordUpdateAll {
+sealed class _WeatherRecordUpdateAll {
   int call({
     required List<int> id,
-    int? weatherId,
-    DateTime? time,
-    String? unit,
-    WeatherRecordType? type,
+    DateTime? date,
+    DateTime? lastUpdate,
   });
 }
 
-class _DailyRecordUpdateAllImpl implements _DailyRecordUpdateAll {
-  const _DailyRecordUpdateAllImpl(this.collection);
+class _WeatherRecordUpdateAllImpl implements _WeatherRecordUpdateAll {
+  const _WeatherRecordUpdateAllImpl(this.collection);
 
-  final IsarCollection<int, DailyRecord> collection;
+  final IsarCollection<int, WeatherRecord> collection;
 
   @override
   int call({
     required List<int> id,
-    Object? weatherId = ignore,
-    Object? time = ignore,
-    Object? unit = ignore,
-    Object? type = ignore,
+    Object? date = ignore,
+    Object? lastUpdate = ignore,
   }) {
     return collection.updateProperties(id, {
-      if (weatherId != ignore) 1: weatherId as int?,
-      if (time != ignore) 2: time as DateTime?,
-      if (unit != ignore) 3: unit as String?,
-      if (type != ignore) 5: type as WeatherRecordType?,
+      if (date != ignore) 1: date as DateTime?,
+      if (lastUpdate != ignore) 2: lastUpdate as DateTime?,
     });
   }
 }
 
-extension DailyRecordUpdate on IsarCollection<int, DailyRecord> {
-  _DailyRecordUpdate get update => _DailyRecordUpdateImpl(this);
+extension WeatherRecordUpdate on IsarCollection<int, WeatherRecord> {
+  _WeatherRecordUpdate get update => _WeatherRecordUpdateImpl(this);
 
-  _DailyRecordUpdateAll get updateAll => _DailyRecordUpdateAllImpl(this);
+  _WeatherRecordUpdateAll get updateAll => _WeatherRecordUpdateAllImpl(this);
 }
 
-sealed class _DailyRecordQueryUpdate {
+sealed class _WeatherRecordQueryUpdate {
   int call({
-    int? weatherId,
-    DateTime? time,
-    String? unit,
-    WeatherRecordType? type,
+    DateTime? date,
+    DateTime? lastUpdate,
   });
 }
 
-class _DailyRecordQueryUpdateImpl implements _DailyRecordQueryUpdate {
-  const _DailyRecordQueryUpdateImpl(this.query, {this.limit});
+class _WeatherRecordQueryUpdateImpl implements _WeatherRecordQueryUpdate {
+  const _WeatherRecordQueryUpdateImpl(this.query, {this.limit});
 
-  final IsarQuery<DailyRecord> query;
+  final IsarQuery<WeatherRecord> query;
   final int? limit;
 
   @override
   int call({
-    Object? weatherId = ignore,
-    Object? time = ignore,
-    Object? unit = ignore,
-    Object? type = ignore,
+    Object? date = ignore,
+    Object? lastUpdate = ignore,
   }) {
     return query.updateProperties(limit: limit, {
-      if (weatherId != ignore) 1: weatherId as int?,
-      if (time != ignore) 2: time as DateTime?,
-      if (unit != ignore) 3: unit as String?,
-      if (type != ignore) 5: type as WeatherRecordType?,
+      if (date != ignore) 1: date as DateTime?,
+      if (lastUpdate != ignore) 2: lastUpdate as DateTime?,
     });
   }
 }
 
-extension DailyRecordQueryUpdate on IsarQuery<DailyRecord> {
-  _DailyRecordQueryUpdate get updateFirst =>
-      _DailyRecordQueryUpdateImpl(this, limit: 1);
+extension WeatherRecordQueryUpdate on IsarQuery<WeatherRecord> {
+  _WeatherRecordQueryUpdate get updateFirst =>
+      _WeatherRecordQueryUpdateImpl(this, limit: 1);
 
-  _DailyRecordQueryUpdate get updateAll => _DailyRecordQueryUpdateImpl(this);
+  _WeatherRecordQueryUpdate get updateAll =>
+      _WeatherRecordQueryUpdateImpl(this);
 }
 
-class _DailyRecordQueryBuilderUpdateImpl implements _DailyRecordQueryUpdate {
-  const _DailyRecordQueryBuilderUpdateImpl(this.query, {this.limit});
+class _WeatherRecordQueryBuilderUpdateImpl
+    implements _WeatherRecordQueryUpdate {
+  const _WeatherRecordQueryBuilderUpdateImpl(this.query, {this.limit});
 
-  final QueryBuilder<DailyRecord, DailyRecord, QOperations> query;
+  final QueryBuilder<WeatherRecord, WeatherRecord, QOperations> query;
   final int? limit;
 
   @override
   int call({
-    Object? weatherId = ignore,
-    Object? time = ignore,
-    Object? unit = ignore,
-    Object? type = ignore,
+    Object? date = ignore,
+    Object? lastUpdate = ignore,
   }) {
     final q = query.build();
     try {
       return q.updateProperties(limit: limit, {
-        if (weatherId != ignore) 1: weatherId as int?,
-        if (time != ignore) 2: time as DateTime?,
-        if (unit != ignore) 3: unit as String?,
-        if (type != ignore) 5: type as WeatherRecordType?,
+        if (date != ignore) 1: date as DateTime?,
+        if (lastUpdate != ignore) 2: lastUpdate as DateTime?,
       });
     } finally {
       q.close();
@@ -2499,23 +1802,18 @@ class _DailyRecordQueryBuilderUpdateImpl implements _DailyRecordQueryUpdate {
   }
 }
 
-extension DailyRecordQueryBuilderUpdate
-    on QueryBuilder<DailyRecord, DailyRecord, QOperations> {
-  _DailyRecordQueryUpdate get updateFirst =>
-      _DailyRecordQueryBuilderUpdateImpl(this, limit: 1);
+extension WeatherRecordQueryBuilderUpdate
+    on QueryBuilder<WeatherRecord, WeatherRecord, QOperations> {
+  _WeatherRecordQueryUpdate get updateFirst =>
+      _WeatherRecordQueryBuilderUpdateImpl(this, limit: 1);
 
-  _DailyRecordQueryUpdate get updateAll =>
-      _DailyRecordQueryBuilderUpdateImpl(this);
+  _WeatherRecordQueryUpdate get updateAll =>
+      _WeatherRecordQueryBuilderUpdateImpl(this);
 }
 
-const _dailyRecordType = {
-  0: WeatherRecordType.hourly,
-  1: WeatherRecordType.daily,
-};
-
-extension DailyRecordQueryFilter
-    on QueryBuilder<DailyRecord, DailyRecord, QFilterCondition> {
-  QueryBuilder<DailyRecord, DailyRecord, QAfterFilterCondition> idEqualTo(
+extension WeatherRecordQueryFilter
+    on QueryBuilder<WeatherRecord, WeatherRecord, QFilterCondition> {
+  QueryBuilder<WeatherRecord, WeatherRecord, QAfterFilterCondition> idEqualTo(
     int value,
   ) {
     return QueryBuilder.apply(this, (query) {
@@ -2528,7 +1826,8 @@ extension DailyRecordQueryFilter
     });
   }
 
-  QueryBuilder<DailyRecord, DailyRecord, QAfterFilterCondition> idGreaterThan(
+  QueryBuilder<WeatherRecord, WeatherRecord, QAfterFilterCondition>
+      idGreaterThan(
     int value,
   ) {
     return QueryBuilder.apply(this, (query) {
@@ -2541,7 +1840,7 @@ extension DailyRecordQueryFilter
     });
   }
 
-  QueryBuilder<DailyRecord, DailyRecord, QAfterFilterCondition>
+  QueryBuilder<WeatherRecord, WeatherRecord, QAfterFilterCondition>
       idGreaterThanOrEqualTo(
     int value,
   ) {
@@ -2555,7 +1854,7 @@ extension DailyRecordQueryFilter
     });
   }
 
-  QueryBuilder<DailyRecord, DailyRecord, QAfterFilterCondition> idLessThan(
+  QueryBuilder<WeatherRecord, WeatherRecord, QAfterFilterCondition> idLessThan(
     int value,
   ) {
     return QueryBuilder.apply(this, (query) {
@@ -2568,7 +1867,7 @@ extension DailyRecordQueryFilter
     });
   }
 
-  QueryBuilder<DailyRecord, DailyRecord, QAfterFilterCondition>
+  QueryBuilder<WeatherRecord, WeatherRecord, QAfterFilterCondition>
       idLessThanOrEqualTo(
     int value,
   ) {
@@ -2582,7 +1881,7 @@ extension DailyRecordQueryFilter
     });
   }
 
-  QueryBuilder<DailyRecord, DailyRecord, QAfterFilterCondition> idBetween(
+  QueryBuilder<WeatherRecord, WeatherRecord, QAfterFilterCondition> idBetween(
     int lower,
     int upper,
   ) {
@@ -2597,7 +1896,782 @@ extension DailyRecordQueryFilter
     });
   }
 
-  QueryBuilder<DailyRecord, DailyRecord, QAfterFilterCondition>
+  QueryBuilder<WeatherRecord, WeatherRecord, QAfterFilterCondition> dateEqualTo(
+    DateTime value,
+  ) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        EqualCondition(
+          property: 1,
+          value: value,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<WeatherRecord, WeatherRecord, QAfterFilterCondition>
+      dateGreaterThan(
+    DateTime value,
+  ) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        GreaterCondition(
+          property: 1,
+          value: value,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<WeatherRecord, WeatherRecord, QAfterFilterCondition>
+      dateGreaterThanOrEqualTo(
+    DateTime value,
+  ) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        GreaterOrEqualCondition(
+          property: 1,
+          value: value,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<WeatherRecord, WeatherRecord, QAfterFilterCondition>
+      dateLessThan(
+    DateTime value,
+  ) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        LessCondition(
+          property: 1,
+          value: value,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<WeatherRecord, WeatherRecord, QAfterFilterCondition>
+      dateLessThanOrEqualTo(
+    DateTime value,
+  ) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        LessOrEqualCondition(
+          property: 1,
+          value: value,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<WeatherRecord, WeatherRecord, QAfterFilterCondition> dateBetween(
+    DateTime lower,
+    DateTime upper,
+  ) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        BetweenCondition(
+          property: 1,
+          lower: lower,
+          upper: upper,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<WeatherRecord, WeatherRecord, QAfterFilterCondition>
+      lastUpdateEqualTo(
+    DateTime value,
+  ) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        EqualCondition(
+          property: 2,
+          value: value,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<WeatherRecord, WeatherRecord, QAfterFilterCondition>
+      lastUpdateGreaterThan(
+    DateTime value,
+  ) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        GreaterCondition(
+          property: 2,
+          value: value,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<WeatherRecord, WeatherRecord, QAfterFilterCondition>
+      lastUpdateGreaterThanOrEqualTo(
+    DateTime value,
+  ) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        GreaterOrEqualCondition(
+          property: 2,
+          value: value,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<WeatherRecord, WeatherRecord, QAfterFilterCondition>
+      lastUpdateLessThan(
+    DateTime value,
+  ) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        LessCondition(
+          property: 2,
+          value: value,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<WeatherRecord, WeatherRecord, QAfterFilterCondition>
+      lastUpdateLessThanOrEqualTo(
+    DateTime value,
+  ) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        LessOrEqualCondition(
+          property: 2,
+          value: value,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<WeatherRecord, WeatherRecord, QAfterFilterCondition>
+      lastUpdateBetween(
+    DateTime lower,
+    DateTime upper,
+  ) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        BetweenCondition(
+          property: 2,
+          lower: lower,
+          upper: upper,
+        ),
+      );
+    });
+  }
+}
+
+extension WeatherRecordQueryObject
+    on QueryBuilder<WeatherRecord, WeatherRecord, QFilterCondition> {}
+
+extension WeatherRecordQuerySortBy
+    on QueryBuilder<WeatherRecord, WeatherRecord, QSortBy> {
+  QueryBuilder<WeatherRecord, WeatherRecord, QAfterSortBy> sortById() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(0);
+    });
+  }
+
+  QueryBuilder<WeatherRecord, WeatherRecord, QAfterSortBy> sortByIdDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(0, sort: Sort.desc);
+    });
+  }
+
+  QueryBuilder<WeatherRecord, WeatherRecord, QAfterSortBy> sortByDate() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(1);
+    });
+  }
+
+  QueryBuilder<WeatherRecord, WeatherRecord, QAfterSortBy> sortByDateDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(1, sort: Sort.desc);
+    });
+  }
+
+  QueryBuilder<WeatherRecord, WeatherRecord, QAfterSortBy> sortByLastUpdate() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(2);
+    });
+  }
+
+  QueryBuilder<WeatherRecord, WeatherRecord, QAfterSortBy>
+      sortByLastUpdateDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(2, sort: Sort.desc);
+    });
+  }
+}
+
+extension WeatherRecordQuerySortThenBy
+    on QueryBuilder<WeatherRecord, WeatherRecord, QSortThenBy> {
+  QueryBuilder<WeatherRecord, WeatherRecord, QAfterSortBy> thenById() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(0);
+    });
+  }
+
+  QueryBuilder<WeatherRecord, WeatherRecord, QAfterSortBy> thenByIdDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(0, sort: Sort.desc);
+    });
+  }
+
+  QueryBuilder<WeatherRecord, WeatherRecord, QAfterSortBy> thenByDate() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(1);
+    });
+  }
+
+  QueryBuilder<WeatherRecord, WeatherRecord, QAfterSortBy> thenByDateDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(1, sort: Sort.desc);
+    });
+  }
+
+  QueryBuilder<WeatherRecord, WeatherRecord, QAfterSortBy> thenByLastUpdate() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(2);
+    });
+  }
+
+  QueryBuilder<WeatherRecord, WeatherRecord, QAfterSortBy>
+      thenByLastUpdateDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(2, sort: Sort.desc);
+    });
+  }
+}
+
+extension WeatherRecordQueryWhereDistinct
+    on QueryBuilder<WeatherRecord, WeatherRecord, QDistinct> {
+  QueryBuilder<WeatherRecord, WeatherRecord, QAfterDistinct> distinctByDate() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(1);
+    });
+  }
+
+  QueryBuilder<WeatherRecord, WeatherRecord, QAfterDistinct>
+      distinctByLastUpdate() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(2);
+    });
+  }
+}
+
+extension WeatherRecordQueryProperty1
+    on QueryBuilder<WeatherRecord, WeatherRecord, QProperty> {
+  QueryBuilder<WeatherRecord, int, QAfterProperty> idProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addProperty(0);
+    });
+  }
+
+  QueryBuilder<WeatherRecord, DateTime, QAfterProperty> dateProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addProperty(1);
+    });
+  }
+
+  QueryBuilder<WeatherRecord, DateTime, QAfterProperty> lastUpdateProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addProperty(2);
+    });
+  }
+}
+
+extension WeatherRecordQueryProperty2<R>
+    on QueryBuilder<WeatherRecord, R, QAfterProperty> {
+  QueryBuilder<WeatherRecord, (R, int), QAfterProperty> idProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addProperty(0);
+    });
+  }
+
+  QueryBuilder<WeatherRecord, (R, DateTime), QAfterProperty> dateProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addProperty(1);
+    });
+  }
+
+  QueryBuilder<WeatherRecord, (R, DateTime), QAfterProperty>
+      lastUpdateProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addProperty(2);
+    });
+  }
+}
+
+extension WeatherRecordQueryProperty3<R1, R2>
+    on QueryBuilder<WeatherRecord, (R1, R2), QAfterProperty> {
+  QueryBuilder<WeatherRecord, (R1, R2, int), QOperations> idProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addProperty(0);
+    });
+  }
+
+  QueryBuilder<WeatherRecord, (R1, R2, DateTime), QOperations> dateProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addProperty(1);
+    });
+  }
+
+  QueryBuilder<WeatherRecord, (R1, R2, DateTime), QOperations>
+      lastUpdateProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addProperty(2);
+    });
+  }
+}
+
+// coverage:ignore-file
+// ignore_for_file: duplicate_ignore, invalid_use_of_protected_member, lines_longer_than_80_chars, constant_identifier_names, avoid_js_rounded_ints, no_leading_underscores_for_local_identifiers, require_trailing_commas, unnecessary_parenthesis, unnecessary_raw_strings, unnecessary_null_in_if_null_operators, library_private_types_in_public_api, prefer_const_constructors
+// ignore_for_file: type=lint
+
+extension GetWeatherMeasurementCollection on Isar {
+  IsarCollection<int, WeatherMeasurement> get weatherMeasurements =>
+      this.collection();
+}
+
+const WeatherMeasurementSchema = IsarGeneratedSchema(
+  schema: IsarSchema(
+    name: 'WeatherMeasurement',
+    idName: 'id',
+    embedded: false,
+    properties: [
+      IsarPropertySchema(
+        name: 'weatherId',
+        type: IsarType.long,
+      ),
+      IsarPropertySchema(
+        name: 'measurementType',
+        type: IsarType.byte,
+        enumMap: {
+          "temperature": 0,
+          "temperatureMax": 1,
+          "temperatureMin": 2,
+          "relativeHumidity": 3,
+          "rain": 4,
+          "precipitationProbability": 5,
+          "uvIndex": 6,
+          "windSpeed": 7,
+          "sunrise": 8,
+          "sunset": 9,
+          "moonPhase": 10,
+          "unknown": 11
+        },
+      ),
+      IsarPropertySchema(
+        name: 'time',
+        type: IsarType.dateTime,
+      ),
+      IsarPropertySchema(
+        name: 'unit',
+        type: IsarType.string,
+      ),
+      IsarPropertySchema(
+        name: 'value',
+        type: IsarType.json,
+      ),
+      IsarPropertySchema(
+        name: 'interval',
+        type: IsarType.byte,
+        enumMap: {"hourly": 0, "daily": 1},
+      ),
+    ],
+    indexes: [],
+  ),
+  converter: IsarObjectConverter<int, WeatherMeasurement>(
+    serialize: serializeWeatherMeasurement,
+    deserialize: deserializeWeatherMeasurement,
+    deserializeProperty: deserializeWeatherMeasurementProp,
+  ),
+  embeddedSchemas: [],
+);
+
+@isarProtected
+int serializeWeatherMeasurement(IsarWriter writer, WeatherMeasurement object) {
+  IsarCore.writeLong(writer, 1, object.weatherId);
+  IsarCore.writeByte(writer, 2, object.measurementType.index);
+  IsarCore.writeLong(writer, 3, object.time.toUtc().microsecondsSinceEpoch);
+  IsarCore.writeString(writer, 4, object.unit);
+  IsarCore.writeString(writer, 5, isarJsonEncode(object.value));
+  IsarCore.writeByte(writer, 6, object.interval.index);
+  return object.id;
+}
+
+@isarProtected
+WeatherMeasurement deserializeWeatherMeasurement(IsarReader reader) {
+  final int _id;
+  _id = IsarCore.readId(reader);
+  final int _weatherId;
+  _weatherId = IsarCore.readLong(reader, 1);
+  final MeasurementType _measurementType;
+  {
+    if (IsarCore.readNull(reader, 2)) {
+      _measurementType = MeasurementType.temperature;
+    } else {
+      _measurementType =
+          _weatherMeasurementMeasurementType[IsarCore.readByte(reader, 2)] ??
+              MeasurementType.temperature;
+    }
+  }
+  final DateTime _time;
+  {
+    final value = IsarCore.readLong(reader, 3);
+    if (value == -9223372036854775808) {
+      _time = DateTime.fromMillisecondsSinceEpoch(0, isUtc: true).toLocal();
+    } else {
+      _time = DateTime.fromMicrosecondsSinceEpoch(value, isUtc: true).toLocal();
+    }
+  }
+  final String _unit;
+  _unit = IsarCore.readString(reader, 4) ?? '';
+  final dynamic _value;
+  _value = isarJsonDecode(IsarCore.readString(reader, 5) ?? 'null') ?? null;
+  final MeasurementInterval _interval;
+  {
+    if (IsarCore.readNull(reader, 6)) {
+      _interval = MeasurementInterval.hourly;
+    } else {
+      _interval = _weatherMeasurementInterval[IsarCore.readByte(reader, 6)] ??
+          MeasurementInterval.hourly;
+    }
+  }
+  final object = WeatherMeasurement(
+    id: _id,
+    weatherId: _weatherId,
+    measurementType: _measurementType,
+    time: _time,
+    unit: _unit,
+    value: _value,
+    interval: _interval,
+  );
+  return object;
+}
+
+@isarProtected
+dynamic deserializeWeatherMeasurementProp(IsarReader reader, int property) {
+  switch (property) {
+    case 0:
+      return IsarCore.readId(reader);
+    case 1:
+      return IsarCore.readLong(reader, 1);
+    case 2:
+      {
+        if (IsarCore.readNull(reader, 2)) {
+          return MeasurementType.temperature;
+        } else {
+          return _weatherMeasurementMeasurementType[
+                  IsarCore.readByte(reader, 2)] ??
+              MeasurementType.temperature;
+        }
+      }
+    case 3:
+      {
+        final value = IsarCore.readLong(reader, 3);
+        if (value == -9223372036854775808) {
+          return DateTime.fromMillisecondsSinceEpoch(0, isUtc: true).toLocal();
+        } else {
+          return DateTime.fromMicrosecondsSinceEpoch(value, isUtc: true)
+              .toLocal();
+        }
+      }
+    case 4:
+      return IsarCore.readString(reader, 4) ?? '';
+    case 5:
+      return isarJsonDecode(IsarCore.readString(reader, 5) ?? 'null') ?? null;
+    case 6:
+      {
+        if (IsarCore.readNull(reader, 6)) {
+          return MeasurementInterval.hourly;
+        } else {
+          return _weatherMeasurementInterval[IsarCore.readByte(reader, 6)] ??
+              MeasurementInterval.hourly;
+        }
+      }
+    default:
+      throw ArgumentError('Unknown property: $property');
+  }
+}
+
+sealed class _WeatherMeasurementUpdate {
+  bool call({
+    required int id,
+    int? weatherId,
+    MeasurementType? measurementType,
+    DateTime? time,
+    String? unit,
+    MeasurementInterval? interval,
+  });
+}
+
+class _WeatherMeasurementUpdateImpl implements _WeatherMeasurementUpdate {
+  const _WeatherMeasurementUpdateImpl(this.collection);
+
+  final IsarCollection<int, WeatherMeasurement> collection;
+
+  @override
+  bool call({
+    required int id,
+    Object? weatherId = ignore,
+    Object? measurementType = ignore,
+    Object? time = ignore,
+    Object? unit = ignore,
+    Object? interval = ignore,
+  }) {
+    return collection.updateProperties([
+          id
+        ], {
+          if (weatherId != ignore) 1: weatherId as int?,
+          if (measurementType != ignore) 2: measurementType as MeasurementType?,
+          if (time != ignore) 3: time as DateTime?,
+          if (unit != ignore) 4: unit as String?,
+          if (interval != ignore) 6: interval as MeasurementInterval?,
+        }) >
+        0;
+  }
+}
+
+sealed class _WeatherMeasurementUpdateAll {
+  int call({
+    required List<int> id,
+    int? weatherId,
+    MeasurementType? measurementType,
+    DateTime? time,
+    String? unit,
+    MeasurementInterval? interval,
+  });
+}
+
+class _WeatherMeasurementUpdateAllImpl implements _WeatherMeasurementUpdateAll {
+  const _WeatherMeasurementUpdateAllImpl(this.collection);
+
+  final IsarCollection<int, WeatherMeasurement> collection;
+
+  @override
+  int call({
+    required List<int> id,
+    Object? weatherId = ignore,
+    Object? measurementType = ignore,
+    Object? time = ignore,
+    Object? unit = ignore,
+    Object? interval = ignore,
+  }) {
+    return collection.updateProperties(id, {
+      if (weatherId != ignore) 1: weatherId as int?,
+      if (measurementType != ignore) 2: measurementType as MeasurementType?,
+      if (time != ignore) 3: time as DateTime?,
+      if (unit != ignore) 4: unit as String?,
+      if (interval != ignore) 6: interval as MeasurementInterval?,
+    });
+  }
+}
+
+extension WeatherMeasurementUpdate on IsarCollection<int, WeatherMeasurement> {
+  _WeatherMeasurementUpdate get update => _WeatherMeasurementUpdateImpl(this);
+
+  _WeatherMeasurementUpdateAll get updateAll =>
+      _WeatherMeasurementUpdateAllImpl(this);
+}
+
+sealed class _WeatherMeasurementQueryUpdate {
+  int call({
+    int? weatherId,
+    MeasurementType? measurementType,
+    DateTime? time,
+    String? unit,
+    MeasurementInterval? interval,
+  });
+}
+
+class _WeatherMeasurementQueryUpdateImpl
+    implements _WeatherMeasurementQueryUpdate {
+  const _WeatherMeasurementQueryUpdateImpl(this.query, {this.limit});
+
+  final IsarQuery<WeatherMeasurement> query;
+  final int? limit;
+
+  @override
+  int call({
+    Object? weatherId = ignore,
+    Object? measurementType = ignore,
+    Object? time = ignore,
+    Object? unit = ignore,
+    Object? interval = ignore,
+  }) {
+    return query.updateProperties(limit: limit, {
+      if (weatherId != ignore) 1: weatherId as int?,
+      if (measurementType != ignore) 2: measurementType as MeasurementType?,
+      if (time != ignore) 3: time as DateTime?,
+      if (unit != ignore) 4: unit as String?,
+      if (interval != ignore) 6: interval as MeasurementInterval?,
+    });
+  }
+}
+
+extension WeatherMeasurementQueryUpdate on IsarQuery<WeatherMeasurement> {
+  _WeatherMeasurementQueryUpdate get updateFirst =>
+      _WeatherMeasurementQueryUpdateImpl(this, limit: 1);
+
+  _WeatherMeasurementQueryUpdate get updateAll =>
+      _WeatherMeasurementQueryUpdateImpl(this);
+}
+
+class _WeatherMeasurementQueryBuilderUpdateImpl
+    implements _WeatherMeasurementQueryUpdate {
+  const _WeatherMeasurementQueryBuilderUpdateImpl(this.query, {this.limit});
+
+  final QueryBuilder<WeatherMeasurement, WeatherMeasurement, QOperations> query;
+  final int? limit;
+
+  @override
+  int call({
+    Object? weatherId = ignore,
+    Object? measurementType = ignore,
+    Object? time = ignore,
+    Object? unit = ignore,
+    Object? interval = ignore,
+  }) {
+    final q = query.build();
+    try {
+      return q.updateProperties(limit: limit, {
+        if (weatherId != ignore) 1: weatherId as int?,
+        if (measurementType != ignore) 2: measurementType as MeasurementType?,
+        if (time != ignore) 3: time as DateTime?,
+        if (unit != ignore) 4: unit as String?,
+        if (interval != ignore) 6: interval as MeasurementInterval?,
+      });
+    } finally {
+      q.close();
+    }
+  }
+}
+
+extension WeatherMeasurementQueryBuilderUpdate
+    on QueryBuilder<WeatherMeasurement, WeatherMeasurement, QOperations> {
+  _WeatherMeasurementQueryUpdate get updateFirst =>
+      _WeatherMeasurementQueryBuilderUpdateImpl(this, limit: 1);
+
+  _WeatherMeasurementQueryUpdate get updateAll =>
+      _WeatherMeasurementQueryBuilderUpdateImpl(this);
+}
+
+const _weatherMeasurementMeasurementType = {
+  0: MeasurementType.temperature,
+  1: MeasurementType.temperatureMax,
+  2: MeasurementType.temperatureMin,
+  3: MeasurementType.relativeHumidity,
+  4: MeasurementType.rain,
+  5: MeasurementType.precipitationProbability,
+  6: MeasurementType.uvIndex,
+  7: MeasurementType.windSpeed,
+  8: MeasurementType.sunrise,
+  9: MeasurementType.sunset,
+  10: MeasurementType.moonPhase,
+  11: MeasurementType.unknown,
+};
+const _weatherMeasurementInterval = {
+  0: MeasurementInterval.hourly,
+  1: MeasurementInterval.daily,
+};
+
+extension WeatherMeasurementQueryFilter
+    on QueryBuilder<WeatherMeasurement, WeatherMeasurement, QFilterCondition> {
+  QueryBuilder<WeatherMeasurement, WeatherMeasurement, QAfterFilterCondition>
+      idEqualTo(
+    int value,
+  ) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        EqualCondition(
+          property: 0,
+          value: value,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<WeatherMeasurement, WeatherMeasurement, QAfterFilterCondition>
+      idGreaterThan(
+    int value,
+  ) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        GreaterCondition(
+          property: 0,
+          value: value,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<WeatherMeasurement, WeatherMeasurement, QAfterFilterCondition>
+      idGreaterThanOrEqualTo(
+    int value,
+  ) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        GreaterOrEqualCondition(
+          property: 0,
+          value: value,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<WeatherMeasurement, WeatherMeasurement, QAfterFilterCondition>
+      idLessThan(
+    int value,
+  ) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        LessCondition(
+          property: 0,
+          value: value,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<WeatherMeasurement, WeatherMeasurement, QAfterFilterCondition>
+      idLessThanOrEqualTo(
+    int value,
+  ) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        LessOrEqualCondition(
+          property: 0,
+          value: value,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<WeatherMeasurement, WeatherMeasurement, QAfterFilterCondition>
+      idBetween(
+    int lower,
+    int upper,
+  ) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        BetweenCondition(
+          property: 0,
+          lower: lower,
+          upper: upper,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<WeatherMeasurement, WeatherMeasurement, QAfterFilterCondition>
       weatherIdEqualTo(
     int value,
   ) {
@@ -2611,7 +2685,7 @@ extension DailyRecordQueryFilter
     });
   }
 
-  QueryBuilder<DailyRecord, DailyRecord, QAfterFilterCondition>
+  QueryBuilder<WeatherMeasurement, WeatherMeasurement, QAfterFilterCondition>
       weatherIdGreaterThan(
     int value,
   ) {
@@ -2625,7 +2699,7 @@ extension DailyRecordQueryFilter
     });
   }
 
-  QueryBuilder<DailyRecord, DailyRecord, QAfterFilterCondition>
+  QueryBuilder<WeatherMeasurement, WeatherMeasurement, QAfterFilterCondition>
       weatherIdGreaterThanOrEqualTo(
     int value,
   ) {
@@ -2639,7 +2713,7 @@ extension DailyRecordQueryFilter
     });
   }
 
-  QueryBuilder<DailyRecord, DailyRecord, QAfterFilterCondition>
+  QueryBuilder<WeatherMeasurement, WeatherMeasurement, QAfterFilterCondition>
       weatherIdLessThan(
     int value,
   ) {
@@ -2653,7 +2727,7 @@ extension DailyRecordQueryFilter
     });
   }
 
-  QueryBuilder<DailyRecord, DailyRecord, QAfterFilterCondition>
+  QueryBuilder<WeatherMeasurement, WeatherMeasurement, QAfterFilterCondition>
       weatherIdLessThanOrEqualTo(
     int value,
   ) {
@@ -2667,7 +2741,7 @@ extension DailyRecordQueryFilter
     });
   }
 
-  QueryBuilder<DailyRecord, DailyRecord, QAfterFilterCondition>
+  QueryBuilder<WeatherMeasurement, WeatherMeasurement, QAfterFilterCondition>
       weatherIdBetween(
     int lower,
     int upper,
@@ -2683,81 +2757,171 @@ extension DailyRecordQueryFilter
     });
   }
 
-  QueryBuilder<DailyRecord, DailyRecord, QAfterFilterCondition> timeEqualTo(
-    DateTime value,
+  QueryBuilder<WeatherMeasurement, WeatherMeasurement, QAfterFilterCondition>
+      measurementTypeEqualTo(
+    MeasurementType value,
   ) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         EqualCondition(
           property: 2,
-          value: value,
+          value: value.index,
         ),
       );
     });
   }
 
-  QueryBuilder<DailyRecord, DailyRecord, QAfterFilterCondition> timeGreaterThan(
-    DateTime value,
+  QueryBuilder<WeatherMeasurement, WeatherMeasurement, QAfterFilterCondition>
+      measurementTypeGreaterThan(
+    MeasurementType value,
   ) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         GreaterCondition(
           property: 2,
+          value: value.index,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<WeatherMeasurement, WeatherMeasurement, QAfterFilterCondition>
+      measurementTypeGreaterThanOrEqualTo(
+    MeasurementType value,
+  ) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        GreaterOrEqualCondition(
+          property: 2,
+          value: value.index,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<WeatherMeasurement, WeatherMeasurement, QAfterFilterCondition>
+      measurementTypeLessThan(
+    MeasurementType value,
+  ) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        LessCondition(
+          property: 2,
+          value: value.index,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<WeatherMeasurement, WeatherMeasurement, QAfterFilterCondition>
+      measurementTypeLessThanOrEqualTo(
+    MeasurementType value,
+  ) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        LessOrEqualCondition(
+          property: 2,
+          value: value.index,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<WeatherMeasurement, WeatherMeasurement, QAfterFilterCondition>
+      measurementTypeBetween(
+    MeasurementType lower,
+    MeasurementType upper,
+  ) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        BetweenCondition(
+          property: 2,
+          lower: lower.index,
+          upper: upper.index,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<WeatherMeasurement, WeatherMeasurement, QAfterFilterCondition>
+      timeEqualTo(
+    DateTime value,
+  ) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        EqualCondition(
+          property: 3,
           value: value,
         ),
       );
     });
   }
 
-  QueryBuilder<DailyRecord, DailyRecord, QAfterFilterCondition>
+  QueryBuilder<WeatherMeasurement, WeatherMeasurement, QAfterFilterCondition>
+      timeGreaterThan(
+    DateTime value,
+  ) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        GreaterCondition(
+          property: 3,
+          value: value,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<WeatherMeasurement, WeatherMeasurement, QAfterFilterCondition>
       timeGreaterThanOrEqualTo(
     DateTime value,
   ) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         GreaterOrEqualCondition(
-          property: 2,
+          property: 3,
           value: value,
         ),
       );
     });
   }
 
-  QueryBuilder<DailyRecord, DailyRecord, QAfterFilterCondition> timeLessThan(
+  QueryBuilder<WeatherMeasurement, WeatherMeasurement, QAfterFilterCondition>
+      timeLessThan(
     DateTime value,
   ) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         LessCondition(
-          property: 2,
+          property: 3,
           value: value,
         ),
       );
     });
   }
 
-  QueryBuilder<DailyRecord, DailyRecord, QAfterFilterCondition>
+  QueryBuilder<WeatherMeasurement, WeatherMeasurement, QAfterFilterCondition>
       timeLessThanOrEqualTo(
     DateTime value,
   ) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         LessOrEqualCondition(
-          property: 2,
+          property: 3,
           value: value,
         ),
       );
     });
   }
 
-  QueryBuilder<DailyRecord, DailyRecord, QAfterFilterCondition> timeBetween(
+  QueryBuilder<WeatherMeasurement, WeatherMeasurement, QAfterFilterCondition>
+      timeBetween(
     DateTime lower,
     DateTime upper,
   ) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         BetweenCondition(
-          property: 2,
+          property: 3,
           lower: lower,
           upper: upper,
         ),
@@ -2765,14 +2929,15 @@ extension DailyRecordQueryFilter
     });
   }
 
-  QueryBuilder<DailyRecord, DailyRecord, QAfterFilterCondition> unitEqualTo(
+  QueryBuilder<WeatherMeasurement, WeatherMeasurement, QAfterFilterCondition>
+      unitEqualTo(
     String value, {
     bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         EqualCondition(
-          property: 3,
+          property: 4,
           value: value,
           caseSensitive: caseSensitive,
         ),
@@ -2780,14 +2945,15 @@ extension DailyRecordQueryFilter
     });
   }
 
-  QueryBuilder<DailyRecord, DailyRecord, QAfterFilterCondition> unitGreaterThan(
+  QueryBuilder<WeatherMeasurement, WeatherMeasurement, QAfterFilterCondition>
+      unitGreaterThan(
     String value, {
     bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         GreaterCondition(
-          property: 3,
+          property: 4,
           value: value,
           caseSensitive: caseSensitive,
         ),
@@ -2795,7 +2961,7 @@ extension DailyRecordQueryFilter
     });
   }
 
-  QueryBuilder<DailyRecord, DailyRecord, QAfterFilterCondition>
+  QueryBuilder<WeatherMeasurement, WeatherMeasurement, QAfterFilterCondition>
       unitGreaterThanOrEqualTo(
     String value, {
     bool caseSensitive = true,
@@ -2803,7 +2969,7 @@ extension DailyRecordQueryFilter
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         GreaterOrEqualCondition(
-          property: 3,
+          property: 4,
           value: value,
           caseSensitive: caseSensitive,
         ),
@@ -2811,14 +2977,15 @@ extension DailyRecordQueryFilter
     });
   }
 
-  QueryBuilder<DailyRecord, DailyRecord, QAfterFilterCondition> unitLessThan(
+  QueryBuilder<WeatherMeasurement, WeatherMeasurement, QAfterFilterCondition>
+      unitLessThan(
     String value, {
     bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         LessCondition(
-          property: 3,
+          property: 4,
           value: value,
           caseSensitive: caseSensitive,
         ),
@@ -2826,7 +2993,7 @@ extension DailyRecordQueryFilter
     });
   }
 
-  QueryBuilder<DailyRecord, DailyRecord, QAfterFilterCondition>
+  QueryBuilder<WeatherMeasurement, WeatherMeasurement, QAfterFilterCondition>
       unitLessThanOrEqualTo(
     String value, {
     bool caseSensitive = true,
@@ -2834,7 +3001,7 @@ extension DailyRecordQueryFilter
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         LessOrEqualCondition(
-          property: 3,
+          property: 4,
           value: value,
           caseSensitive: caseSensitive,
         ),
@@ -2842,7 +3009,8 @@ extension DailyRecordQueryFilter
     });
   }
 
-  QueryBuilder<DailyRecord, DailyRecord, QAfterFilterCondition> unitBetween(
+  QueryBuilder<WeatherMeasurement, WeatherMeasurement, QAfterFilterCondition>
+      unitBetween(
     String lower,
     String upper, {
     bool caseSensitive = true,
@@ -2850,7 +3018,7 @@ extension DailyRecordQueryFilter
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         BetweenCondition(
-          property: 3,
+          property: 4,
           lower: lower,
           upper: upper,
           caseSensitive: caseSensitive,
@@ -2859,14 +3027,15 @@ extension DailyRecordQueryFilter
     });
   }
 
-  QueryBuilder<DailyRecord, DailyRecord, QAfterFilterCondition> unitStartsWith(
+  QueryBuilder<WeatherMeasurement, WeatherMeasurement, QAfterFilterCondition>
+      unitStartsWith(
     String value, {
     bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         StartsWithCondition(
-          property: 3,
+          property: 4,
           value: value,
           caseSensitive: caseSensitive,
         ),
@@ -2874,14 +3043,15 @@ extension DailyRecordQueryFilter
     });
   }
 
-  QueryBuilder<DailyRecord, DailyRecord, QAfterFilterCondition> unitEndsWith(
+  QueryBuilder<WeatherMeasurement, WeatherMeasurement, QAfterFilterCondition>
+      unitEndsWith(
     String value, {
     bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         EndsWithCondition(
-          property: 3,
+          property: 4,
           value: value,
           caseSensitive: caseSensitive,
         ),
@@ -2889,13 +3059,12 @@ extension DailyRecordQueryFilter
     });
   }
 
-  QueryBuilder<DailyRecord, DailyRecord, QAfterFilterCondition> unitContains(
-      String value,
-      {bool caseSensitive = true}) {
+  QueryBuilder<WeatherMeasurement, WeatherMeasurement, QAfterFilterCondition>
+      unitContains(String value, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         ContainsCondition(
-          property: 3,
+          property: 4,
           value: value,
           caseSensitive: caseSensitive,
         ),
@@ -2903,13 +3072,12 @@ extension DailyRecordQueryFilter
     });
   }
 
-  QueryBuilder<DailyRecord, DailyRecord, QAfterFilterCondition> unitMatches(
-      String pattern,
-      {bool caseSensitive = true}) {
+  QueryBuilder<WeatherMeasurement, WeatherMeasurement, QAfterFilterCondition>
+      unitMatches(String pattern, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         MatchesCondition(
-          property: 3,
+          property: 4,
           wildcard: pattern,
           caseSensitive: caseSensitive,
         ),
@@ -2917,104 +3085,109 @@ extension DailyRecordQueryFilter
     });
   }
 
-  QueryBuilder<DailyRecord, DailyRecord, QAfterFilterCondition> unitIsEmpty() {
+  QueryBuilder<WeatherMeasurement, WeatherMeasurement, QAfterFilterCondition>
+      unitIsEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         const EqualCondition(
-          property: 3,
+          property: 4,
           value: '',
         ),
       );
     });
   }
 
-  QueryBuilder<DailyRecord, DailyRecord, QAfterFilterCondition>
+  QueryBuilder<WeatherMeasurement, WeatherMeasurement, QAfterFilterCondition>
       unitIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         const GreaterCondition(
-          property: 3,
+          property: 4,
           value: '',
         ),
       );
     });
   }
 
-  QueryBuilder<DailyRecord, DailyRecord, QAfterFilterCondition> typeEqualTo(
-    WeatherRecordType value,
+  QueryBuilder<WeatherMeasurement, WeatherMeasurement, QAfterFilterCondition>
+      intervalEqualTo(
+    MeasurementInterval value,
   ) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         EqualCondition(
-          property: 5,
+          property: 6,
           value: value.index,
         ),
       );
     });
   }
 
-  QueryBuilder<DailyRecord, DailyRecord, QAfterFilterCondition> typeGreaterThan(
-    WeatherRecordType value,
+  QueryBuilder<WeatherMeasurement, WeatherMeasurement, QAfterFilterCondition>
+      intervalGreaterThan(
+    MeasurementInterval value,
   ) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         GreaterCondition(
-          property: 5,
+          property: 6,
           value: value.index,
         ),
       );
     });
   }
 
-  QueryBuilder<DailyRecord, DailyRecord, QAfterFilterCondition>
-      typeGreaterThanOrEqualTo(
-    WeatherRecordType value,
+  QueryBuilder<WeatherMeasurement, WeatherMeasurement, QAfterFilterCondition>
+      intervalGreaterThanOrEqualTo(
+    MeasurementInterval value,
   ) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         GreaterOrEqualCondition(
-          property: 5,
+          property: 6,
           value: value.index,
         ),
       );
     });
   }
 
-  QueryBuilder<DailyRecord, DailyRecord, QAfterFilterCondition> typeLessThan(
-    WeatherRecordType value,
+  QueryBuilder<WeatherMeasurement, WeatherMeasurement, QAfterFilterCondition>
+      intervalLessThan(
+    MeasurementInterval value,
   ) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         LessCondition(
-          property: 5,
+          property: 6,
           value: value.index,
         ),
       );
     });
   }
 
-  QueryBuilder<DailyRecord, DailyRecord, QAfterFilterCondition>
-      typeLessThanOrEqualTo(
-    WeatherRecordType value,
+  QueryBuilder<WeatherMeasurement, WeatherMeasurement, QAfterFilterCondition>
+      intervalLessThanOrEqualTo(
+    MeasurementInterval value,
   ) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         LessOrEqualCondition(
-          property: 5,
+          property: 6,
           value: value.index,
         ),
       );
     });
   }
 
-  QueryBuilder<DailyRecord, DailyRecord, QAfterFilterCondition> typeBetween(
-    WeatherRecordType lower,
-    WeatherRecordType upper,
+  QueryBuilder<WeatherMeasurement, WeatherMeasurement, QAfterFilterCondition>
+      intervalBetween(
+    MeasurementInterval lower,
+    MeasurementInterval upper,
   ) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         BetweenCondition(
-          property: 5,
+          property: 6,
           lower: lower.index,
           upper: upper.index,
         ),
@@ -3023,319 +3196,407 @@ extension DailyRecordQueryFilter
   }
 }
 
-extension DailyRecordQueryObject
-    on QueryBuilder<DailyRecord, DailyRecord, QFilterCondition> {}
+extension WeatherMeasurementQueryObject
+    on QueryBuilder<WeatherMeasurement, WeatherMeasurement, QFilterCondition> {}
 
-extension DailyRecordQuerySortBy
-    on QueryBuilder<DailyRecord, DailyRecord, QSortBy> {
-  QueryBuilder<DailyRecord, DailyRecord, QAfterSortBy> sortById() {
+extension WeatherMeasurementQuerySortBy
+    on QueryBuilder<WeatherMeasurement, WeatherMeasurement, QSortBy> {
+  QueryBuilder<WeatherMeasurement, WeatherMeasurement, QAfterSortBy>
+      sortById() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(0);
     });
   }
 
-  QueryBuilder<DailyRecord, DailyRecord, QAfterSortBy> sortByIdDesc() {
+  QueryBuilder<WeatherMeasurement, WeatherMeasurement, QAfterSortBy>
+      sortByIdDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(0, sort: Sort.desc);
     });
   }
 
-  QueryBuilder<DailyRecord, DailyRecord, QAfterSortBy> sortByWeatherId() {
+  QueryBuilder<WeatherMeasurement, WeatherMeasurement, QAfterSortBy>
+      sortByWeatherId() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(1);
     });
   }
 
-  QueryBuilder<DailyRecord, DailyRecord, QAfterSortBy> sortByWeatherIdDesc() {
+  QueryBuilder<WeatherMeasurement, WeatherMeasurement, QAfterSortBy>
+      sortByWeatherIdDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(1, sort: Sort.desc);
     });
   }
 
-  QueryBuilder<DailyRecord, DailyRecord, QAfterSortBy> sortByTime() {
+  QueryBuilder<WeatherMeasurement, WeatherMeasurement, QAfterSortBy>
+      sortByMeasurementType() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(2);
     });
   }
 
-  QueryBuilder<DailyRecord, DailyRecord, QAfterSortBy> sortByTimeDesc() {
+  QueryBuilder<WeatherMeasurement, WeatherMeasurement, QAfterSortBy>
+      sortByMeasurementTypeDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(2, sort: Sort.desc);
     });
   }
 
-  QueryBuilder<DailyRecord, DailyRecord, QAfterSortBy> sortByUnit(
+  QueryBuilder<WeatherMeasurement, WeatherMeasurement, QAfterSortBy>
+      sortByTime() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(3);
+    });
+  }
+
+  QueryBuilder<WeatherMeasurement, WeatherMeasurement, QAfterSortBy>
+      sortByTimeDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(3, sort: Sort.desc);
+    });
+  }
+
+  QueryBuilder<WeatherMeasurement, WeatherMeasurement, QAfterSortBy> sortByUnit(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(
-        3,
+        4,
         caseSensitive: caseSensitive,
       );
     });
   }
 
-  QueryBuilder<DailyRecord, DailyRecord, QAfterSortBy> sortByUnitDesc(
-      {bool caseSensitive = true}) {
+  QueryBuilder<WeatherMeasurement, WeatherMeasurement, QAfterSortBy>
+      sortByUnitDesc({bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(
-        3,
+        4,
         sort: Sort.desc,
         caseSensitive: caseSensitive,
       );
     });
   }
 
-  QueryBuilder<DailyRecord, DailyRecord, QAfterSortBy> sortByValue() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(4);
-    });
-  }
-
-  QueryBuilder<DailyRecord, DailyRecord, QAfterSortBy> sortByValueDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(4, sort: Sort.desc);
-    });
-  }
-
-  QueryBuilder<DailyRecord, DailyRecord, QAfterSortBy> sortByType() {
+  QueryBuilder<WeatherMeasurement, WeatherMeasurement, QAfterSortBy>
+      sortByValue() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(5);
     });
   }
 
-  QueryBuilder<DailyRecord, DailyRecord, QAfterSortBy> sortByTypeDesc() {
+  QueryBuilder<WeatherMeasurement, WeatherMeasurement, QAfterSortBy>
+      sortByValueDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(5, sort: Sort.desc);
     });
   }
+
+  QueryBuilder<WeatherMeasurement, WeatherMeasurement, QAfterSortBy>
+      sortByInterval() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(6);
+    });
+  }
+
+  QueryBuilder<WeatherMeasurement, WeatherMeasurement, QAfterSortBy>
+      sortByIntervalDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(6, sort: Sort.desc);
+    });
+  }
 }
 
-extension DailyRecordQuerySortThenBy
-    on QueryBuilder<DailyRecord, DailyRecord, QSortThenBy> {
-  QueryBuilder<DailyRecord, DailyRecord, QAfterSortBy> thenById() {
+extension WeatherMeasurementQuerySortThenBy
+    on QueryBuilder<WeatherMeasurement, WeatherMeasurement, QSortThenBy> {
+  QueryBuilder<WeatherMeasurement, WeatherMeasurement, QAfterSortBy>
+      thenById() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(0);
     });
   }
 
-  QueryBuilder<DailyRecord, DailyRecord, QAfterSortBy> thenByIdDesc() {
+  QueryBuilder<WeatherMeasurement, WeatherMeasurement, QAfterSortBy>
+      thenByIdDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(0, sort: Sort.desc);
     });
   }
 
-  QueryBuilder<DailyRecord, DailyRecord, QAfterSortBy> thenByWeatherId() {
+  QueryBuilder<WeatherMeasurement, WeatherMeasurement, QAfterSortBy>
+      thenByWeatherId() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(1);
     });
   }
 
-  QueryBuilder<DailyRecord, DailyRecord, QAfterSortBy> thenByWeatherIdDesc() {
+  QueryBuilder<WeatherMeasurement, WeatherMeasurement, QAfterSortBy>
+      thenByWeatherIdDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(1, sort: Sort.desc);
     });
   }
 
-  QueryBuilder<DailyRecord, DailyRecord, QAfterSortBy> thenByTime() {
+  QueryBuilder<WeatherMeasurement, WeatherMeasurement, QAfterSortBy>
+      thenByMeasurementType() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(2);
     });
   }
 
-  QueryBuilder<DailyRecord, DailyRecord, QAfterSortBy> thenByTimeDesc() {
+  QueryBuilder<WeatherMeasurement, WeatherMeasurement, QAfterSortBy>
+      thenByMeasurementTypeDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(2, sort: Sort.desc);
     });
   }
 
-  QueryBuilder<DailyRecord, DailyRecord, QAfterSortBy> thenByUnit(
+  QueryBuilder<WeatherMeasurement, WeatherMeasurement, QAfterSortBy>
+      thenByTime() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(3);
+    });
+  }
+
+  QueryBuilder<WeatherMeasurement, WeatherMeasurement, QAfterSortBy>
+      thenByTimeDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(3, sort: Sort.desc);
+    });
+  }
+
+  QueryBuilder<WeatherMeasurement, WeatherMeasurement, QAfterSortBy> thenByUnit(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(3, caseSensitive: caseSensitive);
+      return query.addSortBy(4, caseSensitive: caseSensitive);
     });
   }
 
-  QueryBuilder<DailyRecord, DailyRecord, QAfterSortBy> thenByUnitDesc(
-      {bool caseSensitive = true}) {
+  QueryBuilder<WeatherMeasurement, WeatherMeasurement, QAfterSortBy>
+      thenByUnitDesc({bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(3, sort: Sort.desc, caseSensitive: caseSensitive);
+      return query.addSortBy(4, sort: Sort.desc, caseSensitive: caseSensitive);
     });
   }
 
-  QueryBuilder<DailyRecord, DailyRecord, QAfterSortBy> thenByValue() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(4);
-    });
-  }
-
-  QueryBuilder<DailyRecord, DailyRecord, QAfterSortBy> thenByValueDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(4, sort: Sort.desc);
-    });
-  }
-
-  QueryBuilder<DailyRecord, DailyRecord, QAfterSortBy> thenByType() {
+  QueryBuilder<WeatherMeasurement, WeatherMeasurement, QAfterSortBy>
+      thenByValue() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(5);
     });
   }
 
-  QueryBuilder<DailyRecord, DailyRecord, QAfterSortBy> thenByTypeDesc() {
+  QueryBuilder<WeatherMeasurement, WeatherMeasurement, QAfterSortBy>
+      thenByValueDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(5, sort: Sort.desc);
     });
   }
+
+  QueryBuilder<WeatherMeasurement, WeatherMeasurement, QAfterSortBy>
+      thenByInterval() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(6);
+    });
+  }
+
+  QueryBuilder<WeatherMeasurement, WeatherMeasurement, QAfterSortBy>
+      thenByIntervalDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(6, sort: Sort.desc);
+    });
+  }
 }
 
-extension DailyRecordQueryWhereDistinct
-    on QueryBuilder<DailyRecord, DailyRecord, QDistinct> {
-  QueryBuilder<DailyRecord, DailyRecord, QAfterDistinct> distinctByWeatherId() {
+extension WeatherMeasurementQueryWhereDistinct
+    on QueryBuilder<WeatherMeasurement, WeatherMeasurement, QDistinct> {
+  QueryBuilder<WeatherMeasurement, WeatherMeasurement, QAfterDistinct>
+      distinctByWeatherId() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(1);
     });
   }
 
-  QueryBuilder<DailyRecord, DailyRecord, QAfterDistinct> distinctByTime() {
+  QueryBuilder<WeatherMeasurement, WeatherMeasurement, QAfterDistinct>
+      distinctByMeasurementType() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(2);
     });
   }
 
-  QueryBuilder<DailyRecord, DailyRecord, QAfterDistinct> distinctByUnit(
-      {bool caseSensitive = true}) {
+  QueryBuilder<WeatherMeasurement, WeatherMeasurement, QAfterDistinct>
+      distinctByTime() {
     return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(3, caseSensitive: caseSensitive);
+      return query.addDistinctBy(3);
     });
   }
 
-  QueryBuilder<DailyRecord, DailyRecord, QAfterDistinct> distinctByValue() {
+  QueryBuilder<WeatherMeasurement, WeatherMeasurement, QAfterDistinct>
+      distinctByUnit({bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(4);
+      return query.addDistinctBy(4, caseSensitive: caseSensitive);
     });
   }
 
-  QueryBuilder<DailyRecord, DailyRecord, QAfterDistinct> distinctByType() {
+  QueryBuilder<WeatherMeasurement, WeatherMeasurement, QAfterDistinct>
+      distinctByValue() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(5);
     });
   }
+
+  QueryBuilder<WeatherMeasurement, WeatherMeasurement, QAfterDistinct>
+      distinctByInterval() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(6);
+    });
+  }
 }
 
-extension DailyRecordQueryProperty1
-    on QueryBuilder<DailyRecord, DailyRecord, QProperty> {
-  QueryBuilder<DailyRecord, int, QAfterProperty> idProperty() {
+extension WeatherMeasurementQueryProperty1
+    on QueryBuilder<WeatherMeasurement, WeatherMeasurement, QProperty> {
+  QueryBuilder<WeatherMeasurement, int, QAfterProperty> idProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addProperty(0);
     });
   }
 
-  QueryBuilder<DailyRecord, int, QAfterProperty> weatherIdProperty() {
+  QueryBuilder<WeatherMeasurement, int, QAfterProperty> weatherIdProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addProperty(1);
     });
   }
 
-  QueryBuilder<DailyRecord, DateTime, QAfterProperty> timeProperty() {
+  QueryBuilder<WeatherMeasurement, MeasurementType, QAfterProperty>
+      measurementTypeProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addProperty(2);
     });
   }
 
-  QueryBuilder<DailyRecord, String, QAfterProperty> unitProperty() {
+  QueryBuilder<WeatherMeasurement, DateTime, QAfterProperty> timeProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addProperty(3);
     });
   }
 
-  QueryBuilder<DailyRecord, dynamic, QAfterProperty> valueProperty() {
+  QueryBuilder<WeatherMeasurement, String, QAfterProperty> unitProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addProperty(4);
     });
   }
 
-  QueryBuilder<DailyRecord, WeatherRecordType, QAfterProperty> typeProperty() {
+  QueryBuilder<WeatherMeasurement, dynamic, QAfterProperty> valueProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addProperty(5);
     });
   }
+
+  QueryBuilder<WeatherMeasurement, MeasurementInterval, QAfterProperty>
+      intervalProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addProperty(6);
+    });
+  }
 }
 
-extension DailyRecordQueryProperty2<R>
-    on QueryBuilder<DailyRecord, R, QAfterProperty> {
-  QueryBuilder<DailyRecord, (R, int), QAfterProperty> idProperty() {
+extension WeatherMeasurementQueryProperty2<R>
+    on QueryBuilder<WeatherMeasurement, R, QAfterProperty> {
+  QueryBuilder<WeatherMeasurement, (R, int), QAfterProperty> idProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addProperty(0);
     });
   }
 
-  QueryBuilder<DailyRecord, (R, int), QAfterProperty> weatherIdProperty() {
+  QueryBuilder<WeatherMeasurement, (R, int), QAfterProperty>
+      weatherIdProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addProperty(1);
     });
   }
 
-  QueryBuilder<DailyRecord, (R, DateTime), QAfterProperty> timeProperty() {
+  QueryBuilder<WeatherMeasurement, (R, MeasurementType), QAfterProperty>
+      measurementTypeProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addProperty(2);
     });
   }
 
-  QueryBuilder<DailyRecord, (R, String), QAfterProperty> unitProperty() {
+  QueryBuilder<WeatherMeasurement, (R, DateTime), QAfterProperty>
+      timeProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addProperty(3);
     });
   }
 
-  QueryBuilder<DailyRecord, (R, dynamic), QAfterProperty> valueProperty() {
+  QueryBuilder<WeatherMeasurement, (R, String), QAfterProperty> unitProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addProperty(4);
     });
   }
 
-  QueryBuilder<DailyRecord, (R, WeatherRecordType), QAfterProperty>
-      typeProperty() {
+  QueryBuilder<WeatherMeasurement, (R, dynamic), QAfterProperty>
+      valueProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addProperty(5);
     });
   }
+
+  QueryBuilder<WeatherMeasurement, (R, MeasurementInterval), QAfterProperty>
+      intervalProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addProperty(6);
+    });
+  }
 }
 
-extension DailyRecordQueryProperty3<R1, R2>
-    on QueryBuilder<DailyRecord, (R1, R2), QAfterProperty> {
-  QueryBuilder<DailyRecord, (R1, R2, int), QOperations> idProperty() {
+extension WeatherMeasurementQueryProperty3<R1, R2>
+    on QueryBuilder<WeatherMeasurement, (R1, R2), QAfterProperty> {
+  QueryBuilder<WeatherMeasurement, (R1, R2, int), QOperations> idProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addProperty(0);
     });
   }
 
-  QueryBuilder<DailyRecord, (R1, R2, int), QOperations> weatherIdProperty() {
+  QueryBuilder<WeatherMeasurement, (R1, R2, int), QOperations>
+      weatherIdProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addProperty(1);
     });
   }
 
-  QueryBuilder<DailyRecord, (R1, R2, DateTime), QOperations> timeProperty() {
+  QueryBuilder<WeatherMeasurement, (R1, R2, MeasurementType), QOperations>
+      measurementTypeProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addProperty(2);
     });
   }
 
-  QueryBuilder<DailyRecord, (R1, R2, String), QOperations> unitProperty() {
+  QueryBuilder<WeatherMeasurement, (R1, R2, DateTime), QOperations>
+      timeProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addProperty(3);
     });
   }
 
-  QueryBuilder<DailyRecord, (R1, R2, dynamic), QOperations> valueProperty() {
+  QueryBuilder<WeatherMeasurement, (R1, R2, String), QOperations>
+      unitProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addProperty(4);
     });
   }
 
-  QueryBuilder<DailyRecord, (R1, R2, WeatherRecordType), QOperations>
-      typeProperty() {
+  QueryBuilder<WeatherMeasurement, (R1, R2, dynamic), QOperations>
+      valueProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addProperty(5);
+    });
+  }
+
+  QueryBuilder<WeatherMeasurement, (R1, R2, MeasurementInterval), QOperations>
+      intervalProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addProperty(6);
     });
   }
 }

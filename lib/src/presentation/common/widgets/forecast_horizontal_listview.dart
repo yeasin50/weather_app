@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:weather_app/src/domain/entity/weather_record.dart';
 
-import '../../../infrastructure/infrastructure.dart';
 import 'forecast_list_tile.dart';
 
 class ForecastHorizontalListview extends StatefulWidget {
@@ -26,16 +26,20 @@ class ForecastHorizontalListview extends StatefulWidget {
 
   /// handle hour/weekly preview
   final bool isHourly;
-  final List<HourlyWeatherInfo> data;
+  final List<WeatherMeasurement> data;
 
   final EdgeInsets? padding;
 
   @override
-  State<ForecastHorizontalListview> createState() => _ForecastHorizontalListviewState();
+  State<ForecastHorizontalListview> createState() =>
+      _ForecastHorizontalListviewState();
 }
 
-class _ForecastHorizontalListviewState extends State<ForecastHorizontalListview> {
-  String label(int i) => widget.isHourly ? "${widget.data[i].date.hour}" : DateFormat("E").format(widget.data[i].date);
+class _ForecastHorizontalListviewState
+    extends State<ForecastHorizontalListview> {
+  String label(int i) => widget.isHourly
+      ? "${widget.data[i].time.hour}"
+      : DateFormat("E").format(widget.data[i].time);
 
   List<GlobalKey> tileKeys = [];
   final ScrollController controller = ScrollController();
@@ -54,7 +58,7 @@ class _ForecastHorizontalListviewState extends State<ForecastHorizontalListview>
         index = today.hour;
       } else {
         index = widget.data.indexWhere(
-          (element) => element.date.day == today.day,
+          (element) => element.time.day == today.day,
         );
       }
       setState(() {
@@ -75,9 +79,16 @@ class _ForecastHorizontalListviewState extends State<ForecastHorizontalListview>
     if (ctx == null) return;
     final target = ctx.findRenderObject() as RenderBox;
 
-    final position = target.localToGlobal(Offset.zero, ancestor: context.findRenderObject());
+    final position = target.localToGlobal(
+      Offset.zero,
+      ancestor: context.findRenderObject(),
+    );
 
-    controller.animateTo(position.dx, duration: Durations.long4, curve: Curves.easeIn);
+    controller.animateTo(
+      position.dx,
+      duration: Durations.long4,
+      curve: Curves.easeIn,
+    );
   }
 
   @override

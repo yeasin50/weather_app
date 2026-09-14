@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:flutter/material.dart';
 import 'package:weather_app/src/infrastructure/model/weather_record.dart';
 
@@ -6,8 +8,8 @@ import '../domain/weather_service.dart';
 
 // manage state of ui
 
-class WeatherProvider extends ChangeNotifier {
-  WeatherProvider({required this.db, required this.service});
+class WeatherNotifier extends ChangeNotifier {
+  WeatherNotifier({required this.db, required this.service});
 
   final IWeatherDatabase db;
   final IWeatherService service;
@@ -15,6 +17,10 @@ class WeatherProvider extends ChangeNotifier {
   /// active city record
   WeatherRecord? _todayWeather;
   WeatherRecord? get todayWeather => _todayWeather;
+
+  final List<WeatherRecord> _savedCities = [];
+  UnmodifiableListView<WeatherRecord> get savedCities =>
+      UnmodifiableListView([..._savedCities]);
 
   String _errorMessage = "";
   String get err => _errorMessage;

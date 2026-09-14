@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:weather_app/src/infrastructure/weather_provider.dart';
 import 'package:weather_app/src/presentation/common/widgets/app_button.dart';
 import 'package:weather_app/src/presentation/home/widgets/app_bar.dart';
+import '../../app/route_config.dart';
 import '../../infrastructure/infrastructure.dart';
 
 import '../../domain/domain.dart';
@@ -21,7 +23,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return GradientBackground(
       isImage: true,
-      child: Consumer<WeatherProvider>(
+      child: Consumer<WeatherNotifier>(
         builder: (context, data, child) {
           final todayRecord = data.todayWeather;
           final title = todayRecord == null
@@ -42,7 +44,8 @@ class _HomePageState extends State<HomePage> {
                           alignment: const Alignment(0, .65),
                           child: AppButton.header(
                             label: "Find My City",
-                          ), //TODO: missing tap; we can simply navigate to search  route right
+                            onTap: () => context.push(AppRoute.searchCity),
+                          ),
                         )
                       : MyCityWeatherView(),
                 ),
