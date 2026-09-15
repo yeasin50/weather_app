@@ -19,7 +19,6 @@ class IsarWeatherDatabase extends IWeatherDatabase {
     Directory weatherDBPath = await Directory(dbPath).create(recursive: true);
     isar = await Isar.open([
       CityRecordSchema,
-      WeatherRecordSchema,
       WeatherMeasurementSchema,
       UserPreferenceSchema,
     ], directory: weatherDBPath.path);
@@ -29,34 +28,35 @@ class IsarWeatherDatabase extends IWeatherDatabase {
   @override
   Future<bool> deleteRecord(int id) async {
     return await _db.writeTxn(() async {
-      return await _db.weatherRecords.delete(id);
+      return await _db.cityRecords.delete(id);
     });
   }
 
   @override
   Future<List<CityWeatherRecord>> getRecords() async {
-    final records = await _db.collection<WeatherRecord>().where().findAll();
+    final records = await _db.collection<CityRecord>().where().findAll();
     List<CityWeatherRecord> data = [];
     //TODO: Check fetch all and Map vs fetch N  times
     for (final r in records) {
       final hourlyItems = await _db.weatherMeasurements
           .filter()
-          .weatherIdEqualTo(r.id)
-          .intervalEqualTo(MeasurementInterval.hourly)
+          .cityIdEqualTo(r.id)
+          .intervalEqualTo(.hourly)
           .findAll();
 
       final dailyItems = await _db.weatherMeasurements
           .filter()
-          .weatherIdEqualTo(r.id)
-          .intervalEqualTo(MeasurementInterval.hourly)
+          .cityIdEqualTo(r.id)
+          .intervalEqualTo(.hourly)
           .findAll();
 
-      final city = await _db.cityRecords.get(r.id);
+      //FIXME:: empty city
+      final city = await _db.cityRecords.get(r.id) ?? CityRecord.none;
 
       data.add(
         CityWeatherRecord(
-          date: r.date,
-          city: city!,
+          date: r.lastUpdate,
+          city: city,
           dailyItems: dailyItems,
           hourlyItems: hourlyItems,
         ),
@@ -69,13 +69,15 @@ class IsarWeatherDatabase extends IWeatherDatabase {
   @override
   Future<CityWeatherRecord> saveRecord(CityWeatherRecord record) async {
     await _db.writeTxn(() async {
-      await _db.weatherRecords.delete(record.city.id);
-      //TODO: delete
-      // _db.weatherMeasurements.deleteAll( _db.weatherRecords.deleteAll(await _db.weatherRecords.filter()));
+      final currentItems = await _db.weatherMeasurements
+          .filter()
+          .cityIdEqualTo(record.city.id)
+          .findAll();
 
-      await _db.weatherRecords.put(
-        WeatherRecord(date: record.date, lastUpdate: DateTime.now()),
+      await _db.weatherMeasurements.deleteAll(
+        currentItems.map((e) => e.id).toList(),
       );
+
       await _db.cityRecords.put(record.city);
       await _db.weatherMeasurements.putAll(record.dailyItems);
       await _db.weatherMeasurements.putAll(record.hourlyItems);

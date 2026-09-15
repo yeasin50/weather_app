@@ -290,7 +290,7 @@ abstract class _CityInfo implements CityInfo {
 
 /// @nodoc
 mixin _$WeatherResponse {
-  WeatherRecord get record => throw _privateConstructorUsedError;
+  CityInfo get city => throw _privateConstructorUsedError;
   List<WeatherMeasurement> get dailyRecords =>
       throw _privateConstructorUsedError;
   List<WeatherMeasurement> get hourlyRecord =>
@@ -311,10 +311,12 @@ abstract class $WeatherResponseCopyWith<$Res> {
   ) = _$WeatherResponseCopyWithImpl<$Res, WeatherResponse>;
   @useResult
   $Res call({
-    WeatherRecord record,
+    CityInfo city,
     List<WeatherMeasurement> dailyRecords,
     List<WeatherMeasurement> hourlyRecord,
   });
+
+  $CityInfoCopyWith<$Res> get city;
 }
 
 /// @nodoc
@@ -332,16 +334,16 @@ class _$WeatherResponseCopyWithImpl<$Res, $Val extends WeatherResponse>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? record = null,
+    Object? city = null,
     Object? dailyRecords = null,
     Object? hourlyRecord = null,
   }) {
     return _then(
       _value.copyWith(
-            record: null == record
-                ? _value.record
-                : record // ignore: cast_nullable_to_non_nullable
-                      as WeatherRecord,
+            city: null == city
+                ? _value.city
+                : city // ignore: cast_nullable_to_non_nullable
+                      as CityInfo,
             dailyRecords: null == dailyRecords
                 ? _value.dailyRecords
                 : dailyRecords // ignore: cast_nullable_to_non_nullable
@@ -353,6 +355,16 @@ class _$WeatherResponseCopyWithImpl<$Res, $Val extends WeatherResponse>
           )
           as $Val,
     );
+  }
+
+  /// Create a copy of WeatherResponse
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $CityInfoCopyWith<$Res> get city {
+    return $CityInfoCopyWith<$Res>(_value.city, (value) {
+      return _then(_value.copyWith(city: value) as $Val);
+    });
   }
 }
 
@@ -366,10 +378,13 @@ abstract class _$$WeatherResponseImplCopyWith<$Res>
   @override
   @useResult
   $Res call({
-    WeatherRecord record,
+    CityInfo city,
     List<WeatherMeasurement> dailyRecords,
     List<WeatherMeasurement> hourlyRecord,
   });
+
+  @override
+  $CityInfoCopyWith<$Res> get city;
 }
 
 /// @nodoc
@@ -386,16 +401,16 @@ class __$$WeatherResponseImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? record = null,
+    Object? city = null,
     Object? dailyRecords = null,
     Object? hourlyRecord = null,
   }) {
     return _then(
       _$WeatherResponseImpl(
-        record: null == record
-            ? _value.record
-            : record // ignore: cast_nullable_to_non_nullable
-                  as WeatherRecord,
+        city: null == city
+            ? _value.city
+            : city // ignore: cast_nullable_to_non_nullable
+                  as CityInfo,
         dailyRecords: null == dailyRecords
             ? _value._dailyRecords
             : dailyRecords // ignore: cast_nullable_to_non_nullable
@@ -413,14 +428,14 @@ class __$$WeatherResponseImplCopyWithImpl<$Res>
 
 class _$WeatherResponseImpl implements _WeatherResponse {
   const _$WeatherResponseImpl({
-    required this.record,
+    required this.city,
     required final List<WeatherMeasurement> dailyRecords,
     required final List<WeatherMeasurement> hourlyRecord,
   }) : _dailyRecords = dailyRecords,
        _hourlyRecord = hourlyRecord;
 
   @override
-  final WeatherRecord record;
+  final CityInfo city;
   final List<WeatherMeasurement> _dailyRecords;
   @override
   List<WeatherMeasurement> get dailyRecords {
@@ -439,7 +454,7 @@ class _$WeatherResponseImpl implements _WeatherResponse {
 
   @override
   String toString() {
-    return 'WeatherResponse(record: $record, dailyRecords: $dailyRecords, hourlyRecord: $hourlyRecord)';
+    return 'WeatherResponse(city: $city, dailyRecords: $dailyRecords, hourlyRecord: $hourlyRecord)';
   }
 
   @override
@@ -447,7 +462,7 @@ class _$WeatherResponseImpl implements _WeatherResponse {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$WeatherResponseImpl &&
-            (identical(other.record, record) || other.record == record) &&
+            (identical(other.city, city) || other.city == city) &&
             const DeepCollectionEquality().equals(
               other._dailyRecords,
               _dailyRecords,
@@ -461,7 +476,7 @@ class _$WeatherResponseImpl implements _WeatherResponse {
   @override
   int get hashCode => Object.hash(
     runtimeType,
-    record,
+    city,
     const DeepCollectionEquality().hash(_dailyRecords),
     const DeepCollectionEquality().hash(_hourlyRecord),
   );
@@ -480,13 +495,13 @@ class _$WeatherResponseImpl implements _WeatherResponse {
 
 abstract class _WeatherResponse implements WeatherResponse {
   const factory _WeatherResponse({
-    required final WeatherRecord record,
+    required final CityInfo city,
     required final List<WeatherMeasurement> dailyRecords,
     required final List<WeatherMeasurement> hourlyRecord,
   }) = _$WeatherResponseImpl;
 
   @override
-  WeatherRecord get record;
+  CityInfo get city;
   @override
   List<WeatherMeasurement> get dailyRecords;
   @override

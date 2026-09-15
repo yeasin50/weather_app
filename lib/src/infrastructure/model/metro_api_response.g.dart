@@ -39,11 +39,11 @@ _$MetroApiResponseImpl _$$MetroApiResponseImplFromJson(
   longitude: (json['longitude'] as num).toDouble(),
   timezone: json['timezone'] as String,
   hourlyUnits: Map<String, String>.from(json['hourly_units'] as Map),
-  hourly: (json['hourly'] as Map<String, dynamic>?)?.map(
+  hourly: (json['hourly'] as Map<String, dynamic>).map(
     (k, e) => MapEntry(k, e as List<dynamic>),
   ),
   dailyUnits: Map<String, String>.from(json['daily_units'] as Map),
-  daily: (json['daily'] as Map<String, dynamic>?)?.map(
+  daily: (json['daily'] as Map<String, dynamic>).map(
     (k, e) => MapEntry(k, e as List<dynamic>),
   ),
 );

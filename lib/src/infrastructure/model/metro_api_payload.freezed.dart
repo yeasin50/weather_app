@@ -21,7 +21,10 @@ MetroWeatherPayload _$MetroWeatherPayloadFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$MetroWeatherPayload {
+  CityInfo get city => throw _privateConstructorUsedError;
+  @deprecated
   double get latitude => throw _privateConstructorUsedError;
+  @deprecated
   double get longitude => throw _privateConstructorUsedError;
   List<HourlyItem> get hourlyItems => throw _privateConstructorUsedError;
   List<DailyItem> get dailyItems => throw _privateConstructorUsedError;
@@ -46,13 +49,16 @@ abstract class $MetroWeatherPayloadCopyWith<$Res> {
   ) = _$MetroWeatherPayloadCopyWithImpl<$Res, MetroWeatherPayload>;
   @useResult
   $Res call({
-    double latitude,
-    double longitude,
+    CityInfo city,
+    @deprecated double latitude,
+    @deprecated double longitude,
     List<HourlyItem> hourlyItems,
     List<DailyItem> dailyItems,
     String timezone,
     int pastDays,
   });
+
+  $CityInfoCopyWith<$Res> get city;
 }
 
 /// @nodoc
@@ -70,6 +76,7 @@ class _$MetroWeatherPayloadCopyWithImpl<$Res, $Val extends MetroWeatherPayload>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? city = null,
     Object? latitude = null,
     Object? longitude = null,
     Object? hourlyItems = null,
@@ -79,6 +86,10 @@ class _$MetroWeatherPayloadCopyWithImpl<$Res, $Val extends MetroWeatherPayload>
   }) {
     return _then(
       _value.copyWith(
+            city: null == city
+                ? _value.city
+                : city // ignore: cast_nullable_to_non_nullable
+                      as CityInfo,
             latitude: null == latitude
                 ? _value.latitude
                 : latitude // ignore: cast_nullable_to_non_nullable
@@ -107,6 +118,16 @@ class _$MetroWeatherPayloadCopyWithImpl<$Res, $Val extends MetroWeatherPayload>
           as $Val,
     );
   }
+
+  /// Create a copy of MetroWeatherPayload
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $CityInfoCopyWith<$Res> get city {
+    return $CityInfoCopyWith<$Res>(_value.city, (value) {
+      return _then(_value.copyWith(city: value) as $Val);
+    });
+  }
 }
 
 /// @nodoc
@@ -119,13 +140,17 @@ abstract class _$$MetroWeatherPayloadImplCopyWith<$Res>
   @override
   @useResult
   $Res call({
-    double latitude,
-    double longitude,
+    CityInfo city,
+    @deprecated double latitude,
+    @deprecated double longitude,
     List<HourlyItem> hourlyItems,
     List<DailyItem> dailyItems,
     String timezone,
     int pastDays,
   });
+
+  @override
+  $CityInfoCopyWith<$Res> get city;
 }
 
 /// @nodoc
@@ -142,6 +167,7 @@ class __$$MetroWeatherPayloadImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? city = null,
     Object? latitude = null,
     Object? longitude = null,
     Object? hourlyItems = null,
@@ -151,6 +177,10 @@ class __$$MetroWeatherPayloadImplCopyWithImpl<$Res>
   }) {
     return _then(
       _$MetroWeatherPayloadImpl(
+        city: null == city
+            ? _value.city
+            : city // ignore: cast_nullable_to_non_nullable
+                  as CityInfo,
         latitude: null == latitude
             ? _value.latitude
             : latitude // ignore: cast_nullable_to_non_nullable
@@ -184,8 +214,9 @@ class __$$MetroWeatherPayloadImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$MetroWeatherPayloadImpl extends _MetroWeatherPayload {
   _$MetroWeatherPayloadImpl({
-    required this.latitude,
-    required this.longitude,
+    required this.city,
+    @deprecated required this.latitude,
+    @deprecated required this.longitude,
     required final List<HourlyItem> hourlyItems,
     required final List<DailyItem> dailyItems,
     this.timezone = "auto",
@@ -198,8 +229,12 @@ class _$MetroWeatherPayloadImpl extends _MetroWeatherPayload {
       _$$MetroWeatherPayloadImplFromJson(json);
 
   @override
+  final CityInfo city;
+  @override
+  @deprecated
   final double latitude;
   @override
+  @deprecated
   final double longitude;
   final List<HourlyItem> _hourlyItems;
   @override
@@ -226,7 +261,7 @@ class _$MetroWeatherPayloadImpl extends _MetroWeatherPayload {
 
   @override
   String toString() {
-    return 'MetroWeatherPayload(latitude: $latitude, longitude: $longitude, hourlyItems: $hourlyItems, dailyItems: $dailyItems, timezone: $timezone, pastDays: $pastDays)';
+    return 'MetroWeatherPayload(city: $city, latitude: $latitude, longitude: $longitude, hourlyItems: $hourlyItems, dailyItems: $dailyItems, timezone: $timezone, pastDays: $pastDays)';
   }
 
   @override
@@ -234,6 +269,7 @@ class _$MetroWeatherPayloadImpl extends _MetroWeatherPayload {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$MetroWeatherPayloadImpl &&
+            (identical(other.city, city) || other.city == city) &&
             (identical(other.latitude, latitude) ||
                 other.latitude == latitude) &&
             (identical(other.longitude, longitude) ||
@@ -256,6 +292,7 @@ class _$MetroWeatherPayloadImpl extends _MetroWeatherPayload {
   @override
   int get hashCode => Object.hash(
     runtimeType,
+    city,
     latitude,
     longitude,
     const DeepCollectionEquality().hash(_hourlyItems),
@@ -283,8 +320,9 @@ class _$MetroWeatherPayloadImpl extends _MetroWeatherPayload {
 
 abstract class _MetroWeatherPayload extends MetroWeatherPayload {
   factory _MetroWeatherPayload({
-    required final double latitude,
-    required final double longitude,
+    required final CityInfo city,
+    @deprecated required final double latitude,
+    @deprecated required final double longitude,
     required final List<HourlyItem> hourlyItems,
     required final List<DailyItem> dailyItems,
     final String timezone,
@@ -296,8 +334,12 @@ abstract class _MetroWeatherPayload extends MetroWeatherPayload {
       _$MetroWeatherPayloadImpl.fromJson;
 
   @override
+  CityInfo get city;
+  @override
+  @deprecated
   double get latitude;
   @override
+  @deprecated
   double get longitude;
   @override
   List<HourlyItem> get hourlyItems;

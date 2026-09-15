@@ -10,8 +10,10 @@ class MetroWeatherPayload extends WeatherRequest with _$MetroWeatherPayload {
   const MetroWeatherPayload._();
 
   factory MetroWeatherPayload({
-    required double latitude,
-    required double longitude,
+    required CityInfo city,
+
+    @deprecated required double latitude,
+    @deprecated required double longitude,
 
     required List<HourlyItem> hourlyItems,
     required List<DailyItem> dailyItems,
@@ -23,10 +25,12 @@ class MetroWeatherPayload extends WeatherRequest with _$MetroWeatherPayload {
       _$MetroWeatherPayloadFromJson(json);
 
   factory MetroWeatherPayload.defaultRequest({
-    required double latitude,
-    required double longitude,
+    @deprecated required double latitude,
+    @deprecated required double longitude,
+    required CityInfo city,
   }) {
     return MetroWeatherPayload(
+      city: city,
       latitude: latitude,
       longitude: longitude,
       hourlyItems: HourlyItem.defaultItems,
@@ -36,8 +40,8 @@ class MetroWeatherPayload extends WeatherRequest with _$MetroWeatherPayload {
 
   @override
   Map<String, dynamic> get toQuery => {
-    "latitude": latitude.toString(),
-    "longitude": longitude.toString(),
+    "latitude": city.latitude.toString(),
+    "longitude": city.longitude.toString(),
     "hourly": hourlyItems.map((e) => e.value).join(","),
     "daily": dailyItems.map((e) => e.value).join(","),
     "timezone": timezone,

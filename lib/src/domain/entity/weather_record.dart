@@ -4,7 +4,7 @@ part 'weather_record.g.dart';
 
 @collection
 class CityRecord {
-  CityRecord({
+  const CityRecord({
     required this.id,
     required this.name,
     required this.latitude,
@@ -25,19 +25,25 @@ class CityRecord {
 
   /// expect city[name]
   final DateTime lastUpdate;
+
+  static CityRecord none = CityRecord(
+    id: 0,
+    name: "",
+    latitude: 0,
+    longitude: 0,
+    location: "",
+    country: "",
+    countryCode: "",
+    lastUpdate: DateTime.now(),
+  );
 }
 
-//TODO: merge city?
-@collection
-class WeatherRecord {
-  WeatherRecord({required this.date, required this.lastUpdate});
+enum MeasurementInterval {
+  hourly,
+  daily;
 
-  Id id = Isar.autoIncrement;
-  final DateTime date;
-  final DateTime lastUpdate;
+  bool get isHourly => this == MeasurementInterval.hourly;
 }
-
-enum MeasurementInterval { hourly, daily }
 
 enum MeasurementType {
   temperature,
@@ -57,7 +63,7 @@ enum MeasurementType {
 @collection
 class WeatherMeasurement {
   WeatherMeasurement({
-    required this.weatherId,
+    required this.cityId,
     required this.measurementType,
     required this.time,
     required this.unit,
@@ -66,7 +72,7 @@ class WeatherMeasurement {
   });
 
   Id id = Isar.autoIncrement;
-  final int weatherId;
+  final int cityId;
 
   @Enumerated(EnumType.name)
   final MeasurementType measurementType;

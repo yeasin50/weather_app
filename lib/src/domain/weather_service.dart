@@ -29,7 +29,7 @@ sealed class CityInfo with _$CityInfo {
 @freezed
 class WeatherResponse with _$WeatherResponse {
   const factory WeatherResponse({
-    required WeatherRecord record,
+    required CityInfo city,
     required List<WeatherMeasurement> dailyRecords,
     required List<WeatherMeasurement> hourlyRecord,
   }) = _WeatherResponse;

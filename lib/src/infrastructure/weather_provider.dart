@@ -16,11 +16,11 @@ class WeatherNotifier extends ChangeNotifier {
   final IWeatherService service;
 
   /// active city record
-  WeatherRecord? _todayWeather;
-  WeatherRecord? get todayWeather => _todayWeather;
+  CityWeatherRecord? _todayWeather;
+  CityWeatherRecord? get todayWeather => _todayWeather;
 
-  final List<WeatherRecord> _savedCities = [];
-  UnmodifiableListView<WeatherRecord> get savedCities =>
+  final List<CityWeatherRecord> _savedCities = [];
+  UnmodifiableListView<CityWeatherRecord> get savedCities =>
       UnmodifiableListView([..._savedCities]);
 
   String _errorMessage = "";
@@ -28,6 +28,18 @@ class WeatherNotifier extends ChangeNotifier {
   bool get hasErr => _errorMessage.isNotEmpty;
 
   Future<void> changeCity(CityInfo city) async {}
+
+  Future<void> loadData() async {
+    try {
+      final result = await db.getRecords();
+      _savedCities.clear();
+      _savedCities.addAll(result);
+      notifyListeners();
+    } catch (e) {
+      _errorMessage = e.toString();
+      notifyListeners();
+    }
+  }
 
   // gonna refresh  only home city
   Future<void> refreshHomeCity() async {}
@@ -37,31 +49,34 @@ class WeatherNotifier extends ChangeNotifier {
       final req = MetroWeatherPayload(
         latitude: city.latitude,
         longitude: city.longitude,
+        city: city,
         dailyItems: DailyItem.defaultItems,
         hourlyItems: HourlyItem.defaultItems,
       );
 
       final response = await service.fetchWeather(req);
 
+      final cityRecord = CityRecord(
+        id: city.id ?? DateTime.now().millisecondsSinceEpoch,
+        latitude: city.latitude,
+        longitude: city.longitude,
+        name: city.name,
+        country: city.countryCode,
+        countryCode: city.countryCode,
+        location: city.location,
+        lastUpdate: DateTime.now(),
+      );
+
       final savedResult = await db.saveRecord(
         CityWeatherRecord(
           date: DateTime.now(),
-          city: CityRecord(
-            id: city.id ?? DateTime.now().millisecondsSinceEpoch,
-            latitude: city.latitude,
-            longitude: city.longitude,
-            name: city.name,
-            country: city.countryCode,
-            countryCode: city.countryCode,
-            location: city.location,
-            lastUpdate: DateTime.now(),
-          ),
+          city: cityRecord,
           dailyItems: response.dailyRecords,
           hourlyItems: response.hourlyRecord,
         ),
       );
 
-      print("saved item ${savedResult.city.id} ");
+      //TODO: refresh
     } catch (e) {
       _errorMessage = "failed to save city";
       notifyListeners();

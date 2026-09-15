@@ -351,9 +351,9 @@ mixin _$MetroApiResponse {
   double get longitude => throw _privateConstructorUsedError;
   String get timezone => throw _privateConstructorUsedError;
   Map<String, String> get hourlyUnits => throw _privateConstructorUsedError;
-  Map<String, List<dynamic>>? get hourly => throw _privateConstructorUsedError;
+  Map<String, List<dynamic>> get hourly => throw _privateConstructorUsedError;
   Map<String, String> get dailyUnits => throw _privateConstructorUsedError;
-  Map<String, List<dynamic>>? get daily => throw _privateConstructorUsedError;
+  Map<String, List<dynamic>> get daily => throw _privateConstructorUsedError;
 
   /// Serializes this MetroApiResponse to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -377,9 +377,9 @@ abstract class $MetroApiResponseCopyWith<$Res> {
     double longitude,
     String timezone,
     Map<String, String> hourlyUnits,
-    Map<String, List<dynamic>>? hourly,
+    Map<String, List<dynamic>> hourly,
     Map<String, String> dailyUnits,
-    Map<String, List<dynamic>>? daily,
+    Map<String, List<dynamic>> daily,
   });
 }
 
@@ -402,9 +402,9 @@ class _$MetroApiResponseCopyWithImpl<$Res, $Val extends MetroApiResponse>
     Object? longitude = null,
     Object? timezone = null,
     Object? hourlyUnits = null,
-    Object? hourly = freezed,
+    Object? hourly = null,
     Object? dailyUnits = null,
-    Object? daily = freezed,
+    Object? daily = null,
   }) {
     return _then(
       _value.copyWith(
@@ -424,18 +424,18 @@ class _$MetroApiResponseCopyWithImpl<$Res, $Val extends MetroApiResponse>
                 ? _value.hourlyUnits
                 : hourlyUnits // ignore: cast_nullable_to_non_nullable
                       as Map<String, String>,
-            hourly: freezed == hourly
+            hourly: null == hourly
                 ? _value.hourly
                 : hourly // ignore: cast_nullable_to_non_nullable
-                      as Map<String, List<dynamic>>?,
+                      as Map<String, List<dynamic>>,
             dailyUnits: null == dailyUnits
                 ? _value.dailyUnits
                 : dailyUnits // ignore: cast_nullable_to_non_nullable
                       as Map<String, String>,
-            daily: freezed == daily
+            daily: null == daily
                 ? _value.daily
                 : daily // ignore: cast_nullable_to_non_nullable
-                      as Map<String, List<dynamic>>?,
+                      as Map<String, List<dynamic>>,
           )
           as $Val,
     );
@@ -456,9 +456,9 @@ abstract class _$$MetroApiResponseImplCopyWith<$Res>
     double longitude,
     String timezone,
     Map<String, String> hourlyUnits,
-    Map<String, List<dynamic>>? hourly,
+    Map<String, List<dynamic>> hourly,
     Map<String, String> dailyUnits,
-    Map<String, List<dynamic>>? daily,
+    Map<String, List<dynamic>> daily,
   });
 }
 
@@ -480,9 +480,9 @@ class __$$MetroApiResponseImplCopyWithImpl<$Res>
     Object? longitude = null,
     Object? timezone = null,
     Object? hourlyUnits = null,
-    Object? hourly = freezed,
+    Object? hourly = null,
     Object? dailyUnits = null,
-    Object? daily = freezed,
+    Object? daily = null,
   }) {
     return _then(
       _$MetroApiResponseImpl(
@@ -502,18 +502,18 @@ class __$$MetroApiResponseImplCopyWithImpl<$Res>
             ? _value._hourlyUnits
             : hourlyUnits // ignore: cast_nullable_to_non_nullable
                   as Map<String, String>,
-        hourly: freezed == hourly
+        hourly: null == hourly
             ? _value._hourly
             : hourly // ignore: cast_nullable_to_non_nullable
-                  as Map<String, List<dynamic>>?,
+                  as Map<String, List<dynamic>>,
         dailyUnits: null == dailyUnits
             ? _value._dailyUnits
             : dailyUnits // ignore: cast_nullable_to_non_nullable
                   as Map<String, String>,
-        daily: freezed == daily
+        daily: null == daily
             ? _value._daily
             : daily // ignore: cast_nullable_to_non_nullable
-                  as Map<String, List<dynamic>>?,
+                  as Map<String, List<dynamic>>,
       ),
     );
   }
@@ -527,9 +527,9 @@ class _$MetroApiResponseImpl extends _MetroApiResponse {
     required this.longitude,
     required this.timezone,
     required final Map<String, String> hourlyUnits,
-    required final Map<String, List<dynamic>>? hourly,
+    required final Map<String, List<dynamic>> hourly,
     required final Map<String, String> dailyUnits,
-    required final Map<String, List<dynamic>>? daily,
+    required final Map<String, List<dynamic>> daily,
   }) : _hourlyUnits = hourlyUnits,
        _hourly = hourly,
        _dailyUnits = dailyUnits,
@@ -553,14 +553,12 @@ class _$MetroApiResponseImpl extends _MetroApiResponse {
     return EqualUnmodifiableMapView(_hourlyUnits);
   }
 
-  final Map<String, List<dynamic>>? _hourly;
+  final Map<String, List<dynamic>> _hourly;
   @override
-  Map<String, List<dynamic>>? get hourly {
-    final value = _hourly;
-    if (value == null) return null;
+  Map<String, List<dynamic>> get hourly {
     if (_hourly is EqualUnmodifiableMapView) return _hourly;
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableMapView(value);
+    return EqualUnmodifiableMapView(_hourly);
   }
 
   final Map<String, String> _dailyUnits;
@@ -571,14 +569,12 @@ class _$MetroApiResponseImpl extends _MetroApiResponse {
     return EqualUnmodifiableMapView(_dailyUnits);
   }
 
-  final Map<String, List<dynamic>>? _daily;
+  final Map<String, List<dynamic>> _daily;
   @override
-  Map<String, List<dynamic>>? get daily {
-    final value = _daily;
-    if (value == null) return null;
+  Map<String, List<dynamic>> get daily {
     if (_daily is EqualUnmodifiableMapView) return _daily;
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableMapView(value);
+    return EqualUnmodifiableMapView(_daily);
   }
 
   @override
@@ -645,9 +641,9 @@ abstract class _MetroApiResponse extends MetroApiResponse {
     required final double longitude,
     required final String timezone,
     required final Map<String, String> hourlyUnits,
-    required final Map<String, List<dynamic>>? hourly,
+    required final Map<String, List<dynamic>> hourly,
     required final Map<String, String> dailyUnits,
-    required final Map<String, List<dynamic>>? daily,
+    required final Map<String, List<dynamic>> daily,
   }) = _$MetroApiResponseImpl;
   const _MetroApiResponse._() : super._();
 
@@ -663,11 +659,11 @@ abstract class _MetroApiResponse extends MetroApiResponse {
   @override
   Map<String, String> get hourlyUnits;
   @override
-  Map<String, List<dynamic>>? get hourly;
+  Map<String, List<dynamic>> get hourly;
   @override
   Map<String, String> get dailyUnits;
   @override
-  Map<String, List<dynamic>>? get daily;
+  Map<String, List<dynamic>> get daily;
 
   /// Create a copy of MetroApiResponse
   /// with the given fields replaced by the non-null parameter values.

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:weather_app/src/infrastructure/weather_provider.dart';
 
+import '/src/infrastructure/weather_provider.dart';
+import '/src/presentation/widgets/weather_card_view.dart';
+import '../../infrastructure/extension/city_weather_ext.dart';
 import '../widgets/gradient_background.dart';
 import 'widgets/saved_city_appbar.dart';
 
@@ -46,8 +48,17 @@ class _SavedCityPageState extends State<SavedCityPage> {
         return cities.isEmpty
             ? const Center(child: Text("You have not saved any city yet"))
             : ListView.builder(
-                itemCount: 3,
-                itemBuilder: (context, i) => ListTile(title: Text("$i")),
+                itemCount: cities.length,
+                itemBuilder: (context, i) {
+                  final weather = cities[i].currenttemp();
+                  return WeatherCard(
+                    temp: weather.temp,
+                    humidity: weather.humadity,
+                    rain: weather.rain,
+                    location: weather.location,
+                    mode: weather.mood,
+                  );
+                },
               );
       },
     );

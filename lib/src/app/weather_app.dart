@@ -48,7 +48,7 @@ class _WeatherAppState extends State<WeatherApp> {
               create: (context) => WeatherNotifier(
                 db: context.read<IWeatherDatabase>(),
                 service: context.read<IWeatherService>(),
-              ),
+              )..loadData(),
             ),
           ],
           child: MaterialApp.router(

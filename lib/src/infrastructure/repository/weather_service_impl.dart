@@ -4,8 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:stream_transform/stream_transform.dart';
+import '/src/infrastructure/model/metro_api_payload.dart';
 
 import '../../domain/weather_service.dart';
+import '../model/metro_api_extention.dart';
 import '../model/metro_api_response.dart';
 
 class MetroApiServce implements IWeatherService {
@@ -70,6 +72,8 @@ class MetroApiServce implements IWeatherService {
 
   @override
   Future<WeatherResponse> fetchWeather(WeatherRequest req) async {
+    assert(req is MetroWeatherPayload);
+
     final uri = Uri(scheme: "https", host: "api.open-meteo.com");
 
     try {
@@ -77,6 +81,8 @@ class MetroApiServce implements IWeatherService {
         path: "/v1/forecast",
         queryParameters: req.toQuery,
       );
+
+      debugPrint(url.toString());
 
       final response = await http.get(url);
       if (response.statusCode != 200) {
@@ -86,11 +92,12 @@ class MetroApiServce implements IWeatherService {
       final data = jsonDecode(response.body);
       MetroApiResponse result = MetroApiResponse.fromJson(data);
 
-      final record = result.record;
+      final city = (req as MetroWeatherPayload).city;
+
       return WeatherResponse(
-        record: record,
-        dailyRecords: result.dailyRecords(record.id),
-        hourlyRecord: result.hourlyRecords(record.id),
+        city: city,
+        dailyRecords: result.mapWeatherMessurement(.daily, city.id!),
+        hourlyRecord: result.mapWeatherMessurement(.hourly, city.id!),
       );
     } catch (e, trace) {
       debugPrint("$e\n$trace");

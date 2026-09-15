@@ -25,8 +25,6 @@ class WeatherCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
 
-    debugPrint("path  ${mode.imagePath}");
-
     return AspectRatio(
       aspectRatio: 342 / 148,
       child: CustomPaint(
@@ -72,10 +70,7 @@ class WeatherCard extends StatelessWidget {
                   child: Column(
                     children: [
                       Expanded(
-                        child: Image.asset(
-                          mode.imagePath,
-                          fit: BoxFit.contain,
-                        ),
+                        child: Image.asset(mode.imagePath, fit: BoxFit.contain),
                       ),
                       Text(
                         mode.label,
@@ -85,7 +80,7 @@ class WeatherCard extends StatelessWidget {
                       ),
                     ],
                   ),
-                )
+                ),
               ],
             ),
           ),
@@ -103,16 +98,11 @@ class WeatherCardShape extends CustomPainter {
     final double radiusGap = size.height / 10;
     final linearGradientPaint = Paint()
       ..shader = const LinearGradient(
-        colors: [
-          Color(0xFF5936B4),
-          Color(0xFF362A84),
-        ],
+        colors: [Color(0xFF5936B4), Color(0xFF362A84)],
         stops: [0, 1],
         begin: Alignment(-1, .5),
         end: Alignment(1, .5),
-      ).createShader(
-        Rect.fromLTWH(0, 0, size.width, size.height),
-      );
+      ).createShader(Rect.fromLTWH(0, 0, size.width, size.height));
 
     path
       ..moveTo(0, size.height - radiusGap) //bottomLeft
@@ -129,10 +119,7 @@ class WeatherCardShape extends CustomPainter {
       )
       ..lineTo(size.width, size.height / 2) //TopRight
       ..arcToPoint(
-        Offset(
-          size.width - radiusGap,
-          (size.height / 2) - radiusGap,
-        ),
+        Offset(size.width - radiusGap, (size.height / 2) - radiusGap),
         radius: Radius.circular(radiusGap),
         clockwise: false,
       )

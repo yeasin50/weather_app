@@ -9,6 +9,7 @@ part of 'metro_api_payload.dart';
 _$MetroWeatherPayloadImpl _$$MetroWeatherPayloadImplFromJson(
   Map<String, dynamic> json,
 ) => _$MetroWeatherPayloadImpl(
+  city: CityInfo.fromJson(json['city'] as Map<String, dynamic>),
   latitude: (json['latitude'] as num).toDouble(),
   longitude: (json['longitude'] as num).toDouble(),
   hourlyItems: (json['hourly_items'] as List<dynamic>)
@@ -24,6 +25,7 @@ _$MetroWeatherPayloadImpl _$$MetroWeatherPayloadImplFromJson(
 Map<String, dynamic> _$$MetroWeatherPayloadImplToJson(
   _$MetroWeatherPayloadImpl instance,
 ) => <String, dynamic>{
+  'city': instance.city,
   'latitude': instance.latitude,
   'longitude': instance.longitude,
   'hourly_items': instance.hourlyItems
