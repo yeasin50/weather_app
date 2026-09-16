@@ -19,9 +19,9 @@ class UserPreference {
   }) : id = 0;
 
   final Id id;
-  final int homeItemId;
+  int homeItemId;
   @Enumerated(EnumType.name)
-  final WeatherUnit unit;
+  WeatherUnit unit;
 
   DateTime? updatedAt;
 }

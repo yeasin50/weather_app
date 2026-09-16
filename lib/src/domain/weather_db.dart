@@ -7,6 +7,7 @@ abstract class IWeatherDatabase {
 
   Future<CityWeatherRecord> saveRecord(CityWeatherRecord record);
 
+  /// holds all data of a single city; not just for single day
   Future<List<CityWeatherRecord>> getRecords();
   Future<bool> deleteRecord(int id);
 
@@ -26,4 +27,11 @@ class CityWeatherRecord {
   final CityRecord city;
   final List<WeatherMeasurement> dailyItems;
   final List<WeatherMeasurement> hourlyItems;
+
+  static CityWeatherRecord none = CityWeatherRecord(
+    date: DateTime.now(),
+    city: CityRecord.none,
+    dailyItems: [],
+    hourlyItems: [],
+  );
 }

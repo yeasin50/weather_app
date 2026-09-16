@@ -1,15 +1,16 @@
 import 'dart:ui';
+
+import 'package:flutter/material.dart';
 import 'package:isar_community/isar.dart';
 import 'package:provider/provider.dart';
 
-import 'package:flutter/material.dart';
-import 'package:weather_app/src/app/theme_config.dart';
-import 'package:weather_app/src/domain/weather_service.dart';
-import 'package:weather_app/src/infrastructure/repository/weather_records_db.dart';
-
+import '/src/app/theme_config.dart';
+import '/src/domain/weather_service.dart';
+import '/src/infrastructure/repository/weather_records_db.dart';
+import '../presentation/provider/providers.dart';
 import '../domain/weather_db.dart';
 import '../infrastructure/repository/weather_service_impl.dart';
-import '../infrastructure/weather_provider.dart';
+import '../presentation/provider/weather_provider.dart';
 import 'route_config.dart';
 
 class WeatherApp extends StatefulWidget {
@@ -49,6 +50,14 @@ class _WeatherAppState extends State<WeatherApp> {
                 db: context.read<IWeatherDatabase>(),
                 service: context.read<IWeatherService>(),
               )..loadData(),
+            ),
+
+            ChangeNotifierProxyProvider<WeatherNotifier, CityWeatherNotifier>(
+              create: (_) => CityWeatherNotifier(CityWeatherRecord.none),
+              update: (_, weather, cityNotifier) {
+                cityNotifier!.updateCity(weather.activeCity ?? .none);
+                return cityNotifier;
+              },
             ),
           ],
           child: MaterialApp.router(

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../../domain/entity/weather_record.dart';
-import '../../../infrastructure/infrastructure.dart';
+import 'package:weather_app/src/infrastructure/infrastructure.dart';
+import '../../provider/providers.dart';
 
 class ForecastListTile extends StatelessWidget {
   const ForecastListTile({
@@ -12,7 +12,7 @@ class ForecastListTile extends StatelessWidget {
 
   /// dayName / hour/ now
   final String label;
-  final WeatherMeasurement info;
+  final HourlyForcast info;
 
   final bool isActive;
 
@@ -39,9 +39,9 @@ class ForecastListTile extends StatelessWidget {
             children: [
               Text(label, style: textTheme.titleLarge),
               const SizedBox(height: 8),
-              Image.asset(info.imagePath, width: 48),
+              Image.asset(info.mood.imagePath, width: 48),
               const SizedBox(height: 8),
-              Text(" ${info.value}\u00B0", style: textTheme.titleLarge),
+              Text(" ${info.temp.value}\u00B0", style: textTheme.titleLarge),
             ],
           ),
         ),

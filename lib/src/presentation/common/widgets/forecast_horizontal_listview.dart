@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:weather_app/src/domain/entity/weather_record.dart';
+import '../../provider/providers.dart';
 
 import 'forecast_list_tile.dart';
 
-class ForecastHorizontalListview extends StatefulWidget {
+class ForecastHorizontalListview extends StatelessWidget {
   const ForecastHorizontalListview({
     super.key,
     required this.data,
@@ -26,87 +26,30 @@ class ForecastHorizontalListview extends StatefulWidget {
 
   /// handle hour/weekly preview
   final bool isHourly;
-  final List<WeatherMeasurement> data;
+
+  /// only from Now to next hour
+  final List<HourlyForcast> data;
 
   final EdgeInsets? padding;
 
   @override
-  State<ForecastHorizontalListview> createState() =>
-      _ForecastHorizontalListviewState();
-}
-
-class _ForecastHorizontalListviewState
-    extends State<ForecastHorizontalListview> {
-  String label(int i) => widget.isHourly
-      ? "${widget.data[i].time.hour}"
-      : DateFormat("E").format(widget.data[i].time);
-
-  List<GlobalKey> tileKeys = [];
-  final ScrollController controller = ScrollController();
-
-  int? activeIndex;
-
-  @override
-  void initState() {
-    super.initState();
-    tileKeys = List.generate(widget.data.length, (_) => GlobalKey());
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (tileKeys.isEmpty) return;
-      int index = 0;
-      final today = DateTime.now();
-      if (widget.isHourly) {
-        index = today.hour;
-      } else {
-        index = widget.data.indexWhere(
-          (element) => element.time.day == today.day,
-        );
-      }
-      setState(() {
-        activeIndex = index;
-      });
-      moveToIndex(index);
-    });
-  }
-
-  @override
-  void dispose() {
-    controller.dispose();
-    super.dispose();
-  }
-
-  void moveToIndex(int i) {
-    final ctx = tileKeys[i].currentContext;
-    if (ctx == null) return;
-    final target = ctx.findRenderObject() as RenderBox;
-
-    final position = target.localToGlobal(
-      Offset.zero,
-      ancestor: context.findRenderObject(),
-    );
-
-    controller.animateTo(
-      position.dx,
-      duration: Durations.long4,
-      curve: Curves.easeIn,
-    );
-  }
-
-  @override
   Widget build(BuildContext context) {
+    String label(int i) => isHourly
+        ? "${data[i].time.hour}"
+        : DateFormat("E").format(data[i].time);
+
     return ScrollConfiguration(
       behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
       child: SingleChildScrollView(
-        controller: controller,
         scrollDirection: Axis.horizontal,
-        padding: widget.padding,
+        padding: padding,
         child: Row(
           children: [
-            for (int i = 0; i < widget.data.length; i++)
+            for (int i = 0; i < data.length; i++)
               ForecastListTile(
-                isActive: activeIndex == i,
-                key: tileKeys.elementAt(i),
+                isActive: data.elementAt(i).isSelected,
                 label: label(i),
-                info: widget.data.elementAt(i),
+                info: data.elementAt(i),
               ),
           ],
         ),

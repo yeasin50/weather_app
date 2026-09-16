@@ -2,8 +2,12 @@ import 'dart:collection';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import '../domain/domain.dart';
-import 'model/metro_api_payload.dart';
+import '/src/domain/entity/user_preference.dart';
+
+import '../../domain/entity/weather_record.dart';
+import '../../domain/weather_db.dart';
+import '../../domain/weather_service.dart';
+import '../../infrastructure/model/metro_api_payload.dart';
 
 // manage state of ui
 
@@ -12,10 +16,6 @@ class WeatherNotifier extends ChangeNotifier {
 
   final IWeatherDatabase db;
   final IWeatherService service;
-
-  /// active city record
-  CityWeatherRecord? _todayWeather;
-  CityWeatherRecord? get todayWeather => _todayWeather;
 
   final List<CityWeatherRecord> _savedCities = [];
   UnmodifiableListView<CityWeatherRecord> get savedCities =>
@@ -27,7 +27,14 @@ class WeatherNotifier extends ChangeNotifier {
   String get err => _errorMessage;
   bool get hasErr => _errorMessage.isNotEmpty;
 
-  Future<void> changeCity(CityInfo city) async {}
+  /// active city record
+  CityWeatherRecord? _activeCity;
+  CityWeatherRecord? get activeCity => _activeCity;
+
+  Future<void> changeCity(int cityId) async {
+    _activeCity = _savedCities.firstWhere((e) => e.city.id == cityId);
+    notifyListeners();
+  }
 
   Future<void> loadData() async {
     try {
@@ -37,7 +44,7 @@ class WeatherNotifier extends ChangeNotifier {
       _savedCities.clear();
       _savedCities.addAll(result);
 
-      _todayWeather = _savedCities.firstWhere(
+      _activeCity = _savedCities.firstWhere(
         (e) => e.city.id == _preference.homeItemId,
       );
       notifyListeners();

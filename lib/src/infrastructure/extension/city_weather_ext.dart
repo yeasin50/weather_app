@@ -1,10 +1,17 @@
 import 'package:collection/collection.dart';
+import 'package:flutter/material.dart';
 import '/src/domain/entity/weather_record.dart';
 
 import '../../domain/weather_db.dart';
 import 'weather_mood.dart';
 
+// used t feed the ui
+
 extension CityWeatherExt on CityWeatherRecord {
+  // groupBy Day
+
+  //GroupBy hour
+
   WeatherMeasurement? getItem(
     Iterable<WeatherMeasurement> items,
     MeasurementType type,

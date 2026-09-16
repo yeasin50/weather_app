@@ -2,10 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import 'package:weather_app/src/infrastructure/weather_provider.dart';
+import '/src/presentation/provider/weather_provider.dart';
 
 import '/src/presentation/widgets/gradient_background.dart';
-import '../../app/route_config.dart';
 import '../../domain/weather_service.dart';
 import '../city_weather/widgets/search_city_tile.dart';
 

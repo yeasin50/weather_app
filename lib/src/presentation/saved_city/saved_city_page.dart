@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '/src/infrastructure/weather_provider.dart';
+import '../provider/weather_provider.dart';
 import '/src/presentation/widgets/weather_card_view.dart';
 import '../../infrastructure/extension/city_weather_ext.dart';
 import '../widgets/gradient_background.dart';
 import 'widgets/saved_city_appbar.dart';
 
+/// todo: remove other stuff than  drawer
 class SavedCityPage extends StatefulWidget {
   const SavedCityPage._({super.key, required this.view});
   final Widget view;
@@ -57,6 +58,11 @@ class _SavedCityPageState extends State<SavedCityPage> {
                     rain: weather.rain,
                     location: weather.location,
                     mode: weather.mood,
+                    onTap: () {
+                      final cityId = cities[i].city.id;
+                      context.read<WeatherNotifier>().changeCity(cityId);
+                      Scaffold.of(context).closeDrawer();
+                    },
                   );
                 },
               );
