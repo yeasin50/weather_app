@@ -24,6 +24,17 @@ sealed class CityInfo with _$CityInfo {
 
   factory CityInfo.fromJson(Map<String, dynamic> json) =>
       _$CityInfoFromJson(json);
+
+  factory CityInfo.fromCityRecord(CityRecord r) {
+    return CityInfo(
+      id: r.id,
+      name: r.name,
+      latitude: r.latitude,
+      longitude: r.longitude,
+      countryCode: r.countryCode,
+      location: r.location,
+    );
+  }
 }
 
 @freezed

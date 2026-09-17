@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:weather_app/src/presentation/saved_city/saved_city_page.dart';
+import '/src/presentation/saved_city/saved_city_page.dart';
 import '../../../app/route_config.dart';
 import '../../common/widgets/app_button.dart';
 import '../../widgets/gradient_background.dart';
@@ -57,6 +57,11 @@ class _AppDrawerState extends State<AppDrawer> {
                       BackButton(onPressed: Scaffold.of(context).closeDrawer),
                       Text("location", style: textStyle.titleMedium),
                     ],
+                  ),
+
+                  Placeholder(
+                    fallbackHeight: 120,
+                    child: Text("Your current location"),
                   ),
                   Expanded(child: SavedCityPage.view()),
                   AppButton.child(

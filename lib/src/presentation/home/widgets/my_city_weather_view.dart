@@ -16,60 +16,67 @@ class MyCityWeatherView extends StatefulWidget {
 class _MyCityWeatherViewState extends State<MyCityWeatherView> {
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Consumer<CityWeatherNotifier>(
-        builder: (context, data, _) {
-          final currentHourRecord = data.selectedHourForcast;
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              const SizedBox(height: 48),
-              TodaysWeather(
-                temp: currentHourRecord.temp,
-                humidity: currentHourRecord.humadity,
-                rain: currentHourRecord.rain,
-                mood: currentHourRecord.mood.label,
-              ),
-              const SizedBox(height: 48),
-              Glassmorphism(
-                padding: const EdgeInsets.symmetric(vertical: 12),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    const Padding(
-                      padding: EdgeInsets.only(left: 24.0),
-                      child: Text("Hourly Forecast"),
-                    ),
-                    const SizedBox(height: 16),
-                    ForecastHorizontalListview.hourly(
-                      padding: const EdgeInsets.only(left: 24),
-                      data: data.todaysHourlyForecast,
-                    ),
-                  ],
+    return RefreshIndicator(
+      onRefresh: () async {
+        await context.read<WeatherNotifier>().refreshHomeCity();
+        await Future.delayed(Duration(seconds: 2));
+      },
+      child: SingleChildScrollView(
+        physics: AlwaysScrollableScrollPhysics(),
+        child: Consumer<CityWeatherNotifier>(
+          builder: (context, data, _) {
+            final currentHourRecord = data.selectedHourForcast;
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                const SizedBox(height: 48),
+                TodaysWeather(
+                  temp: currentHourRecord.temp,
+                  humidity: currentHourRecord.humadity,
+                  rain: currentHourRecord.rain,
+                  mood: currentHourRecord.mood.label,
                 ),
-              ),
-              const SizedBox(height: 24),
-              Glassmorphism(
-                padding: const EdgeInsets.symmetric(vertical: 12),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    const Padding(
-                      padding: EdgeInsets.only(left: 24.0),
-                      child: Text("Weekly Forecast"),
-                    ),
-                    const SizedBox(height: 16),
-                    ForecastHorizontalListview.weekly(
-                      padding: const EdgeInsets.only(left: 24),
-                      data: data.weeklyForecast,
-                    ),
-                  ],
+                const SizedBox(height: 48),
+                Glassmorphism(
+                  padding: const EdgeInsets.symmetric(vertical: 12),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      const Padding(
+                        padding: EdgeInsets.only(left: 24.0),
+                        child: Text("Hourly Forecast"),
+                      ),
+                      const SizedBox(height: 16),
+                      ForecastHorizontalListview.hourly(
+                        padding: const EdgeInsets.only(left: 24),
+                        data: data.todaysHourlyForecast,
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              const SizedBox(height: 48),
-            ],
-          );
-        },
+                const SizedBox(height: 24),
+                Glassmorphism(
+                  padding: const EdgeInsets.symmetric(vertical: 12),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      const Padding(
+                        padding: EdgeInsets.only(left: 24.0),
+                        child: Text("Weekly Forecast"),
+                      ),
+                      const SizedBox(height: 16),
+                      ForecastHorizontalListview.weekly(
+                        padding: const EdgeInsets.only(left: 24),
+                        data: data.weeklyForecast,
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 48),
+              ],
+            );
+          },
+        ),
       ),
     );
   }

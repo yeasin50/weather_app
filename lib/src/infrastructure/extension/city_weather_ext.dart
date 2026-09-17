@@ -1,5 +1,4 @@
 import 'package:collection/collection.dart';
-import 'package:flutter/material.dart';
 import '/src/domain/entity/weather_record.dart';
 
 import '../../domain/weather_db.dart';

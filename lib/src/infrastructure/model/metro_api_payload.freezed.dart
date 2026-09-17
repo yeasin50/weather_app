@@ -220,7 +220,7 @@ class _$MetroWeatherPayloadImpl extends _MetroWeatherPayload {
     required final List<HourlyItem> hourlyItems,
     required final List<DailyItem> dailyItems,
     this.timezone = "auto",
-    this.pastDays = 7,
+    this.pastDays = 0,
   }) : _hourlyItems = hourlyItems,
        _dailyItems = dailyItems,
        super._();

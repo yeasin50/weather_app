@@ -18,7 +18,7 @@ class MetroWeatherPayload extends WeatherRequest with _$MetroWeatherPayload {
     required List<HourlyItem> hourlyItems,
     required List<DailyItem> dailyItems,
     @Default("auto") String timezone,
-    @Default(7) int pastDays,
+    @Default(0) int pastDays,
   }) = _MetroWeatherPayload;
 
   factory MetroWeatherPayload.fromJson(Map<String, dynamic> json) =>

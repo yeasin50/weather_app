@@ -7,6 +7,7 @@ import '../../../infrastructure/infrastructure.dart';
 import '../../common/widgets/forecast_horizontal_listview.dart';
 import '../../common/widgets/todays_weather_card.dart';
 
+@deprecated
 class SearchedCityDetailsView extends StatefulWidget {
   const SearchedCityDetailsView({
     super.key,

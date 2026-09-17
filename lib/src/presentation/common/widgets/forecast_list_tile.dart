@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:weather_app/src/infrastructure/infrastructure.dart';
+import '/src/infrastructure/infrastructure.dart';
 import '../../provider/providers.dart';
 
 class ForecastListTile extends StatelessWidget {
@@ -25,7 +25,9 @@ class ForecastListTile extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 6),
       child: DecoratedBox(
         decoration: ShapeDecoration(
-          color: isActive
+          color: info == HourlyForcast.none
+              ? Colors.red
+              : isActive
               ? const Color(0xFF48319D)
               : const Color.fromRGBO(72, 49, 157, .2),
           shape: const StadiumBorder(

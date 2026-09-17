@@ -17,7 +17,6 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<CityWeatherNotifier>(
       builder: (context, data, child) {
-        if (data.city == CityRecord.none) return _EmptyCityView();
         final city = data.city;
         final title = city.name;
         return GradientBackground(
@@ -30,7 +29,11 @@ class HomePage extends StatelessWidget {
                   padding: const EdgeInsets.all(12),
                   child: HomeAppBar(title: title),
                 ),
-                Expanded(child: MyCityWeatherView()),
+                Expanded(
+                  child: city == CityRecord.none
+                      ? _EmptyCityView()
+                      : MyCityWeatherView(),
+                ),
               ],
             ),
           ),
@@ -41,17 +44,15 @@ class HomePage extends StatelessWidget {
 }
 
 class _EmptyCityView extends StatelessWidget {
-  const _EmptyCityView({super.key});
+  const _EmptyCityView();
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Align(
-        alignment: const Alignment(0, .65),
-        child: AppButton.header(
-          label: "Find My City",
-          onTap: () => context.push(AppRoute.searchCity),
-        ),
+    return Align(
+      alignment: const Alignment(0, .65),
+      child: AppButton.header(
+        label: "Find My City",
+        onTap: () => context.push(AppRoute.searchCity),
       ),
     );
   }

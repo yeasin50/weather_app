@@ -60,7 +60,10 @@ class WeatherNotifier extends ChangeNotifier {
   }
 
   // gonna refresh  only home city
-  Future<void> refreshHomeCity() async {}
+  Future<void> refreshHomeCity() async {
+    assert(_activeCity != null);
+    await addCity(CityInfo.fromCityRecord(_activeCity!.city));
+  }
 
   Future<void> addCity(CityInfo city) async {
     try {

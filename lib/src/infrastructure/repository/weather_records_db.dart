@@ -47,7 +47,7 @@ class IsarWeatherDatabase extends IWeatherDatabase {
       final dailyItems = await _db.weatherMeasurements
           .filter()
           .cityIdEqualTo(r.id)
-          .intervalEqualTo(.hourly)
+          .intervalEqualTo(.daily)
           .findAll();
 
       //FIXME:: empty city

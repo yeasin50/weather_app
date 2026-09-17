@@ -34,9 +34,8 @@ class ForecastHorizontalListview extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String label(int i) => isHourly
-        ? "${data[i].time.hour}"
-        : DateFormat("E").format(data[i].time);
+    String label(int i) =>
+        DateFormat(isHourly ? "j" : "E").format(data[i].time);
 
     return ScrollConfiguration(
       behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),

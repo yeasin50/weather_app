@@ -53,7 +53,8 @@ class _WeatherAppState extends State<WeatherApp> {
             ),
 
             ChangeNotifierProxyProvider<WeatherNotifier, CityWeatherNotifier>(
-              create: (_) => CityWeatherNotifier(CityWeatherRecord.none),
+              create: (_) =>
+                  CityWeatherNotifier(CityWeatherRecord.none, DateTime.now()),
               update: (_, weather, cityNotifier) {
                 cityNotifier!.updateCity(weather.activeCity ?? .none);
                 return cityNotifier;

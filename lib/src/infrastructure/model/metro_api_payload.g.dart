@@ -19,7 +19,7 @@ _$MetroWeatherPayloadImpl _$$MetroWeatherPayloadImplFromJson(
       .map((e) => $enumDecode(_$DailyItemEnumMap, e))
       .toList(),
   timezone: json['timezone'] as String? ?? "auto",
-  pastDays: (json['past_days'] as num?)?.toInt() ?? 7,
+  pastDays: (json['past_days'] as num?)?.toInt() ?? 0,
 );
 
 Map<String, dynamic> _$$MetroWeatherPayloadImplToJson(

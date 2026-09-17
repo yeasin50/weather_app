@@ -25,6 +25,7 @@ extension MetroApiExt on MetroApiResponse {
     final entriesToBeRecord = (interval.isHourly ? hourly.keys : daily.keys)
         .where((e) => e != "time")
         .toList();
+
     if (entriesToBeRecord.isEmpty) return [];
 
     for (int i = 0; i < entriesToBeRecord.length; i++) {
@@ -36,11 +37,16 @@ extension MetroApiExt on MetroApiResponse {
 
       // specific key's list of items
       final keyItems = (interval.isHourly ? hourly[key] : daily[key]) ?? [];
-      for (final value in keyItems) {
+
+      assert(keyItems.length == days.length, "should be same");
+
+      for (int x = 0; x < keyItems.length; x++) {
+        final value = keyItems[x];
+
         result.add(
           WeatherMeasurement(
             cityId: cityId,
-            time: days[i],
+            time: days[x],
             unit: unit,
             value: value.toString(),
             interval: interval,
