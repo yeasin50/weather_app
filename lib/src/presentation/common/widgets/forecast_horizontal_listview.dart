@@ -4,38 +4,28 @@ import '../../provider/providers.dart';
 
 import 'forecast_list_tile.dart';
 
-class ForecastHorizontalListview extends StatelessWidget {
+class ForecastHorizontalListview<T extends ForecastData>
+    extends StatelessWidget {
   const ForecastHorizontalListview({
     super.key,
     required this.data,
-    required this.isHourly,
     this.padding,
   });
 
-  const ForecastHorizontalListview.hourly({
-    super.key,
-    required this.data,
-    this.padding,
-  }) : isHourly = true;
-
-  const ForecastHorizontalListview.weekly({
-    super.key,
-    required this.data,
-    this.padding,
-  }) : isHourly = false;
-
-  /// handle hour/weekly preview
-  final bool isHourly;
-
-  /// only from Now to next hour
-  final List<HourlyForcast> data;
+  ///  [DailyForecast] or [HourlyForecast]
+  final List<T> data;
 
   final EdgeInsets? padding;
 
   @override
   Widget build(BuildContext context) {
-    String label(int i) =>
-        DateFormat(isHourly ? "j" : "E").format(data[i].time);
+    assert(
+      data.first is HourlyForecast || data.first is DailyForecast,
+      'Expected HourlyForecast or DailyForecast but got ${data.first.runtimeType}',
+    );
+
+    String label(DateTime time) =>
+        DateFormat(T is HourlyForecast ? "j" : "E").format(time);
 
     return ScrollConfiguration(
       behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
@@ -43,14 +33,15 @@ class ForecastHorizontalListview extends StatelessWidget {
         scrollDirection: Axis.horizontal,
         padding: padding,
         child: Row(
-          children: [
-            for (int i = 0; i < data.length; i++)
-              ForecastListTile(
-                isActive: data.elementAt(i).isSelected,
-                label: label(i),
-                info: data.elementAt(i),
-              ),
-          ],
+          children: data
+              .map(
+                (e) => ForecastListTile(
+                  isActive: e.isSelected,
+                  label: label(e.time),
+                  info: e,
+                ),
+              )
+              .toList(),
         ),
       ),
     );

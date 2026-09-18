@@ -3,7 +3,7 @@ import 'package:collection/collection.dart';
 
 import '../../domain/entity/weather_record.dart';
 import '../../domain/weather_db.dart';
-import '../../infrastructure/infrastructure.dart';
+import 'providers.dart';
 
 /// maintain  specific city  record and show specific hour data
 /// hold 7 days data
@@ -22,8 +22,8 @@ class CityWeatherNotifier extends ChangeNotifier {
 
   CityRecord get city => _data.city;
 
-  HourlyForcast _selectedHourForecast = HourlyForcast.none;
-  HourlyForcast get selectedHourForcast => _selectedHourForecast;
+  HourlyForecast _selectedHourForecast = HourlyForecast.none;
+  HourlyForecast get selectedHourForcast => _selectedHourForecast;
 
   /// if missing returns empty
   WeatherMeasurement? _getItem(
@@ -35,8 +35,8 @@ class CityWeatherNotifier extends ChangeNotifier {
   }
 
   ///TODO: Can use single loop for all
-  List<HourlyForcast> get todaysHourlyForecast {
-    final List<HourlyForcast> result = [];
+  List<HourlyForecast> get todaysHourlyForecast {
+    final List<HourlyForecast> result = [];
 
     final groupByHour = groupBy(_data.hourlyItems, (e) => e.time);
 
@@ -60,8 +60,8 @@ class CityWeatherNotifier extends ChangeNotifier {
 
       result.add(
         [temp, rain, humadity].any((e) => e == null)
-            ? HourlyForcast.none
-            : HourlyForcast(
+            ? HourlyForecast.none
+            : HourlyForecast(
                 time: t,
                 temp: temp!,
                 rain: rain!,
@@ -73,8 +73,34 @@ class CityWeatherNotifier extends ChangeNotifier {
     return result;
   }
 
-  List<HourlyForcast> get weeklyForecast {
-    return [];
+  List<DailyForecast> get weeklyForecast {
+    final List<DailyForecast> result = [];
+
+    final groupByHour = groupBy(_data.dailyItems, (e) => e.time);
+    final times = groupByHour.keys.toList();
+
+    for (final t in times) {
+      final items = groupByHour[t];
+      final tempMax = _getItem(items, .temperatureMax);
+      final tempMin = _getItem(items, .temperatureMin);
+      final rain = _getItem(items, .precipitationProbability);
+
+      assert(
+        [tempMin, tempMax, rain].every((e) => e != null),
+        'tempMin:${tempMin != null}  tempMax:${tempMax != null} rain:${rain != null}',
+      );
+
+      result.add(
+        DailyForecast(
+          time: t,
+          tempMin: tempMin!,
+          tempMax: tempMax!,
+          rain: rain!,
+        ),
+      );
+    }
+
+    return result;
   }
 
   void updateCity(CityWeatherRecord record) {
@@ -83,43 +109,4 @@ class CityWeatherNotifier extends ChangeNotifier {
   }
 
   void updateHour() {}
-}
-
-class HourlyForcast {
-  HourlyForcast({
-    required this.time,
-    required this.temp,
-    required this.rain,
-    required this.humadity,
-    this.isSelected = false,
-  });
-
-  final DateTime time;
-  final WeatherMeasurement temp;
-  final WeatherMeasurement rain;
-  @Deprecated("might not want it")
-  final WeatherMeasurement humadity;
-
-  final bool isSelected;
-
-  WeatherMood get mood => WeatherMood.midRain; //TODO: calculate
-
-  static WeatherMeasurement _empty(MeasurementType type) {
-    return WeatherMeasurement(
-      cityId: 0,
-      measurementType: type,
-      time: DateTime.now(),
-      unit: "c",
-      value: "20",
-      interval: MeasurementInterval.hourly,
-    );
-  }
-
-  @deprecated
-  static HourlyForcast none = HourlyForcast(
-    time: DateTime.now(),
-    temp: _empty(MeasurementType.temperature),
-    rain: _empty(MeasurementType.rain),
-    humadity: _empty(MeasurementType.relativeHumidity),
-  );
 }

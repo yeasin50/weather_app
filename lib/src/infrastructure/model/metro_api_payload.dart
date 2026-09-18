@@ -49,7 +49,7 @@ class MetroWeatherPayload extends WeatherRequest with _$MetroWeatherPayload {
   };
 }
 
-//TODO: merge with db layer and return domain string
+//TODO: merge with db layer and returns domain string
 @JsonEnum(valueField: "value")
 enum HourlyItem {
   temperature2m("temperature_2m"),
@@ -74,20 +74,58 @@ enum HourlyItem {
 
 @JsonEnum(valueField: "value")
 enum DailyItem {
+  weatherCode("weather_code"),
+  temperatureMax("temperature_2m_max"),
+  temperatureMin("temperature_2m_min"),
+  rainMax("precipitation_probability_max"),
+
   sunrise("sunrise"),
   sunset("sunset"),
-  moonPhase("moon_phase"),
-  temperatureMax("temperature_2m_max"),
-  temperatureMin("temperature_2m_min");
+  daylightDuration("daylight_duration"),
+  sunshineDuration("sunshine_duration"),
+
+  moonPhase("moon_phase");
 
   const DailyItem(this.value);
   final String value;
 
-  static List<DailyItem> get defaultItems => [
-    sunrise,
-    sunset,
-    moonPhase,
-    temperatureMax,
-    temperatureMin,
-  ];
+  static List<DailyItem> get defaultItems => DailyItem.values;
+}
+
+enum WeatherType {
+  clear,
+  cloudy,
+  fog,
+  drizzle,
+  freezingDrizzle,
+  rain,
+  freezingRain,
+  snow,
+  snowGrains,
+  showers,
+  snowShowers,
+  thunderstorm,
+  unknown,
+
+  /// NOTE: WHY  ISAR generate fails with .shorthand
+  // Not sure why  the number is exact not range
+  ///! https://open-meteo.com/en/docs?timezone=Asia%2FSingapore#weather_variable_documentation
+  // static WeatherType fromCode(int code) {
+  //   return switch (code) {
+  //     < 0 => .unknown,
+  //     0 => .clear,
+  //     < 4 => .cloudy,
+  //     45 || 48 => .fog,
+  //     51 || 53 || 55 => .drizzle,
+  //     56 || 57 => .freezingDrizzle,
+  //     61 || 63 || 65 => .rain,
+  //     66 || 67 => .freezingRain,
+  //     71 || 73 || 75 => .snow,
+  //     77 => .snowGrains,
+  //     80 || 81 || 82 => .showers,
+  //     85 || 86 => .snowShowers,
+  //     95 || 96 || 99 => .thunderstorm,
+  //     _ => .unknown,
+  //   };
+  // }
 }

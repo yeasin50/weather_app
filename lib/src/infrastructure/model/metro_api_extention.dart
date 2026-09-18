@@ -66,6 +66,7 @@ final Map<String, MeasurementType> _measureTypeMap = {
   "relative_humidity_2m": MeasurementType.relativeHumidity,
   "rain": MeasurementType.rain,
   "precipitation_probability": MeasurementType.precipitationProbability,
+  "precipitation_probability_max": MeasurementType.precipitationProbability,
   "uv_index": MeasurementType.uvIndex,
   "wind_speed_10m": MeasurementType.windSpeed,
 

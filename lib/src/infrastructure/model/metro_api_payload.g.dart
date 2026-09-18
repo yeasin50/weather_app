@@ -48,9 +48,13 @@ const _$HourlyItemEnumMap = {
 };
 
 const _$DailyItemEnumMap = {
-  DailyItem.sunrise: 'sunrise',
-  DailyItem.sunset: 'sunset',
-  DailyItem.moonPhase: 'moon_phase',
+  DailyItem.weatherCode: 'weather_code',
   DailyItem.temperatureMax: 'temperature_2m_max',
   DailyItem.temperatureMin: 'temperature_2m_min',
+  DailyItem.rainMax: 'precipitation_probability_max',
+  DailyItem.sunrise: 'sunrise',
+  DailyItem.sunset: 'sunset',
+  DailyItem.daylightDuration: 'daylight_duration',
+  DailyItem.sunshineDuration: 'sunshine_duration',
+  DailyItem.moonPhase: 'moon_phase',
 };

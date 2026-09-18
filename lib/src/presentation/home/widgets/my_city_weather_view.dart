@@ -47,7 +47,7 @@ class _MyCityWeatherViewState extends State<MyCityWeatherView> {
                         child: Text("Hourly Forecast"),
                       ),
                       const SizedBox(height: 16),
-                      ForecastHorizontalListview.hourly(
+                      ForecastHorizontalListview<HourlyForecast>(
                         padding: const EdgeInsets.only(left: 24),
                         data: data.todaysHourlyForecast,
                       ),
@@ -65,7 +65,8 @@ class _MyCityWeatherViewState extends State<MyCityWeatherView> {
                         child: Text("Weekly Forecast"),
                       ),
                       const SizedBox(height: 16),
-                      ForecastHorizontalListview.weekly(
+                      Text(data.weeklyForecast.length.toString()),
+                      ForecastHorizontalListview<DailyForecast>(
                         padding: const EdgeInsets.only(left: 24),
                         data: data.weeklyForecast,
                       ),
