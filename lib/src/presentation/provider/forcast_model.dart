@@ -2,14 +2,20 @@ import '../../domain/entity/weather_record.dart';
 import '../../infrastructure/infrastructure.dart';
 
 sealed class ForecastData {
-  const ForecastData({required this.time, required this.isSelected});
+  const ForecastData({
+    required this.time,
+    required this.weatherCode,
+    required this.isSelected,
+  });
   final DateTime time;
+  final WeatherMeasurement weatherCode;
   final bool isSelected;
 }
 
 class HourlyForecast extends ForecastData {
   HourlyForecast({
     required super.time,
+    required super.weatherCode,
     super.isSelected = false,
     required this.temp,
     required this.rain,
@@ -37,9 +43,10 @@ class HourlyForecast extends ForecastData {
   @deprecated
   static HourlyForecast none = HourlyForecast(
     time: DateTime.now(),
-    temp: _empty(MeasurementType.temperature),
-    rain: _empty(MeasurementType.rain),
-    humadity: _empty(MeasurementType.relativeHumidity),
+    weatherCode: _empty(.weatherCode),
+    temp: _empty(.temperature),
+    rain: _empty(.rain),
+    humadity: _empty(.relativeHumidity),
   );
 }
 
@@ -47,6 +54,7 @@ class HourlyForecast extends ForecastData {
 class DailyForecast extends ForecastData {
   DailyForecast({
     required super.time,
+    required super.weatherCode,
     super.isSelected = false,
     required this.rain,
     required this.tempMin,

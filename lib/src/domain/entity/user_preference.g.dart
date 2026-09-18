@@ -47,7 +47,7 @@ const UserPreferenceSchema = CollectionSchema(
   getId: _userPreferenceGetId,
   getLinks: _userPreferenceGetLinks,
   attach: _userPreferenceAttach,
-  version: '3.3.0-dev.1',
+  version: '3.3.2',
 );
 
 int _userPreferenceEstimateSize(

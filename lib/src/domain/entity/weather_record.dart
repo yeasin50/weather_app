@@ -57,6 +57,9 @@ enum MeasurementType {
   sunrise,
   sunset,
   moonPhase,
+  weatherCode,
+  daylightDuration,
+  sunshineDuration,
   unknown,
 }
 

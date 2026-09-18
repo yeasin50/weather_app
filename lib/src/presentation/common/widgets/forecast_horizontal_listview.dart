@@ -33,6 +33,7 @@ class ForecastHorizontalListview<T extends ForecastData>
         scrollDirection: Axis.horizontal,
         padding: padding,
         child: Row(
+          spacing: 12,
           children: data
               .map(
                 (e) => ForecastListTile(

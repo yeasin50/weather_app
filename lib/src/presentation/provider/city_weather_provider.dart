@@ -49,24 +49,24 @@ class CityWeatherNotifier extends ChangeNotifier {
 
     for (final t in times) {
       final items = groupByHour[t];
+      final weatherCode = _getItem(items, .weatherCode);
       final temp = _getItem(items, .temperature);
       final rain = _getItem(items, .rain);
       final humadity = _getItem(items, .relativeHumidity);
 
       assert(
-        [temp, rain, humadity].every((e) => e != null),
+        [weatherCode, temp, rain, humadity].every((e) => e != null),
         'temp:${temp != null} rain:${rain != null} humadity:${humadity != null}',
       );
 
       result.add(
-        [temp, rain, humadity].any((e) => e == null)
-            ? HourlyForecast.none
-            : HourlyForecast(
-                time: t,
-                temp: temp!,
-                rain: rain!,
-                humadity: humadity!,
-              ),
+        HourlyForecast(
+          time: t,
+          weatherCode: weatherCode!,
+          temp: temp!,
+          rain: rain!,
+          humadity: humadity!,
+        ),
       );
     }
 
@@ -84,9 +84,10 @@ class CityWeatherNotifier extends ChangeNotifier {
       final tempMax = _getItem(items, .temperatureMax);
       final tempMin = _getItem(items, .temperatureMin);
       final rain = _getItem(items, .precipitationProbability);
+      final weatherCode = _getItem(items, .weatherCode);
 
       assert(
-        [tempMin, tempMax, rain].every((e) => e != null),
+        [tempMin, tempMax, rain, weatherCode].every((e) => e != null),
         'tempMin:${tempMin != null}  tempMax:${tempMax != null} rain:${rain != null}',
       );
 
@@ -96,6 +97,7 @@ class CityWeatherNotifier extends ChangeNotifier {
           tempMin: tempMin!,
           tempMax: tempMax!,
           rain: rain!,
+          weatherCode: weatherCode!,
         ),
       );
     }

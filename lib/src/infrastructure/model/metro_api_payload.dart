@@ -6,7 +6,8 @@ part 'metro_api_payload.g.dart';
 
 //TODO: Might change into  simple objects for daily &  hourly items
 @freezed
-class MetroWeatherPayload extends WeatherRequest with _$MetroWeatherPayload {
+abstract class MetroWeatherPayload extends WeatherRequest
+    with _$MetroWeatherPayload {
   const MetroWeatherPayload._();
 
   factory MetroWeatherPayload({
@@ -49,9 +50,11 @@ class MetroWeatherPayload extends WeatherRequest with _$MetroWeatherPayload {
   };
 }
 
+//TODO: Replace with  enhanced enum
 //TODO: merge with db layer and returns domain string
 @JsonEnum(valueField: "value")
 enum HourlyItem {
+  weatherCode("weather_code"),
   temperature2m("temperature_2m"),
   relativeHumidity2m("relative_humidity_2m"),
   rain("rain"),
@@ -63,6 +66,7 @@ enum HourlyItem {
   final String value;
 
   static List<HourlyItem> get defaultItems => [
+    weatherCode,
     temperature2m,
     relativeHumidity2m,
     rain,
@@ -90,42 +94,4 @@ enum DailyItem {
   final String value;
 
   static List<DailyItem> get defaultItems => DailyItem.values;
-}
-
-enum WeatherType {
-  clear,
-  cloudy,
-  fog,
-  drizzle,
-  freezingDrizzle,
-  rain,
-  freezingRain,
-  snow,
-  snowGrains,
-  showers,
-  snowShowers,
-  thunderstorm,
-  unknown,
-
-  /// NOTE: WHY  ISAR generate fails with .shorthand
-  // Not sure why  the number is exact not range
-  ///! https://open-meteo.com/en/docs?timezone=Asia%2FSingapore#weather_variable_documentation
-  // static WeatherType fromCode(int code) {
-  //   return switch (code) {
-  //     < 0 => .unknown,
-  //     0 => .clear,
-  //     < 4 => .cloudy,
-  //     45 || 48 => .fog,
-  //     51 || 53 || 55 => .drizzle,
-  //     56 || 57 => .freezingDrizzle,
-  //     61 || 63 || 65 => .rain,
-  //     66 || 67 => .freezingRain,
-  //     71 || 73 || 75 => .snow,
-  //     77 => .snowGrains,
-  //     80 || 81 || 82 => .showers,
-  //     85 || 86 => .snowShowers,
-  //     95 || 96 || 99 => .thunderstorm,
-  //     _ => .unknown,
-  //   };
-  // }
 }

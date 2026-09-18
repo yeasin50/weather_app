@@ -6,24 +6,23 @@ part of 'metro_api_payload.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$MetroWeatherPayloadImpl _$$MetroWeatherPayloadImplFromJson(
-  Map<String, dynamic> json,
-) => _$MetroWeatherPayloadImpl(
-  city: CityInfo.fromJson(json['city'] as Map<String, dynamic>),
-  latitude: (json['latitude'] as num).toDouble(),
-  longitude: (json['longitude'] as num).toDouble(),
-  hourlyItems: (json['hourly_items'] as List<dynamic>)
-      .map((e) => $enumDecode(_$HourlyItemEnumMap, e))
-      .toList(),
-  dailyItems: (json['daily_items'] as List<dynamic>)
-      .map((e) => $enumDecode(_$DailyItemEnumMap, e))
-      .toList(),
-  timezone: json['timezone'] as String? ?? "auto",
-  pastDays: (json['past_days'] as num?)?.toInt() ?? 0,
-);
+_MetroWeatherPayload _$MetroWeatherPayloadFromJson(Map<String, dynamic> json) =>
+    _MetroWeatherPayload(
+      city: CityInfo.fromJson(json['city'] as Map<String, dynamic>),
+      latitude: (json['latitude'] as num).toDouble(),
+      longitude: (json['longitude'] as num).toDouble(),
+      hourlyItems: (json['hourly_items'] as List<dynamic>)
+          .map((e) => $enumDecode(_$HourlyItemEnumMap, e))
+          .toList(),
+      dailyItems: (json['daily_items'] as List<dynamic>)
+          .map((e) => $enumDecode(_$DailyItemEnumMap, e))
+          .toList(),
+      timezone: json['timezone'] as String? ?? "auto",
+      pastDays: (json['past_days'] as num?)?.toInt() ?? 0,
+    );
 
-Map<String, dynamic> _$$MetroWeatherPayloadImplToJson(
-  _$MetroWeatherPayloadImpl instance,
+Map<String, dynamic> _$MetroWeatherPayloadToJson(
+  _MetroWeatherPayload instance,
 ) => <String, dynamic>{
   'city': instance.city,
   'latitude': instance.latitude,
@@ -39,6 +38,7 @@ Map<String, dynamic> _$$MetroWeatherPayloadImplToJson(
 };
 
 const _$HourlyItemEnumMap = {
+  HourlyItem.weatherCode: 'weather_code',
   HourlyItem.temperature2m: 'temperature_2m',
   HourlyItem.relativeHumidity2m: 'relative_humidity_2m',
   HourlyItem.rain: 'rain',

@@ -58,7 +58,7 @@ const CityRecordSchema = CollectionSchema(
   getId: _cityRecordGetId,
   getLinks: _cityRecordGetLinks,
   attach: _cityRecordAttach,
-  version: '3.3.0-dev.1',
+  version: '3.3.2',
 );
 
 int _cityRecordEstimateSize(
@@ -1411,7 +1411,7 @@ const WeatherMeasurementSchema = CollectionSchema(
   getId: _weatherMeasurementGetId,
   getLinks: _weatherMeasurementGetLinks,
   attach: _weatherMeasurementAttach,
-  version: '3.3.0-dev.1',
+  version: '3.3.2',
 );
 
 int _weatherMeasurementEstimateSize(
@@ -1518,6 +1518,9 @@ const _WeatherMeasurementmeasurementTypeEnumValueMap = {
   r'sunrise': r'sunrise',
   r'sunset': r'sunset',
   r'moonPhase': r'moonPhase',
+  r'weatherCode': r'weatherCode',
+  r'daylightDuration': r'daylightDuration',
+  r'sunshineDuration': r'sunshineDuration',
   r'unknown': r'unknown',
 };
 const _WeatherMeasurementmeasurementTypeValueEnumMap = {
@@ -1532,6 +1535,9 @@ const _WeatherMeasurementmeasurementTypeValueEnumMap = {
   r'sunrise': MeasurementType.sunrise,
   r'sunset': MeasurementType.sunset,
   r'moonPhase': MeasurementType.moonPhase,
+  r'weatherCode': MeasurementType.weatherCode,
+  r'daylightDuration': MeasurementType.daylightDuration,
+  r'sunshineDuration': MeasurementType.sunshineDuration,
   r'unknown': MeasurementType.unknown,
 };
 

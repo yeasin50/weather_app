@@ -76,10 +76,15 @@ final Map<String, MeasurementType> _measureTypeMap = {
   "moon_phase": MeasurementType.moonPhase,
   "temperature_2m_max": MeasurementType.temperatureMax,
   "temperature_2m_min": MeasurementType.temperatureMin,
+  "weather_code": MeasurementType.weatherCode,
+  "daylight_duration": .daylightDuration,
+  "sunshine_duration": .sunshineDuration,
 };
 
 MeasurementType _measureFromStr(String str) {
-  return _measureTypeMap[str] ?? MeasurementType.unknown;
+  final result = _measureTypeMap[str] ?? .unknown;
+  assert(result != .unknown, "handle MeasurementType $str");
+  return result;
 }
 
 //

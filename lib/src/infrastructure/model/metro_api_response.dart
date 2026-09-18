@@ -38,7 +38,7 @@ abstract class MetroApiCityInfo with _$MetroApiCityInfo {
 }
 
 @freezed
-class MetroApiResponse with _$MetroApiResponse {
+abstract class MetroApiResponse with _$MetroApiResponse {
   const MetroApiResponse._();
 
   const factory MetroApiResponse({
