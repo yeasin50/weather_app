@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import '../../../domain/domain.dart';
+import 'package:provider/provider.dart';
 import '../../../infrastructure/model/metro_api_weather_code.dart';
+import '../weather_value_formatter.dart';
 import '/src/presentation/common/common.dart';
 import '../../provider/providers.dart';
 
@@ -32,24 +33,6 @@ class ForecastListTile<T extends ForecastData> extends StatelessWidget {
   }
 }
 
-String _valueFormatter(WeatherMeasurement data) {
-  return switch (data.measurementType) {
-    .temperature || .temperatureMax || .temperatureMin => "${data.value}\u00B0",
-    .rain || .precipitationProbability => () {
-      final value = double.tryParse(data.value)?.toInt();
-      assert(
-        value != null,
-        "invaid parse ${data.measurementType} value ${data.value}",
-      );
-      return value == 0 ? "" : "${value ?? "NA"}%";
-    }(),
-    _ => () {
-      assert(false, " missing type ${data.measurementType}");
-      return "NA";
-    }(),
-  };
-}
-
 class _HourlyForecastTile extends StatelessWidget {
   const _HourlyForecastTile({required this.info});
   final HourlyForecast info;
@@ -59,24 +42,27 @@ class _HourlyForecastTile extends StatelessWidget {
     final textTheme = Theme.of(context).textTheme;
     return Padding(
       padding: const .symmetric(horizontal: 8, vertical: 16),
-      child: Column(
-        mainAxisAlignment: .spaceAround,
-        children: [
-          Text(_valueFormatter(info.temp), style: textTheme.bodyLarge),
-          const SizedBox(height: 8),
-          Text(_valueFormatter(info.rain)),
-          const SizedBox(height: 8),
-          Icon(WeatherType.fromCode(info.weatherCode.value).icon),
-          const SizedBox(height: 8),
-          Text(
-            AppDateFormatter.hourly(info.time),
-            style: textTheme.bodyLarge?.copyWith(fontWeight: .w500),
-          ),
-          Text(
-            AppDateFormatter.hourly(info.time, true),
-            style: textTheme.bodySmall,
-          ),
-        ],
+      child: InkWell(
+        onTap: () => context.read<CityWeatherNotifier>().updateHour(info.time),
+        child: Column(
+          mainAxisAlignment: .spaceAround,
+          children: [
+            Text(info.temp.formatValue, style: textTheme.bodyLarge),
+            const SizedBox(height: 8),
+            Text(info.rain.formatValue),
+            const SizedBox(height: 8),
+            Icon(WeatherType.fromCode(info.weatherCode.value).icon),
+            const SizedBox(height: 8),
+            Text(
+              AppDateFormatter.hourly(info.time),
+              style: textTheme.bodyLarge?.copyWith(fontWeight: .w500),
+            ),
+            Text(
+              AppDateFormatter.hourly(info.time, true),
+              style: textTheme.bodySmall,
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -106,13 +92,13 @@ class _DailyForecastTile extends StatelessWidget {
           spacing: 6,
           children: [
             Text(
-              _valueFormatter(info.tempMax),
+              info.tempMax.formatValue,
               style: textTheme.bodyMedium?.copyWith(fontWeight: .w500),
             ),
-            Text(_valueFormatter(info.tempMin), style: textTheme.bodyMedium),
+            Text(info.tempMin.formatValue, style: textTheme.bodyMedium),
             const SizedBox(),
             Icon(WeatherType.fromCode(info.weatherCode.value).icon),
-            Text(_valueFormatter(info.rain)),
+            Text(info.rain.formatValue),
             Text(AppDateFormatter.daily(info.time)),
           ],
         ),

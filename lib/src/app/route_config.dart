@@ -1,4 +1,7 @@
+import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
+import 'package:weather_app/src/presentation/provider/weather_provider.dart';
 
 import '../presentation/home/home_page.dart';
 import '../presentation/saved_city/saved_city_page.dart';
@@ -15,7 +18,15 @@ class AppRoute {
     return GoRouter(
       initialLocation: home,
       routes: [
-        GoRoute(path: home, builder: (context, state) => const HomePage()),
+        GoRoute(
+          path: home,
+          builder: (context, state) =>
+              context
+                  .watch<WeatherNotifier>()
+                  .isloading // I  might gonna put on single initial loading
+              ? Center(child: CircularProgressIndicator())
+              : const HomePage(),
+        ),
         GoRoute(path: savedPage, builder: (context, state) => SavedCityPage()),
         GoRoute(
           path: searchCity,

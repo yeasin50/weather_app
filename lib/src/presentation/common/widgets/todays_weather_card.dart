@@ -1,41 +1,35 @@
 import 'package:flutter/material.dart';
 
-import '../../../domain/entity/weather_record.dart';
+import '../../provider/providers.dart';
+import '../weather_value_formatter.dart';
 
 class TodaysWeather extends StatelessWidget {
-  const TodaysWeather({
-    super.key,
-    required this.temp,
-    required this.humidity,
-    required this.rain,
-    required this.mood,
-  });
+  const TodaysWeather({super.key, required this.data});
 
-  final WeatherMeasurement temp;
-  final WeatherMeasurement humidity;
-  final WeatherMeasurement rain;
-
-  final String mood;
+  final HourlyForecast data;
 
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme.copyWith();
-
-    final tempValue = int.tryParse(temp.value) ?? 0;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       mainAxisSize: MainAxisSize.min,
       children: [
         Text(
-          "${tempValue.toStringAsFixed(0)}\u00B0",
+          data.weatherCode.formatValue,
+          textAlign: .center,
+          style: textTheme.bodyLarge,
+        ),
+        Text(
+          data.temp.formatValue,
           textAlign: TextAlign.center,
           style: textTheme.displayLarge?.copyWith(color: Colors.white),
         ),
-        Text(mood, textAlign: TextAlign.center, style: textTheme.bodyLarge),
-        const SizedBox(height: 8),
+        const SizedBox(height: 8), //TODO:  new properties
+        Text("Feels like xxx", textAlign: .center),
         Text(
-          "H:${humidity.value}\u00B0 L:${rain.value}\u00B0",
+          "Max:${data.temp.formatValue}  Min:${data.temp.formatValue}",
           textAlign: TextAlign.center,
           style: textTheme.titleMedium?.copyWith(),
         ),

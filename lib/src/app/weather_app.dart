@@ -21,7 +21,8 @@ class WeatherApp extends StatefulWidget {
 }
 
 class _WeatherAppState extends State<WeatherApp> {
-  final isarDB = IsarWeatherDatabase.initDB();
+  final isarDB =
+      IsarWeatherDatabase.initDB(); //TODO: centralize all initial loading
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<Isar>(

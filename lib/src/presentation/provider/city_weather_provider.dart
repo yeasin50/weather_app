@@ -3,6 +3,7 @@ import 'package:collection/collection.dart';
 
 import '../../domain/entity/weather_record.dart';
 import '../../domain/weather_db.dart';
+import '../common/common.dart';
 import 'providers.dart';
 
 /// maintain  specific city  record and show specific hour data
@@ -13,17 +14,15 @@ class CityWeatherNotifier extends ChangeNotifier {
 
   DateTime _selectedDay;
   DateTime get selectedDay => _selectedDay;
-  DateTime get selectedHour => DateTime(
-    _selectedDay.year,
-    _selectedDay.month,
-    _selectedDay.day,
-    _selectedDay.hour,
-  );
+  DateTime get selectedHour => _selectedDay.tilHour;
 
   CityRecord get city => _data.city;
 
-  HourlyForecast _selectedHourForecast = HourlyForecast.none;
-  HourlyForecast get selectedHourForcast => _selectedHourForecast;
+  HourlyForecast get selectedHourForcast => _todaysHourlyForecast.firstWhere((
+    e,
+  ) {
+    return e.time.day == selectedHour.day && e.time.hour == selectedHour.hour;
+  });
 
   /// if missing returns empty
   WeatherMeasurement? _getItem(
@@ -34,17 +33,26 @@ class CityWeatherNotifier extends ChangeNotifier {
     return result;
   }
 
+  List<HourlyForecast> _todaysHourlyForecast = [];
+  UnmodifiableListView<HourlyForecast> get todaysHourlyForecast =>
+      UnmodifiableListView(_todaysHourlyForecast);
+
+  List<DailyForecast> _weeklyForecast = [];
+  UnmodifiableListView<DailyForecast> get weeklyForecast =>
+      UnmodifiableListView(_weeklyForecast);
+
   ///TODO: Can use single loop for all
-  List<HourlyForecast> get todaysHourlyForecast {
+  List<HourlyForecast> _parseTodaysHourlyForecast() {
     final List<HourlyForecast> result = [];
 
-    final groupByHour = groupBy(_data.hourlyItems, (e) => e.time);
+    final now = DateTime.now();
 
+    final groupByHour = groupBy(_data.hourlyItems, (e) => e.time);
     final times = groupByHour.keys.toList();
     times.removeWhere(
       (e) =>
-          e.isBefore(selectedHour) ||
-          !e.isBefore(selectedDay.add(const Duration(days: 1))),
+          e.isBefore(now.tilHour) || //24h
+          !e.isBefore(now.tilHour.add(const Duration(days: 1))),
     );
 
     for (final t in times) {
@@ -59,21 +67,21 @@ class CityWeatherNotifier extends ChangeNotifier {
         'temp:${temp != null} rain:${rain != null} humadity:${humadity != null}',
       );
 
-      result.add(
-        HourlyForecast(
-          time: t,
-          weatherCode: weatherCode!,
-          temp: temp!,
-          rain: rain!,
-          humadity: humadity!,
-        ),
+      final forecast = HourlyForecast(
+        time: t,
+        weatherCode: weatherCode!,
+        temp: temp!,
+        rain: rain!,
+        humadity: humadity!,
       );
+
+      result.add(forecast);
     }
 
     return result;
   }
 
-  List<DailyForecast> get weeklyForecast {
+  List<DailyForecast> _parseWeeklyForecast() {
     final List<DailyForecast> result = [];
 
     final groupByHour = groupBy(_data.dailyItems, (e) => e.time);
@@ -107,8 +115,14 @@ class CityWeatherNotifier extends ChangeNotifier {
 
   void updateCity(CityWeatherRecord record) {
     _data = record;
+    _weeklyForecast = _parseWeeklyForecast();
+    _todaysHourlyForecast = _parseTodaysHourlyForecast();
+
     notifyListeners();
   }
 
-  void updateHour() {}
+  void updateHour(DateTime date) {
+    _selectedDay = date;
+    notifyListeners();
+  }
 }

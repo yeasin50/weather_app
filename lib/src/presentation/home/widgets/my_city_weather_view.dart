@@ -27,15 +27,10 @@ class _MyCityWeatherViewState extends State<MyCityWeatherView> {
           builder: (context, data, _) {
             final currentHourRecord = data.selectedHourForcast;
             return Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
+              crossAxisAlignment: .stretch,
               children: [
                 const SizedBox(height: 48),
-                TodaysWeather(
-                  temp: currentHourRecord.temp,
-                  humidity: currentHourRecord.humadity,
-                  rain: currentHourRecord.rain,
-                  mood: currentHourRecord.mood.label,
-                ),
+                TodaysWeather(data: currentHourRecord),
                 const SizedBox(height: 48),
                 Glassmorphism(
                   padding: const EdgeInsets.symmetric(vertical: 12),

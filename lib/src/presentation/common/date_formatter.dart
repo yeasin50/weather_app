@@ -1,7 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+extension DateExtention on DateTime {
+  DateTime get tilHour => DateTime(year, month, day, hour);
+  String get formatDaily => AppDateFormatter.daily(this);
+
+  String get formatHourly => AppDateFormatter.hourly(this);
+  String get formatTDY => AppDateFormatter.hourly(this, true);
+}
+
+@Deprecated("use DateExtention")
 class AppDateFormatter {
+  @deprecated
   static String daily(DateTime date) {
     if (DateUtils.isSameDay(date, DateTime.now())) {
       return "today";

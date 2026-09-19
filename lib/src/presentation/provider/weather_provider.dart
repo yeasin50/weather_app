@@ -17,6 +17,9 @@ class WeatherNotifier extends ChangeNotifier {
   final IWeatherDatabase db;
   final IWeatherService service;
 
+  bool _isLoading = false;
+  bool get isloading => _isLoading;
+
   final List<CityWeatherRecord> _savedCities = [];
   UnmodifiableListView<CityWeatherRecord> get savedCities =>
       UnmodifiableListView([..._savedCities]);
@@ -38,18 +41,20 @@ class WeatherNotifier extends ChangeNotifier {
 
   Future<void> loadData() async {
     try {
+      _isLoading = true;
       _preference = await db.getPreference();
-
       final result = await db.getRecords();
+
       _savedCities.clear();
       _savedCities.addAll(result);
 
       _activeCity = _savedCities.firstWhere(
         (e) => e.city.id == _preference.homeItemId,
       );
-      notifyListeners();
     } catch (e) {
       _errorMessage = e.toString();
+    } finally {
+      _isLoading = false;
       notifyListeners();
     }
   }
@@ -100,7 +105,6 @@ class WeatherNotifier extends ChangeNotifier {
       log(" Saved record ${savedResult.toString()}");
       await updatePreference(homeCityId: cityRecord.id);
       await loadData();
-      notifyListeners();
     } catch (e) {
       _errorMessage = "failed to save city";
       notifyListeners();
