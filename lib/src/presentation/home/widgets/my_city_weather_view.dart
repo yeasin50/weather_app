@@ -59,13 +59,12 @@ class _MyCityWeatherViewState extends State<MyCityWeatherView> {
                   padding: const EdgeInsets.symmetric(vertical: 12),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
+                    spacing: 16,
                     children: [
                       const Padding(
                         padding: EdgeInsets.only(left: 24.0),
                         child: Text("Weekly Forecast"),
                       ),
-                      const SizedBox(height: 16),
-                      Text(data.weeklyForecast.length.toString()),
                       ForecastHorizontalListview<DailyForecast>(
                         padding: const EdgeInsets.only(left: 24),
                         data: data.weeklyForecast,

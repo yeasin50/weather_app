@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../../../domain/domain.dart';
+import '../../../infrastructure/model/metro_api_weather_code.dart';
 import '/src/presentation/common/common.dart';
 import '../../provider/providers.dart';
 
@@ -30,6 +32,24 @@ class ForecastListTile<T extends ForecastData> extends StatelessWidget {
   }
 }
 
+String _valueFormatter(WeatherMeasurement data) {
+  return switch (data.measurementType) {
+    .temperature || .temperatureMax || .temperatureMin => "${data.value}\u00B0",
+    .rain || .precipitationProbability => () {
+      final value = double.tryParse(data.value)?.toInt();
+      assert(
+        value != null,
+        "invaid parse ${data.measurementType} value ${data.value}",
+      );
+      return value == 0 ? "" : "${value ?? "NA"}%";
+    }(),
+    _ => () {
+      assert(false, " missing type ${data.measurementType}");
+      return "NA";
+    }(),
+  };
+}
+
 class _HourlyForecastTile extends StatelessWidget {
   const _HourlyForecastTile({required this.info});
   final HourlyForecast info;
@@ -37,34 +57,26 @@ class _HourlyForecastTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
-    return DecoratedBox(
-      decoration: ShapeDecoration(
-        color:
-            //used for debug view xd
-            info == HourlyForecast.none
-            ? Colors.red
-            : info.isSelected
-            ? const Color(0xFF48319D)
-            : const .fromRGBO(72, 49, 157, .2),
-        shape: const StadiumBorder(
-          side: BorderSide(color: .fromRGBO(255, 255, 255, .2)),
-        ),
-      ),
-      child: Padding(
-        padding: const .symmetric(horizontal: 6, vertical: 16),
-        child: Column(
-          mainAxisAlignment: .spaceAround,
-          children: [
-            Text(info.temp.value, style: textTheme.titleLarge),
-            const SizedBox(height: 8),
-            //TODO: image path
-            Text("${info.weatherCode.value}"),
-            const SizedBox(height: 8),
-            Text(" ${info.temp.value}\u00B0", style: textTheme.titleLarge),
-            const SizedBox(height: 8),
-            Text(AppDateFormatter.hourly(info.time)),
-          ],
-        ),
+    return Padding(
+      padding: const .symmetric(horizontal: 8, vertical: 16),
+      child: Column(
+        mainAxisAlignment: .spaceAround,
+        children: [
+          Text(_valueFormatter(info.temp), style: textTheme.bodyLarge),
+          const SizedBox(height: 8),
+          Text(_valueFormatter(info.rain)),
+          const SizedBox(height: 8),
+          Icon(WeatherType.fromCode(info.weatherCode.value).icon),
+          const SizedBox(height: 8),
+          Text(
+            AppDateFormatter.hourly(info.time),
+            style: textTheme.bodyLarge?.copyWith(fontWeight: .w500),
+          ),
+          Text(
+            AppDateFormatter.hourly(info.time, true),
+            style: textTheme.bodySmall,
+          ),
+        ],
       ),
     );
   }
@@ -88,16 +100,19 @@ class _DailyForecastTile extends StatelessWidget {
         ),
       ),
       child: Padding(
-        padding: const .symmetric(horizontal: 6, vertical: 16),
+        padding: const .symmetric(horizontal: 8, vertical: 16),
         child: Column(
           mainAxisAlignment: .spaceAround,
+          spacing: 6,
           children: [
-            Text("${info.tempMax.value}\u00B0 "),
-            Text("${info.tempMin.value}\u00B0 "),
-            const SizedBox(height: 8),
-            Text("${info.weatherCode.value}"),
-            Text("${info.rain.value} %"), // todo:hide 0
-            const SizedBox(height: 8),
+            Text(
+              _valueFormatter(info.tempMax),
+              style: textTheme.bodyMedium?.copyWith(fontWeight: .w500),
+            ),
+            Text(_valueFormatter(info.tempMin), style: textTheme.bodyMedium),
+            const SizedBox(),
+            Icon(WeatherType.fromCode(info.weatherCode.value).icon),
+            Text(_valueFormatter(info.rain)),
             Text(AppDateFormatter.daily(info.time)),
           ],
         ),
