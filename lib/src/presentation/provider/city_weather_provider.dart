@@ -18,11 +18,18 @@ class CityWeatherNotifier extends ChangeNotifier {
 
   CityRecord get city => _data.city;
 
-  HourlyForecast get selectedHourForcast => _todaysHourlyForecast.firstWhere((
-    e,
-  ) {
-    return e.time.day == selectedHour.day && e.time.hour == selectedHour.hour;
-  });
+  ({HourlyForecast forecast, DailyForecast dayForecast})
+  get selectedHourForcast {
+    final forecast = _todaysHourlyForecast.firstWhere((e) {
+      return e.time.day == selectedHour.day && e.time.hour == selectedHour.hour;
+    });
+
+    final dailyData = weeklyForecast.firstWhere(
+      (e) => DateUtils.isSameDay(selectedDay, e.time),
+    );
+
+    return (forecast: forecast, dayForecast: dailyData);
+  }
 
   /// if missing returns empty
   WeatherMeasurement? _getItem(
@@ -33,6 +40,7 @@ class CityWeatherNotifier extends ChangeNotifier {
     return result;
   }
 
+  // TODO: inject sunrise and sunset
   List<HourlyForecast> _todaysHourlyForecast = [];
   UnmodifiableListView<HourlyForecast> get todaysHourlyForecast =>
       UnmodifiableListView(_todaysHourlyForecast);
@@ -51,7 +59,7 @@ class CityWeatherNotifier extends ChangeNotifier {
     final times = groupByHour.keys.toList();
     times.removeWhere(
       (e) =>
-          e.isBefore(now.tilHour) || //24h
+          e.isBefore(now.tilHour) ||
           !e.isBefore(now.tilHour.add(const Duration(days: 1))),
     );
 
@@ -121,6 +129,7 @@ class CityWeatherNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
+  @deprecated
   void updateHour(DateTime date) {
     _selectedDay = date;
     notifyListeners();

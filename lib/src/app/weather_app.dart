@@ -65,7 +65,9 @@ class _WeatherAppState extends State<WeatherApp> {
           child: MaterialApp.router(
             routerConfig: AppRoute.routeConfig(),
             debugShowCheckedModeBanner: false,
-            theme: AppTheme.theme,
+            theme: AppTheme
+                .theme, //TODO: use provider and dynamic from  system schema
+            themeMode: AppTheme.mode,
             scrollBehavior: const ScrollBehavior().copyWith(
               dragDevices: PointerDeviceKind.values.toSet(),
             ),

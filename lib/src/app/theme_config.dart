@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 
 class AppTheme {
-  static const appBarBG = Color(0xAA343464);
+  static ThemeMode _mode = ThemeMode.dark;
+  static ThemeMode get mode => _mode;
 
-  static ThemeData theme = ThemeData.dark().copyWith(
-    scaffoldBackgroundColor: Colors.transparent,
-    appBarTheme: const AppBarTheme(
-      backgroundColor: Colors.transparent,
+  static ThemeData theme = ThemeData.from(
+    colorScheme: ColorScheme.fromSeed(
+      seedColor: Colors.indigo,
+      brightness: Brightness.dark,
     ),
+    useMaterial3: true,
   );
 }

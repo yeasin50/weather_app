@@ -1,31 +1,50 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+import 'package:flutter/services.dart';
 import '/src/presentation/saved_city/saved_city_page.dart';
-import '../../../app/route_config.dart';
-import '../../common/widgets/app_button.dart';
 import '../../widgets/gradient_background.dart';
 
-class HomeAppBar extends StatelessWidget {
+class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
   const HomeAppBar({super.key, required this.title});
 
   final String title;
 
   @override
+  Size get preferredSize => Size.fromHeight(56 + 12);
+
+  @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
-    return AppButton.child(
-      onTap: () => Scaffold.of(context).openDrawer(),
-      child: Row(
-        spacing: 8,
-        children: [
-          const Icon(Icons.menu),
-          Expanded(child: Text(title, style: textTheme.titleLarge)),
-        ],
+    return Material(
+      color: Theme.of(context).colorScheme.surfaceContainerLowest,
+      shape: StadiumBorder(),
+      child: InkWell(
+        onTap: () {},
+        customBorder: StadiumBorder(),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8),
+          child: Row(
+            mainAxisAlignment: .center,
+            spacing: 24,
+            children: [
+              Expanded(
+                child: Row(
+                  spacing: 4,
+                  children: [
+                    const Icon(Icons.location_pin),
+                    Text(title, style: textTheme.titleLarge),
+                  ],
+                ),
+              ),
+              IconButton(onPressed: () {}, icon: Icon(Icons.settings)),
+            ],
+          ),
+        ),
       ),
     );
   }
 }
 
+@deprecated
 class AppDrawer extends StatefulWidget {
   const AppDrawer({super.key});
 
@@ -64,22 +83,6 @@ class _AppDrawerState extends State<AppDrawer> {
                     child: Text("Your current location"),
                   ),
                   Expanded(child: SavedCityPage.view()),
-                  AppButton.child(
-                    onTap: () {
-                      Scaffold.of(context).closeDrawer();
-                      context.push(AppRoute.searchCity);
-                    },
-                    child: Row(
-                      spacing: 8,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Icon(Icons.search),
-                        const Text("Search location"),
-                      ],
-                    ),
-                  ),
-
-                  AppButton.child(child: const Center(child: Text("unit"))),
                   const SizedBox(),
                 ],
               ),

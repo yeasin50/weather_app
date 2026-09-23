@@ -28,7 +28,7 @@ class AppDateFormatter {
           ? "TDY"
           : DateUtils.isSameDay(date, now.add(Duration(days: 1)))
           ? "TMR"
-          : DateFormat.j().format(date);
+          : DateFormat.E().format(date);
     }
     if (DateUtils.isSameDay(date, now) && date.hour == now.hour) {
       return "now";

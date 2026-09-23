@@ -50,7 +50,7 @@ class _AppButtonV2 extends StatelessWidget {
   Widget build(BuildContext context) {
     const border = StadiumBorder(side: BorderSide());
     return Material(
-      color: AppTheme.appBarBG,
+      // color: AppTheme.appBarBG,
       shape: border,
       child: InkWell(
         customBorder: border,

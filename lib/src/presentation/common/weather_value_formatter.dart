@@ -8,7 +8,9 @@ extension WeatherValueFormatter on WeatherMeasurement {
 String _valueFormatter(WeatherMeasurement data) {
   return switch (data.measurementType) {
     ///? Should I show int instead of decimal .....
-    .temperature || .temperatureMax || .temperatureMin => "${data.value}\u00B0",
+    .temperature ||
+    .temperatureMax ||
+    .temperatureMin => "${data.value}\u00B0", //TODO: update with useer settings
     .rain || .precipitationProbability || .relativeHumidity => () {
       final value = double.tryParse(data.value)?.toInt();
       assert(
