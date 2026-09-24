@@ -48,6 +48,17 @@ class HourlyForecast extends ForecastData {
     rain: _empty(.rain),
     humadity: _empty(.relativeHumidity),
   );
+
+  HourlyForecast updateSelected([bool value = false]) {
+    return HourlyForecast(
+      isSelected: value,
+      time: time,
+      weatherCode: weatherCode,
+      temp: temp,
+      rain: rain,
+      humadity: humadity,
+    );
+  }
 }
 
 // for 7 days

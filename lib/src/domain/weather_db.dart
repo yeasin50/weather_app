@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 import 'entity/user_preference.dart';
 import 'entity/weather_record.dart';
 
@@ -34,4 +36,13 @@ class CityWeatherRecord {
     dailyItems: [],
     hourlyItems: [],
   );
+
+  WeatherMeasurement get currentHourCode {
+    if (hourlyItems.isEmpty) throw Exception("hourlyItems  is empty");
+    final now = DateTime.now();
+    return hourlyItems.firstWhere(
+      (e) =>
+          e.measurementType == .weatherCode && DateUtils.isSameDay(e.time, now),
+    );
+  }
 }

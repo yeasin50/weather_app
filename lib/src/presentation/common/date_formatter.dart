@@ -7,17 +7,22 @@ extension DateExtention on DateTime {
 
   String get formatHourly => AppDateFormatter.hourly(this);
   String get formatTDY => AppDateFormatter.hourly(this, true);
+  String get formatDetailed => DateFormat('EEE, MMM d, y').format(this);
 }
 
 @Deprecated("use DateExtention")
 class AppDateFormatter {
   @deprecated
   static String daily(DateTime date) {
+    String value = "";
     if (DateUtils.isSameDay(date, DateTime.now())) {
-      return "today";
+      value = "today";
+    } else {
+      value = DateFormat.EEEE().format(date);
     }
 
-    return DateFormat.E().format(date);
+    //doesn't work expect true mono font but true mono doesn;t look good
+    return value.padRight(10);
   }
 
   static String hourly(DateTime date, [bool stringOnly = false]) {

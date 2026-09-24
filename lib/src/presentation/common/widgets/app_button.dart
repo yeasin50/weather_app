@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 
-import '../../../app/theme_config.dart';
-
 class AppButton extends StatefulWidget {
   const AppButton({
     super.key,
     required this.label,
     this.onTap,
     this.size = const Size.fromHeight(48),
+    this.leading,
   });
 
+  @deprecated
   factory AppButton.header({required String label, VoidCallback? onTap}) {
     return AppButton(label: label, onTap: onTap, size: const Size(220, 64));
   }
@@ -20,6 +20,7 @@ class AppButton extends StatefulWidget {
   final String label;
   final VoidCallback? onTap;
   final Size size;
+  final Widget? leading;
 
   @override
   State<AppButton> createState() => _AppButtonState();
@@ -28,15 +29,18 @@ class AppButton extends StatefulWidget {
 class _AppButtonState extends State<AppButton> {
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(
+    final schema = Theme.of(context).colorScheme;
+
+    return ElevatedButton.icon(
       style: ElevatedButton.styleFrom(
-        foregroundColor: Colors.white,
-        backgroundColor: Colors.deepPurpleAccent,
+        foregroundColor: schema.onPrimaryFixedVariant,
+        backgroundColor: schema.primaryFixedDim,
         shape: const StadiumBorder(),
         fixedSize: widget.size,
       ),
       onPressed: widget.onTap,
-      child: Text(widget.label),
+      label: Text(widget.label),
+      icon: widget.leading,
     );
   }
 }
@@ -48,15 +52,16 @@ class _AppButtonV2 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const border = StadiumBorder(side: BorderSide());
+    final border = StadiumBorder(
+      side: BorderSide(color: Theme.of(context).colorScheme.primaryContainer),
+    );
     return Material(
-      // color: AppTheme.appBarBG,
       shape: border,
       child: InkWell(
         customBorder: border,
         onTap: onTap,
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          padding: const .symmetric(horizontal: 16, vertical: 12),
           child: child,
         ),
       ),

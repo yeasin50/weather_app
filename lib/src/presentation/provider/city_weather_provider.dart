@@ -86,6 +86,7 @@ class CityWeatherNotifier extends ChangeNotifier {
       result.add(forecast);
     }
 
+    result[0] = result[0].updateSelected(true);
     return result;
   }
 
@@ -129,7 +130,6 @@ class CityWeatherNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
-  @deprecated
   void updateHour(DateTime date) {
     _selectedDay = date;
     notifyListeners();

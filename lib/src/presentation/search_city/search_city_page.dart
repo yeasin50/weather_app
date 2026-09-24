@@ -2,9 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import '../../infrastructure/model/metro_api_weather_code.dart';
+import '../common/weather_value_formatter.dart';
 import '/src/presentation/provider/weather_provider.dart';
 
-import '/src/presentation/widgets/gradient_background.dart';
 import '../../domain/weather_service.dart';
 import '../city_weather/widgets/search_city_tile.dart';
 
@@ -32,10 +33,9 @@ class _SearchCityPageState extends State<SearchCityPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: GestureDetector(
-        onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
-        child: GradientBackground(
-          isImage: false,
+      body: SafeArea(
+        child: GestureDetector(
+          onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
           child: CustomScrollView(
             slivers: [
               SliverAppBar(),
@@ -53,6 +53,19 @@ class _SearchCityPageState extends State<SearchCityPage> {
                   ),
                 ),
               ),
+
+              SliverToBoxAdapter(
+                child: ValueListenableBuilder(
+                  valueListenable: controller,
+                  builder: (context, value, child) {
+                    return value.text.trim().isEmpty
+                        ? SavedCitiesOnSearchView()
+                        : SizedBox();
+                  },
+                ),
+              ),
+
+              /// ....
               StreamBuilder<List<CityInfo>>(
                 initialData: const [],
                 stream: repo.searchedCityResult,
@@ -92,6 +105,36 @@ class _SearchCityPageState extends State<SearchCityPage> {
           ),
         ),
       ),
+    );
+  }
+}
+
+class SavedCitiesOnSearchView extends StatelessWidget {
+  const SavedCitiesOnSearchView({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<WeatherNotifier>(
+      builder: (context, value, child) {
+        final cities = value.savedCities;
+        return Column(
+          children: [
+            ...cities.map((e) {
+              return ListTile(
+                leading: Icon(
+                  WeatherType.fromCode(e.currentHourCode.value).icon,
+                ),
+                title: Text(e.city.name),
+                subtitle: Text(e.city.location),
+                onTap: () {
+                  context.read<WeatherNotifier>().changeCity(e.city.id);
+                  context.pop();
+                },
+              );
+            }),
+          ],
+        );
+      },
     );
   }
 }

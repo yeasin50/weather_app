@@ -1,16 +1,24 @@
 import '../../domain/domain.dart';
+import '../../infrastructure/model/metro_api_weather_code.dart'
+    show WeatherType;
 
 extension WeatherValueFormatter on WeatherMeasurement {
-  String get formatValue =>
-      measurementType == .weatherCode ? "mood" : _valueFormatter(this);
+  String get formatValue => measurementType == .weatherCode
+      ? WeatherType.fromCode(value).name
+      : _valueFormatter(this);
 }
 
 String _valueFormatter(WeatherMeasurement data) {
   return switch (data.measurementType) {
     ///? Should I show int instead of decimal .....
-    .temperature ||
-    .temperatureMax ||
-    .temperatureMin => "${data.value}\u00B0", //TODO: update with useer settings
+    .temperature || .temperatureMax || .temperatureMin => () {
+      //TODO: update with useer settings
+      final temp = double.tryParse(
+        data.value.toString().replaceAll(RegExp(r'[^0-9.-]'), ''),
+      );
+
+      return "${temp == null ? "--" : temp.round()}\u00B0"; //pad left for <10?
+    }(),
     .rain || .precipitationProbability || .relativeHumidity => () {
       final value = double.tryParse(data.value)?.toInt();
       assert(

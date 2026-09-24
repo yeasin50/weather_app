@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import '../weather_value_formatter.dart';
+
 import '/src/presentation/common/common.dart';
-import '../../provider/providers.dart';
 import '../../../infrastructure/model/metro_api_weather_code.dart';
+import '../../provider/providers.dart';
+import '../weather_value_formatter.dart';
 
 class ForecastListTile<T extends ForecastData> extends StatelessWidget {
   const ForecastListTile({
@@ -38,19 +38,18 @@ class _HourlyForecastTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
     return Padding(
-      padding: const .symmetric(horizontal: 8, vertical: 16),
+      padding: const .symmetric(horizontal: 8, vertical: 8),
       child: InkWell(
         onTap: () {
-          //shows bottom-sheet
+          ///todo: nav to day view
         },
         child: Column(
           mainAxisAlignment: .spaceBetween,
-          spacing: 4,
+          spacing: 6,
           children: [
             Text(AppDateFormatter.hourly(info.time)),
             Icon(WeatherType.fromCode(info.weatherCode.value).icon),
 
-            Text(info.rain.formatValue),
             Text(info.temp.formatValue, style: textTheme.bodyLarge),
           ],
         ),
@@ -67,29 +66,42 @@ class _DailyForecastTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
 
-    return DecoratedBox(
-      decoration: ShapeDecoration(
-        color: Theme.of(context).colorScheme.surfaceContainerLowest,
-        shape: const StadiumBorder(),
-      ),
+    return InkWell(
+      onTap: () {
+        /// ...
+      },
       child: Padding(
-        padding: const .symmetric(horizontal: 8, vertical: 16),
-        child: Column(
-          mainAxisAlignment: .spaceAround,
+        padding: const .symmetric(horizontal: 8, vertical: 8),
+        child: Row(
+          mainAxisAlignment: .spaceBetween,
           spacing: 8,
           children: [
-            Text(AppDateFormatter.daily(info.time)),
-
-            SizedBox(height: 2),
-            Icon(WeatherType.fromCode(info.weatherCode.value).icon),
-            Text(info.rain.formatValue, style: textTheme.bodySmall),
-            SizedBox(height: 2),
-            Text(
-              info.tempMax.formatValue,
-              style: textTheme.bodyMedium?.copyWith(fontWeight: .w500),
+            SizedBox(width: 80, child: Text(AppDateFormatter.daily(info.time))),
+            Expanded(
+              child: Row(
+                spacing: 4,
+                mainAxisAlignment: .start,
+                children: [
+                  Icon(WeatherType.fromCode(info.weatherCode.value).icon),
+                  Flexible(child: Text(info.weatherCode.formatValue)),
+                ],
+              ),
             ),
-            Text(info.tempMin.formatValue, style: textTheme.bodyMedium),
-            const SizedBox(),
+            // Text(info.rain.formatValue, style: textTheme.bodySmall),
+            SizedBox(
+              width: 120,
+              child: Row(
+                mainAxisAlignment: .end,
+                children: [
+                  Text(
+                    info.tempMax.formatValue,
+                    style: textTheme.bodyMedium?.copyWith(fontWeight: .w500),
+                  ),
+                  Text("/"),
+                  Text(info.tempMin.formatValue, style: textTheme.bodyMedium),
+                ],
+              ),
+            ),
           ],
         ),
       ),

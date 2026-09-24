@@ -1,41 +1,45 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:go_router/go_router.dart';
+import '../../../app/route_config.dart';
 import '/src/presentation/saved_city/saved_city_page.dart';
 import '../../widgets/gradient_background.dart';
 
-class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
+class HomeAppBar extends StatelessWidget {
   const HomeAppBar({super.key, required this.title});
 
   final String title;
 
   @override
-  Size get preferredSize => Size.fromHeight(56 + 12);
-
-  @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
-    return Material(
-      color: Theme.of(context).colorScheme.surfaceContainerLowest,
-      shape: StadiumBorder(),
-      child: InkWell(
-        onTap: () {},
-        customBorder: StadiumBorder(),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8),
+
+    return SafeArea(
+      child: Padding(
+        padding: const .symmetric(horizontal: 12.0, vertical: 4),
+        child: IntrinsicHeight(
           child: Row(
-            mainAxisAlignment: .center,
             spacing: 24,
             children: [
+              IconButton(onPressed: () {}, icon: Icon(Icons.menu)),
               Expanded(
-                child: Row(
-                  spacing: 4,
-                  children: [
-                    const Icon(Icons.location_pin),
-                    Text(title, style: textTheme.titleLarge),
-                  ],
+                child: InkWell(
+                  onTap: () {},
+                  child: SizedBox(
+                    height: 40,
+                    child: Center(
+                      child: Text(
+                        title,
+                        style: textTheme.titleLarge,
+                        textAlign: .center,
+                      ),
+                    ),
+                  ),
                 ),
               ),
-              IconButton(onPressed: () {}, icon: Icon(Icons.settings)),
+              IconButton(
+                onPressed: () => context.push(AppRoute.searchCity),
+                icon: Icon(Icons.search_rounded),
+              ),
             ],
           ),
         ),
