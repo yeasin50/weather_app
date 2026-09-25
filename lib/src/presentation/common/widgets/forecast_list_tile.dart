@@ -6,52 +6,63 @@ import '../../provider/providers.dart';
 import '../weather_value_formatter.dart';
 
 class ForecastListTile<T extends ForecastData> extends StatelessWidget {
-  const ForecastListTile({
-    super.key,
-    required this.info,
-    this.isActive = false,
-  });
+  const ForecastListTile({super.key, required this.info});
 
   final T info;
-
-  @Deprecated("use T")
-  final bool isActive;
 
   @override
   Widget build(BuildContext context) {
     assert(
-      info is HourlyForecast || info is DailyForecast,
+      info is HourlyForecast || info is DailyForecast || info is StarForecast,
       'Expected HourlyForecast or DailyForecast',
     );
 
-    return info is HourlyForecast
-        ? _HourlyForecastTile(info: info as HourlyForecast)
+    return info is HourlyForecast || info is StarForecast
+        ? _HourlyForecastTile(info: info)
         : _DailyForecastTile(info: info as DailyForecast);
   }
 }
 
 class _HourlyForecastTile extends StatelessWidget {
   const _HourlyForecastTile({required this.info});
-  final HourlyForecast info;
+  final ForecastData info;
 
   @override
   Widget build(BuildContext context) {
+    assert(info is HourlyForecast || info is StarForecast);
+
     final textTheme = Theme.of(context).textTheme;
     return Padding(
       padding: const .symmetric(horizontal: 8, vertical: 8),
       child: InkWell(
         onTap: () {
           ///todo: nav to day view
+          print(info.toString());
         },
         child: Column(
           mainAxisAlignment: .spaceBetween,
           spacing: 6,
-          children: [
-            Text(AppDateFormatter.hourly(info.time)),
-            Icon(WeatherType.fromCode(info.weatherCode.value).icon),
-
-            Text(info.temp.formatValue, style: textTheme.bodyLarge),
-          ],
+          children: info is HourlyForecast
+              ? [
+                  Text(AppDateFormatter.hourly(info.time)),
+                  Icon(WeatherType.fromCode(info.weatherCode.value).icon),
+                  Text(
+                    (info as HourlyForecast).temp.formatValue,
+                    style: textTheme.bodyLarge,
+                  ),
+                ]
+              : () {
+                  final bool isSunrise =
+                      info.weatherCode.measurementType == .sunrise;
+                  return [
+                    Text(info.time.formatHMa),
+                    Icon(isSunrise ? Icons.wb_sunny : Icons.nightlight_round),
+                    Text(
+                      isSunrise ? "sunrise" : "sunset",
+                      style: textTheme.bodyLarge,
+                    ),
+                  ];
+                }(),
         ),
       ),
     );

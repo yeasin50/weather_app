@@ -88,7 +88,7 @@ class HourlyForecastListView extends StatelessWidget {
                       onTap: () {
                         ///nav to day  view
                       },
-                      child: ForecastListTile(isActive: e.isSelected, info: e),
+                      child: ForecastListTile(info: e),
                     );
                   }).toList(),
                 ),

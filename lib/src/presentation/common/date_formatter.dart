@@ -8,6 +8,7 @@ extension DateExtention on DateTime {
   String get formatHourly => AppDateFormatter.hourly(this);
   String get formatTDY => AppDateFormatter.hourly(this, true);
   String get formatDetailed => DateFormat('EEE, MMM d, y').format(this);
+  String get formatHMa => DateFormat('HH:MM a').format(this);
 }
 
 @Deprecated("use DateExtention")

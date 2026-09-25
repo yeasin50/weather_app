@@ -12,6 +12,14 @@ sealed class ForecastData {
   final bool isSelected;
 }
 
+///SunMoon rise set
+class StarForecast extends ForecastData {
+  StarForecast({required super.time, required WeatherMeasurement value})
+    : super(weatherCode: value, isSelected: false);
+
+  WeatherMeasurement get value => super.weatherCode;
+}
+
 class HourlyForecast extends ForecastData {
   HourlyForecast({
     required super.time,
@@ -70,11 +78,45 @@ class DailyForecast extends ForecastData {
     required this.rain,
     required this.tempMin,
     required this.tempMax,
+    required this.sunrise,
+    required this.sunset,
   });
 
   final WeatherMeasurement tempMin;
   final WeatherMeasurement tempMax;
   final WeatherMeasurement rain;
+  final WeatherMeasurement sunrise;
+  final WeatherMeasurement sunset;
 
   WeatherMood get mood => WeatherMood.midRain;
+}
+
+extension DailyForeCastExt on DailyForecast {
+  StarForecast get toSunset {
+    return StarForecast(
+      time: DateTime.parse(sunset.value),
+      value: WeatherMeasurement(
+        cityId: sunset.cityId,
+        measurementType: sunset.measurementType,
+        time: sunset.time,
+        unit: sunset.unit,
+        value: sunset.value,
+        interval: sunset.interval,
+      ),
+    );
+  }
+
+  StarForecast get toSunrise {
+    return StarForecast(
+      time: DateTime.parse(sunrise.value),
+      value: WeatherMeasurement(
+        cityId: sunrise.cityId,
+        measurementType: sunrise.measurementType,
+        time: sunrise.time,
+        unit: sunrise.unit,
+        value: sunrise.value,
+        interval: sunrise.interval,
+      ),
+    );
+  }
 }

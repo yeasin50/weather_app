@@ -40,14 +40,38 @@ class CityWeatherNotifier extends ChangeNotifier {
     return result;
   }
 
+  List<ForecastData> _mergeSunriseAndSunset(List<HourlyForecast> forecast) {
+    assert(_dailyForecast.isNotEmpty);
+
+    final List<ForecastData> items = [
+      _dailyForecast.first.toSunrise,
+      _dailyForecast.first.toSunset,
+      _dailyForecast[1].toSunrise,
+      _dailyForecast[1].toSunset, //enough
+    ];
+
+    final dailyStuff = items.where((e) {
+      return !e.time.isBefore(forecast.first.time) &&
+          !e.time.isAfter(forecast.last.time);
+    });
+
+    debugPrint(items.map((e) => e.time).toString());
+    debugPrint(dailyStuff.map((e) => e.time).toString());
+
+    final combinedResult = [...forecast, ...dailyStuff];
+    combinedResult.sort((a, b) => a.time.compareTo(b.time));
+    return combinedResult;
+  }
+
   // TODO: inject sunrise and sunset
   List<HourlyForecast> _todaysHourlyForecast = [];
-  UnmodifiableListView<HourlyForecast> get todaysHourlyForecast =>
-      UnmodifiableListView(_todaysHourlyForecast);
+  UnmodifiableListView<ForecastData> get todaysHourlyForecast {
+    return UnmodifiableListView(_mergeSunriseAndSunset(_todaysHourlyForecast));
+  }
 
-  List<DailyForecast> _weeklyForecast = [];
+  List<DailyForecast> _dailyForecast = [];
   UnmodifiableListView<DailyForecast> get weeklyForecast =>
-      UnmodifiableListView(_weeklyForecast);
+      UnmodifiableListView(_dailyForecast);
 
   ///TODO: Can use single loop for all
   List<HourlyForecast> _parseTodaysHourlyForecast() {
@@ -86,7 +110,8 @@ class CityWeatherNotifier extends ChangeNotifier {
       result.add(forecast);
     }
 
-    result[0] = result[0].updateSelected(true);
+    if (result.isNotEmpty) result[0] = result[0].updateSelected(true);
+
     return result;
   }
 
@@ -102,6 +127,8 @@ class CityWeatherNotifier extends ChangeNotifier {
       final tempMin = _getItem(items, .temperatureMin);
       final rain = _getItem(items, .precipitationProbability);
       final weatherCode = _getItem(items, .weatherCode);
+      final sunrise = _getItem(items, .sunrise);
+      final sunset = _getItem(items, .sunset);
 
       assert(
         [tempMin, tempMax, rain, weatherCode].every((e) => e != null),
@@ -115,6 +142,8 @@ class CityWeatherNotifier extends ChangeNotifier {
           tempMax: tempMax!,
           rain: rain!,
           weatherCode: weatherCode!,
+          sunrise: sunrise!,
+          sunset: sunset!,
         ),
       );
     }
@@ -124,7 +153,7 @@ class CityWeatherNotifier extends ChangeNotifier {
 
   void updateCity(CityWeatherRecord record) {
     _data = record;
-    _weeklyForecast = _parseWeeklyForecast();
+    _dailyForecast = _parseWeeklyForecast();
     _todaysHourlyForecast = _parseTodaysHourlyForecast();
 
     notifyListeners();
