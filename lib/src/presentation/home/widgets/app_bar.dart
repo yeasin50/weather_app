@@ -23,7 +23,7 @@ class HomeAppBar extends StatelessWidget {
               IconButton(onPressed: () {}, icon: Icon(Icons.menu)),
               Expanded(
                 child: InkWell(
-                  onTap: () {},
+                  onTap: () => context.push(AppRoute.searchCity),
                   child: SizedBox(
                     height: 40,
                     child: Center(
