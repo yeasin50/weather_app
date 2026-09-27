@@ -56,5 +56,7 @@ const _$DailyItemEnumMap = {
   DailyItem.sunset: 'sunset',
   DailyItem.daylightDuration: 'daylight_duration',
   DailyItem.sunshineDuration: 'sunshine_duration',
+  DailyItem.moonRise: 'moonrise',
+  DailyItem.moonSet: 'moonset',
   DailyItem.moonPhase: 'moon_phase',
 };

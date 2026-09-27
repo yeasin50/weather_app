@@ -71,14 +71,18 @@ final Map<String, MeasurementType> _measureTypeMap = {
   "wind_speed_10m": MeasurementType.windSpeed,
 
   // Daily strings
-  "sunrise": MeasurementType.sunrise,
-  "sunset": MeasurementType.sunset,
-  "moon_phase": MeasurementType.moonPhase,
   "temperature_2m_max": MeasurementType.temperatureMax,
   "temperature_2m_min": MeasurementType.temperatureMin,
   "weather_code": MeasurementType.weatherCode,
+
+  "sunrise": MeasurementType.sunrise,
+  "sunset": MeasurementType.sunset,
   "daylight_duration": .daylightDuration,
   "sunshine_duration": .sunshineDuration,
+
+  "moon_phase": .moonPhase,
+  "moonrise": .moonRise,
+  "moonset": .moonSet,
 };
 
 MeasurementType _measureFromStr(String str) {

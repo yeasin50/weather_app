@@ -87,7 +87,8 @@ enum DailyItem {
   sunset("sunset"),
   daylightDuration("daylight_duration"),
   sunshineDuration("sunshine_duration"),
-
+  moonRise("moonrise"),
+  moonSet("moonset"),
   moonPhase("moon_phase");
 
   const DailyItem(this.value);

@@ -44,11 +44,12 @@ class HomePage extends StatelessWidget {
                               spacing: 16,
                               children: [
                                 TodaysWeather(),
-                                HourlyForecastListView(),
-                                ForecastHorizontalListview<DailyForecast>(
-                                  data: data.weeklyForecast,
-                                ),
+                                // HourlyForecastListView(),
+                                // ForecastHorizontalListview<DailyForecast>(
+                                //   data: data.weeklyForecast,
+                                // ),
                                 SizedBox(height: 48),
+                                DailyForecastItems(),
                               ],
                             );
                           },
@@ -62,6 +63,24 @@ class HomePage extends StatelessWidget {
           ),
         );
       },
+    );
+  }
+}
+
+class DailyForecastItems extends StatelessWidget {
+  const DailyForecastItems({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Wrap(
+      spacing: 24,
+      runSpacing: 24,
+      children: [
+        HumadityView(measurement: WeatherMeasurement.emptyW),
+        UvindexView(uvIndex: WeatherMeasurement.emptyW),
+        SunMoonView(rise: DateTime.now(), down: DateTime.now()),
+        SunMoonView(rise: DateTime.now(), down: DateTime.now(), isSun: false),
+      ].map((e) => SizedBox.square(dimension: 250, child: e)).toList(),
     );
   }
 }

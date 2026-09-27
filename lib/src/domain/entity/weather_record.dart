@@ -57,6 +57,8 @@ enum MeasurementType {
   sunrise,
   sunset,
   moonPhase,
+  moonRise,
+  moonSet,
   weatherCode,
   daylightDuration,
   sunshineDuration,
@@ -85,4 +87,13 @@ class WeatherMeasurement {
 
   @Enumerated(EnumType.name)
   final MeasurementInterval interval;
+
+  static WeatherMeasurement emptyW = WeatherMeasurement(
+    cityId: 12,
+    measurementType: .temperature,
+    time: DateTime.now(),
+    unit: "",
+    value: "12",
+    interval: .daily,
+  );
 }

@@ -144,6 +144,9 @@ class CityWeatherNotifier extends ChangeNotifier {
           weatherCode: weatherCode!,
           sunrise: sunrise!,
           sunset: sunset!,
+          moonPhase: _getItem(items, .moonPhase)!,
+          moonRise: _getItem(items, .moonRise) ?? WeatherMeasurement.emptyW,
+          moonSet: _getItem(items, .moonSet) ?? WeatherMeasurement.emptyW,
         ),
       );
     }
@@ -163,4 +166,6 @@ class CityWeatherNotifier extends ChangeNotifier {
     _selectedDay = date;
     notifyListeners();
   }
+
+  // daily items for grid, note this combine hourlyItems as well
 }

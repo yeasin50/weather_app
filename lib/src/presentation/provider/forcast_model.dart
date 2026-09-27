@@ -80,6 +80,10 @@ class DailyForecast extends ForecastData {
     required this.tempMax,
     required this.sunrise,
     required this.sunset,
+
+    required this.moonPhase,
+    required this.moonRise,
+    required this.moonSet,
   });
 
   final WeatherMeasurement tempMin;
@@ -87,6 +91,10 @@ class DailyForecast extends ForecastData {
   final WeatherMeasurement rain;
   final WeatherMeasurement sunrise;
   final WeatherMeasurement sunset;
+
+  final WeatherMeasurement moonRise;
+  final WeatherMeasurement moonSet;
+  final WeatherMeasurement moonPhase;
 
   WeatherMood get mood => WeatherMood.midRain;
 }

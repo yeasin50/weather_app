@@ -48,7 +48,7 @@ class _ShapesViewState extends State<ShapesView> {
                   setState(() {});
                 },
               ),
-              const MessurementView(),
+              // const MessurementView(),
 
               ///
               SizedBox.square(
@@ -62,27 +62,6 @@ class _ShapesViewState extends State<ShapesView> {
               ),
             ],
           ),
-        ),
-      ),
-    );
-  }
-}
-
-class MessurementView extends StatelessWidget {
-  const MessurementView({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox.square(
-      dimension: 240,
-      child: Material(
-        color: Colors.grey.shade400,
-        clipBehavior: Clip.antiAlias,
-        shape: UVIndexShape(2),
-        child: InkWell(
-          onTap: () {},
-          customBorder: UVIndexShape(2),
-          child: Column(children: []),
         ),
       ),
     );
@@ -121,126 +100,4 @@ class WindShapePainter extends CustomPainter {
   }
 }
 
-class HumidityPainter extends CustomPainter {
-  HumidityPainter({
-    super.repaint,
-    this.amplitude = 8,
-    this.frequency = .12,
-    this.height = .75,
-    this.shift = 2.88,
-  });
-
-  /// range 0-1
-  final double height;
-
-  final double amplitude;
-  final double frequency;
-
-  final double shift;
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    assert(height > 0 && height < 1);
-    final paint = Paint()
-      ..color = Colors.blue
-      ..strokeWidth = 3
-      ..style = PaintingStyle.fill;
-
-    final path = Path();
-
-    Offset? startPoint;
-    for (double x = 0; x <= size.width; x++) {
-      double y =
-          size.height * (1 - height) + amplitude * sin(x * frequency + shift);
-      if (x == 0) {
-        path.moveTo(x, y);
-        startPoint = Offset(x, y);
-      } else {
-        path.lineTo(x, y);
-      }
-    }
-
-    path
-      ..lineTo(size.width, size.height)
-      ..lineTo(0, size.height)
-      ..lineTo(startPoint!.dx, startPoint.dy)
-      ..close();
-
-    canvas.drawPath(path, paint);
-  }
-
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) {
-    return false;
-  }
-}
-
 /// ...
-
-class UVIndexShape extends ShapeBorder {
-  const UVIndexShape(this.colorIndex);
-  final int colorIndex;
-  @override
-  EdgeInsetsGeometry get dimensions => .zero;
-
-  @override
-  Path getInnerPath(Rect rect, {TextDirection? textDirection}) =>
-      getOuterPath(rect, textDirection: textDirection);
-
-  @override
-  Path getOuterPath(Rect rect, {TextDirection? textDirection}) {
-    final path = Path();
-
-    final cx = rect.size.width / 2;
-    final cy = rect.size.height / 2;
-
-    final baseRadius = rect.width / 2;
-    final waveHeight = baseRadius * .05;
-    final int waves = 12;
-
-    final startAngle = -360 / waves - 2 * pi / 180;
-    for (int i = 0; i <= 360; i++) {
-      double angle = i * pi / 180;
-
-      double radius = baseRadius + sin(startAngle + angle * waves) * waveHeight;
-
-      double x = cx + cos(angle) * radius;
-      double y = cy + sin(angle) * radius;
-
-      i == 0 ? path.moveTo(x, y) : path.lineTo(x, y);
-    }
-
-    return path;
-  }
-
-  @override
-  void paint(Canvas canvas, Rect rect, {TextDirection? textDirection}) {
-    final colors = [
-      Colors.greenAccent,
-      Colors.yellowAccent,
-      Colors.amberAccent,
-      Colors.redAccent,
-      Colors.deepPurpleAccent,
-    ].reversed.toList();
-
-    double stepAngle = 30 * pi / 180;
-    double startAngle = 30 * pi / 180;
-    final radius = rect.width / 2 * .85;
-
-    for (int i = 0; i < 5; i++) {
-      final x = rect.center.dx + cos(startAngle + i * stepAngle) * radius;
-      final y = rect.center.dy + sin(startAngle + i * stepAngle) * radius;
-
-      canvas.drawCircle(
-        Offset(x, y),
-        15,
-        Paint()
-          ..color = colors[i].withAlpha(i == colorIndex ? 255 : 100)
-          ..style = PaintingStyle.fill,
-      );
-    }
-  }
-
-  @override
-  ShapeBorder scale(double t) => this;
-}
