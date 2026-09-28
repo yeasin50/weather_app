@@ -70,7 +70,7 @@ class TodaysWeather extends StatelessWidget {
   }
 }
 
-//old
+@Deprecated("See top huhaha")
 class TodaysWeatherV2 extends StatelessWidget {
   const TodaysWeatherV2({super.key});
 

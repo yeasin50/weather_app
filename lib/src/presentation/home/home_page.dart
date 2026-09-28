@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:weather_app/src/presentation/common/widgets/daily_cards/wind_shape_painter.dart';
 
-import '../common/widgets/daily_cards/air_quality_view.dart';
-import '../common/widgets/daily_cards/daily_card_wrapper.dart';
+import '../common/widgets/daily_cards/daily_weather_card.dart';
+import '../common/widgets/daily_cards/visibility_painter.dart';
 import '/src/domain/entity/weather_record.dart';
 import '/src/presentation/home/widgets/app_bar.dart';
 import '../common/common.dart';
@@ -79,9 +80,28 @@ class DailyForecastItems extends StatelessWidget {
       runSpacing: 24,
       children: [
         HumadityView(measurement: WeatherMeasurement.emptyW),
-        UvindexView(uvIndex: WeatherMeasurement.emptyW),
         SunMoonView(rise: DateTime.now(), down: DateTime.now()),
         SunMoonView(rise: DateTime.now(), down: DateTime.now(), isSun: false),
+        DailyWeatherCard(
+          title: "UV index",
+          icon: Icon(Icons.sunny),
+          value: "8",
+          description: "high",
+          unit: "",
+          shape: UVIndexShape(2),
+          onTap: () {},
+        ),
+
+        DailyWeatherCard(
+          title: "Wind",
+          icon: Icon(Icons.wind_power),
+          value: "3",
+          description: "Gust: 5mph",
+          unit: "mph",
+          painter: WindShapePainter(),
+          onTap: () {},
+        ),
+
         DailyWeatherCard(
           title: "Air quality",
           icon: Icon(Icons.air),
@@ -97,6 +117,7 @@ class DailyForecastItems extends StatelessWidget {
           value: "5.9",
           unit: "mi",
           description: "Moderate",
+          painter: VisibilityPainter(),
           onTap: () {},
         ),
 

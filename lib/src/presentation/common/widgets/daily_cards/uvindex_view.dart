@@ -6,6 +6,7 @@ import '/src/presentation/common/weather_value_formatter.dart';
 import '../../../../domain/entity/weather_record.dart';
 import 'daily_card_wrapper.dart' show DailyItemCard;
 
+@Deprecated("USE DailyWeatherCard instead")
 class UvindexView extends StatelessWidget {
   const UvindexView({super.key, required this.uvIndex});
 
