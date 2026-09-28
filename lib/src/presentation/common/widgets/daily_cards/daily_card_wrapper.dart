@@ -40,3 +40,72 @@ class DailyItemCard extends StatelessWidget {
     );
   }
 }
+
+class DailyWeatherCard extends StatelessWidget {
+  const DailyWeatherCard({
+    super.key,
+    required this.title,
+    required this.icon,
+    required this.value,
+    required this.unit,
+    required this.description,
+    this.onTap,
+    this.shape = const CircleBorder(),
+    this.progressValue,
+  });
+
+  final String title;
+  final Widget icon;
+  final String value;
+  final String unit;
+  final String description;
+
+  final VoidCallback? onTap;
+  final ShapeBorder shape;
+
+  /// if not null  shows progressBar.
+  /// - when `shape`  is circular , it is around it(specially top level with bottom cut)
+  /// - when RoundedRectangleBorder then LinearProgressIndicator before description
+  final double? progressValue;
+
+  @override
+  Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    final style = TextTheme.of(context);
+
+    assert(shape is CircleBorder);
+
+    return DailyItemCard(
+      onTap: onTap,
+      border: shape,
+      child: Padding(
+        ///TODO: Progress indicator
+        padding: const EdgeInsets.all(24.0),
+        child: Column(
+          mainAxisAlignment: .spaceBetween,
+          crossAxisAlignment: shape is CircleBorder ? .center : .stretch,
+          children: [
+            Row(
+              mainAxisSize: .min,
+              spacing: 4,
+              children: [
+                icon,
+                Text(title, style: style.titleMedium),
+              ],
+            ),
+            Row(
+              mainAxisSize: .min,
+              crossAxisAlignment: .end,
+              children: [
+                Text(value, style: style.displayLarge),
+                Text(unit, style: style.displaySmall),
+              ],
+            ),
+
+            Text(description),
+          ],
+        ),
+      ),
+    );
+  }
+}

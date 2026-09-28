@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../common/widgets/daily_cards/air_quality_view.dart';
+import '../common/widgets/daily_cards/daily_card_wrapper.dart';
 import '/src/domain/entity/weather_record.dart';
 import '/src/presentation/home/widgets/app_bar.dart';
 import '../common/common.dart';
@@ -80,6 +82,32 @@ class DailyForecastItems extends StatelessWidget {
         UvindexView(uvIndex: WeatherMeasurement.emptyW),
         SunMoonView(rise: DateTime.now(), down: DateTime.now()),
         SunMoonView(rise: DateTime.now(), down: DateTime.now(), isSun: false),
+        DailyWeatherCard(
+          title: "Air quality",
+          icon: Icon(Icons.air),
+          value: "150",
+          description: "Very unhealthy",
+          unit: "",
+          onTap: () {},
+        ),
+
+        DailyWeatherCard(
+          title: "Visiblity",
+          icon: Icon(Icons.visibility_outlined),
+          value: "5.9",
+          unit: "mi",
+          description: "Moderate",
+          onTap: () {},
+        ),
+
+        DailyWeatherCard(
+          title: "Pressure",
+          icon: Icon(Icons.electric_meter),
+          value: "29.79",
+          unit: "",
+          description: "inHg",
+          onTap: () {},
+        ),
       ].map((e) => SizedBox.square(dimension: 250, child: e)).toList(),
     );
   }

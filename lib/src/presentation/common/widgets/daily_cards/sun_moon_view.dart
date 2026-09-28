@@ -1,9 +1,11 @@
+import 'dart:math' show sqrt;
+
 import 'package:flutter/material.dart';
 import '/src/presentation/common/common.dart';
 import '../../../../domain/entity/weather_record.dart';
 import 'daily_card_wrapper.dart';
 
-class SunMoonView extends StatelessWidget {
+class SunMoonView extends StatefulWidget {
   const SunMoonView({
     super.key,
     required this.rise,
@@ -20,30 +22,61 @@ class SunMoonView extends StatelessWidget {
   final bool isSun;
 
   @override
+  State<SunMoonView> createState() => _SunMoonViewState();
+}
+
+class _SunMoonViewState extends State<SunMoonView> {
+  double value = 0;
+
+  @override
   Widget build(BuildContext context) {
     final style = TextTheme.of(context);
     final scheme = Theme.of(context).colorScheme;
 
     final shapeBorder = RoundedRectangleBorder(borderRadius: .circular(24));
-    final String label = isSun ? "Sun" : "Moon";
+    final String label = widget.isSun ? "Sun" : "Moon";
 
     final border = RoundedRectangleBorder(borderRadius: .circular(24));
-    return DailyItemCard(
-      onTap: () {},
-      child: Column(
-        spacing: 8,
-        children: [
-          Row(spacing: 6, children: [Icon(Icons.star), Text(label)]),
-          Expanded(
-            child: CustomPaint(
-              painter: _StarTrajectoryPainer(AlwaysStoppedAnimation(.5)),
-              child: Placeholder(color: Colors.grey.withAlpha(14)),
+    return Column(
+      children: [
+        Slider(
+          value: value,
+          onChanged: (v) {
+            value = v;
+            setState(() {});
+          },
+        ),
+        Expanded(
+          child: DailyItemCard(
+            onTap: () {},
+            child: Column(
+              spacing: 8,
+              children: [
+                Row(spacing: 6, children: [Icon(Icons.star), Text(label)]),
+                Expanded(
+                  child: CustomPaint(
+                    painter: _StarTrajectoryPainer(
+                      AlwaysStoppedAnimation(value),
+                      color: widget.isSun
+                          ? Colors.amberAccent
+                          : Colors.blueGrey,
+                    ),
+                    child: Placeholder(color: Colors.grey.withAlpha(14)),
+                  ),
+                ), // paintu....
+                Row(
+                  children: [
+                    Text(widget.rise.formatHMa),
+                    Spacer(),
+                    Text(widget.down.formatHMa),
+                  ],
+                ),
+                Text("phase view..."),
+              ],
             ),
-          ), // paintu....
-          Row(children: [Text(rise.formatHMa), Spacer(), Text(down.formatHMa)]),
-          Text("phase view..."),
-        ],
-      ),
+          ),
+        ),
+      ],
     );
   }
 }
@@ -58,14 +91,17 @@ class _StarTrajectoryPainer extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final center = Offset(size.width / 2, size.height * 1.1);
+    final radius = size.width / 2;
+    final rect = Rect.fromLTWH(0, 0, size.width, size.height);
+
     final path = Path.combine(
-      PathOperation.intersect,
+      PathOperation.intersect, // cam  reduce with center.height
       Path()
-        ..addOval(Rect.fromCircle(center: center, radius: size.width / 2))
+        ..addOval(Rect.fromCircle(center: center, radius: radius))
         ..moveTo(0, size.height)
         ..lineTo(size.width, size.height)
         ..close(),
-      Path()..addRect(Rect.fromLTWH(0, 0, size.width, size.height)),
+      Path()..addRect(rect),
     );
 
     final paint = Paint()
@@ -76,17 +112,31 @@ class _StarTrajectoryPainer extends CustomPainter {
 
     drawDottedPath(canvas, path, paint);
 
-    // fill section //TODO:
-    // final progress = animation.value;
-    // final fillArch = Path()
-    //   ..moveTo(0, size.height)
-    //   ..arcToPoint(bottomRight, radius: Radius.circular(222))
-    //   ..close();
-    //
-    // final metrics = fillArch.computeMetrics().first;
-    // final partialPath = metrics.extractPath(0, metrics.length * progress);
-    //
-    // drawDottedPath(canvas, partialPath, paint, gap: 1);
+    final progress = animation.value;
+    // fill section
+    final fillPath = Path.combine(
+      .intersect,
+      path,
+      Path()..addRect(Rect.fromLTWH(0, 0, size.width * progress, size.height)),
+    );
+
+    canvas.drawPath(
+      fillPath,
+      Paint()
+        ..shader = LinearGradient(
+          colors: [color.withAlpha(100), color.withAlpha(0)],
+          begin: .topCenter,
+          end: .bottomCenter,
+        ).createShader(rect),
+    );
+
+    /// moving sun/moon
+    final x = size.width * progress;
+    final dx = x - center.dx;
+    final y = center.dy - sqrt(radius * radius - dx * dx);
+
+    //TODO: rotate sun
+    canvas.drawCircle(Offset(x, y), 5, Paint()..color = color);
   }
 
   void drawDottedPath(
