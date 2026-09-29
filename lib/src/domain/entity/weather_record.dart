@@ -62,6 +62,9 @@ enum MeasurementType {
   weatherCode,
   daylightDuration,
   sunshineDuration,
+
+  airQuality,
+  visiblity,
   unknown,
 }
 

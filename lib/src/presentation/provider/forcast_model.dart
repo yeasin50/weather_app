@@ -28,12 +28,21 @@ class HourlyForecast extends ForecastData {
     required this.temp,
     required this.rain,
     required this.humadity,
+    required this.uvIndex,
+    required this.wind,
+    // required this.airQuality,
+    // required this.visibility,
+    required this.precipitationProbability,
   });
 
   final WeatherMeasurement temp;
   final WeatherMeasurement rain;
-  @Deprecated("might not want it")
   final WeatherMeasurement humadity;
+  final WeatherMeasurement precipitationProbability;
+  final WeatherMeasurement uvIndex;
+  final WeatherMeasurement wind;
+  // final WeatherMeasurement airQuality;
+  // final WeatherMeasurement visibility;
 
   WeatherMood get mood => WeatherMood.midRain; //TODO: calculate
 
@@ -55,6 +64,11 @@ class HourlyForecast extends ForecastData {
     temp: _empty(.temperature),
     rain: _empty(.rain),
     humadity: _empty(.relativeHumidity),
+    uvIndex: _empty(.uvIndex),
+    wind: _empty(.windSpeed),
+    // airQuality: _empty(.airQuality),
+    // visibility: _empty(.visiblity),
+    precipitationProbability: _empty(.precipitationProbability),
   );
 
   HourlyForecast updateSelected([bool value = false]) {
@@ -65,6 +79,11 @@ class HourlyForecast extends ForecastData {
       temp: temp,
       rain: rain,
       humadity: humadity,
+      uvIndex: uvIndex,
+      wind: wind,
+      // airQuality: airQuality,
+      // visibility: visibility,
+      precipitationProbability: precipitationProbability,
     );
   }
 }

@@ -45,6 +45,7 @@ const _$HourlyItemEnumMap = {
   HourlyItem.precipitationProbability: 'precipitation_probability',
   HourlyItem.uvIndex: 'uv_index',
   HourlyItem.windSpeed10m: 'wind_speed_10m',
+  HourlyItem.visibility: 'visibility',
 };
 
 const _$DailyItemEnumMap = {

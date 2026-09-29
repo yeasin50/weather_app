@@ -39,7 +39,11 @@ class DailyWeatherCard extends StatelessWidget {
     final scheme = Theme.of(context).colorScheme;
     final style = TextTheme.of(context);
 
-    assert(shape is CircleBorder || shape is UVIndexShape);
+    assert(
+      shape is CircleBorder ||
+          shape is UVIndexShape ||
+          shape is RoundedRectangleBorder,
+    );
 
     return DailyItemCard(
       onTap: onTap,

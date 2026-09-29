@@ -60,7 +60,8 @@ enum HourlyItem {
   rain("rain"),
   precipitationProbability("precipitation_probability"),
   uvIndex("uv_index"),
-  windSpeed10m("wind_speed_10m");
+  windSpeed10m("wind_speed_10m"),
+  visibility("visibility");
 
   const HourlyItem(this.value);
   final String value;

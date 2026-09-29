@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:weather_app/src/presentation/common/widgets/daily_cards/wind_shape_painter.dart';
+import '../../infrastructure/infrastructure.dart';
+import '/src/presentation/common/widgets/daily_cards/wind_shape_painter.dart';
 
 import '../common/widgets/daily_cards/daily_weather_card.dart';
 import '../common/widgets/daily_cards/visibility_painter.dart';
@@ -19,6 +20,7 @@ class HomePage extends StatelessWidget {
       builder: (context, data, child) {
         final city = data.city;
         final title = city.name + ", " + city.countryCode; //TODO: update view
+
         if (city == CityRecord.none) return EmptyCityView();
 
         return Scaffold(
@@ -46,7 +48,7 @@ class HomePage extends StatelessWidget {
                               crossAxisAlignment: .stretch,
                               spacing: 16,
                               children: [
-                                TodaysWeather(),
+                                // TodaysWeather(),
                                 // HourlyForecastListView(),
                                 // ForecastHorizontalListview<DailyForecast>(
                                 //   data: data.weeklyForecast,
@@ -75,61 +77,91 @@ class DailyForecastItems extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Wrap(
-      spacing: 24,
-      runSpacing: 24,
-      children: [
-        HumadityView(measurement: WeatherMeasurement.emptyW),
-        SunMoonView(rise: DateTime.now(), down: DateTime.now()),
-        SunMoonView(rise: DateTime.now(), down: DateTime.now(), isSun: false),
-        DailyWeatherCard(
-          title: "UV index",
-          icon: Icon(Icons.sunny),
-          value: "8",
-          description: "high",
-          unit: "",
-          shape: UVIndexShape(2),
-          onTap: () {},
-        ),
+    return Consumer<CityWeatherNotifier>(
+      builder: (context, value, child) {
+        final hourData = value.selectedHourForcast;
+        final uv = UVIndexParser(hourData.forecast.uvIndex);
 
-        DailyWeatherCard(
-          title: "Wind",
-          icon: Icon(Icons.wind_power),
-          value: "3",
-          description: "Gust: 5mph",
-          unit: "mph",
-          painter: WindShapePainter(),
-          onTap: () {},
-        ),
+        //FIXME: value aren't good, have some confusion how api  providing me
+        final sunRise = DateTime.parse(hourData.dayForecast.sunrise.value);
+        final sunSet = DateTime.parse(hourData.dayForecast.sunset.value);
 
-        DailyWeatherCard(
-          title: "Air quality",
-          icon: Icon(Icons.air),
-          value: "150",
-          description: "Very unhealthy",
-          unit: "",
-          onTap: () {},
-        ),
+        final moonRise = DateTime.parse(hourData.dayForecast.moonRise.value);
+        final moonSet = DateTime.parse(hourData.dayForecast.moonSet.value);
 
-        DailyWeatherCard(
-          title: "Visiblity",
-          icon: Icon(Icons.visibility_outlined),
-          value: "5.9",
-          unit: "mi",
-          description: "Moderate",
-          painter: VisibilityPainter(),
-          onTap: () {},
-        ),
+        return Column(
+          spacing: 24,
+          children: [
+            DailyWeatherCard(
+              title: "UV index", //TODO:  have parser
+              icon: Icon(Icons.sunny),
+              value: uv.value.toString(),
+              description: uv.level,
+              unit: "",
+              shape: UVIndexShape(uv.colorIndex, colors: UVIndexParser.colors),
+              onTap: () {},
+            ),
 
-        DailyWeatherCard(
-          title: "Pressure",
-          icon: Icon(Icons.electric_meter),
-          value: "29.79",
-          unit: "",
-          description: "inHg",
-          onTap: () {},
-        ),
-      ].map((e) => SizedBox.square(dimension: 250, child: e)).toList(),
+            SunMoonView(rise: sunRise, down: sunSet),
+            SunMoonView(rise: moonRise, down: moonSet, isSun: false),
+          ].map((e) => SizedBox.square(dimension: 250, child: e)).toList(),
+        );
+      },
+      child: Wrap(
+        spacing: 24,
+        runSpacing: 24,
+        children: [
+          HumadityView(measurement: WeatherMeasurement.emptyW),
+
+          DailyWeatherCard(
+            title: "Perception",
+            icon: Icon(Icons.water_outlined),
+            value: "0.04",
+            description: "no rain for 2 hours",
+            unit: "in",
+            onTap: () {},
+            shape: RoundedRectangleBorder(borderRadius: .circular(24)),
+          ),
+
+          DailyWeatherCard(
+            title: "Wind",
+            icon: Icon(Icons.wind_power),
+            value: "3",
+            description: "Gust: 5mph",
+            unit: "mph",
+            painter: WindShapePainter(),
+            onTap: () {},
+          ),
+
+          DailyWeatherCard(
+            title: "Air quality",
+            icon: Icon(Icons.air),
+            value: "150",
+            description: "Very unhealthy",
+            unit: "",
+            onTap: () {},
+          ),
+
+          DailyWeatherCard(
+            title: "Visiblity",
+            icon: Icon(Icons.visibility_outlined),
+            value: "5.9",
+            unit: "mi",
+            description: "Moderate",
+            painter: VisibilityPainter(),
+            onTap: () {},
+          ),
+
+          DailyWeatherCard(
+            title: "Pressure",
+            icon: Icon(Icons.electric_meter),
+            value: "29.79",
+            unit: "",
+            description: "inHg",
+            onTap: () {},
+          ),
+        ].map((e) => SizedBox.square(dimension: 250, child: e)).toList(),
+      ),
     );
   }
 }

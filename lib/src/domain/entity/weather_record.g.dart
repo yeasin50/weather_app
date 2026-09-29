@@ -1523,6 +1523,8 @@ const _WeatherMeasurementmeasurementTypeEnumValueMap = {
   r'weatherCode': r'weatherCode',
   r'daylightDuration': r'daylightDuration',
   r'sunshineDuration': r'sunshineDuration',
+  r'airQuality': r'airQuality',
+  r'visiblity': r'visiblity',
   r'unknown': r'unknown',
 };
 const _WeatherMeasurementmeasurementTypeValueEnumMap = {
@@ -1542,6 +1544,8 @@ const _WeatherMeasurementmeasurementTypeValueEnumMap = {
   r'weatherCode': MeasurementType.weatherCode,
   r'daylightDuration': MeasurementType.daylightDuration,
   r'sunshineDuration': MeasurementType.sunshineDuration,
+  r'airQuality': MeasurementType.airQuality,
+  r'visiblity': MeasurementType.visiblity,
   r'unknown': MeasurementType.unknown,
 };
 

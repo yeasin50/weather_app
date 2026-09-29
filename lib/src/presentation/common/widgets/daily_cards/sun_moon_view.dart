@@ -28,6 +28,28 @@ class SunMoonView extends StatefulWidget {
 class _SunMoonViewState extends State<SunMoonView> {
   double value = 0;
 
+  DateTime get rise => widget.rise;
+  DateTime get fall => widget.down;
+
+  @override
+  void initState() {
+    super.initState();
+
+    final now = DateTime.now();
+
+    if (now.isBefore(rise)) {
+      value = 0;
+    } else if (now.isAfter(fall)) {
+      value = 1;
+      print("here ${widget.isSun}: now $now fall: $fall ");
+    } else {
+      final duration = fall.difference(rise);
+      final currentSpan = now.difference(rise);
+
+      value = currentSpan.inMinutes / duration.inMinutes;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final style = TextTheme.of(context);

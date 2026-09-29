@@ -1,50 +1,11 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import '/src/presentation/common/weather_value_formatter.dart';
-
-import '../../../../domain/entity/weather_record.dart';
-import 'daily_card_wrapper.dart' show DailyItemCard;
-
-@Deprecated("USE DailyWeatherCard instead")
-class UvindexView extends StatelessWidget {
-  const UvindexView({super.key, required this.uvIndex});
-
-  final WeatherMeasurement uvIndex;
-
-  @override
-  Widget build(BuildContext context) {
-    final style = TextTheme.of(context);
-
-    return DailyItemCard(
-      //FIXME: MaterialShape on InkWell have some corner issue on Splash
-      border: UVIndexShape(2),
-      onTap: () {},
-      child: Column(
-        crossAxisAlignment: .center,
-        mainAxisAlignment: .spaceBetween,
-        children: [
-          SizedBox(),
-          Row(
-            mainAxisSize: .min,
-            spacing: 8,
-            children: [
-              Icon(Icons.sunny),
-              Text("UV Index", style: style.bodyLarge),
-            ],
-          ),
-          Text(uvIndex.value, style: style.displayLarge),
-          Text(uvIndex.formatValue),
-          SizedBox(),
-        ],
-      ),
-    );
-  }
-}
 
 class UVIndexShape extends ShapeBorder {
-  const UVIndexShape(this.colorIndex);
+  const UVIndexShape(this.colorIndex, {this.colors = const []});
   final int colorIndex;
+  final List<Color> colors;
   @override
   EdgeInsetsGeometry get dimensions => .zero;
 
@@ -80,16 +41,10 @@ class UVIndexShape extends ShapeBorder {
 
   @override
   void paint(Canvas canvas, Rect rect, {TextDirection? textDirection}) {
-    final colors = [
-      Colors.greenAccent,
-      Colors.yellowAccent,
-      Colors.amberAccent,
-      Colors.redAccent,
-      Colors.deepPurpleAccent,
-    ].reversed.toList();
+    assert(colors.length == 5, "require 5 UV colors");
 
-    double stepAngle = 30 * pi / 180;
-    double startAngle = 30 * pi / 180;
+    double stepAngle = -30 * pi / 180;
+    double startAngle = -pi + stepAngle;
     final radius = rect.width / 2 * .85;
 
     for (int i = 0; i < 5; i++) {

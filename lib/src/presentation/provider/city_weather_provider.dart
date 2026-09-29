@@ -4,11 +4,12 @@ import 'package:collection/collection.dart';
 import '../../domain/entity/weather_record.dart';
 import '../../domain/weather_db.dart';
 import '../common/common.dart';
+import 'city_weather_card_data_provider.dart';
 import 'providers.dart';
 
 /// maintain  specific city  record and show specific hour data
 /// hold 7 days data
-class CityWeatherNotifier extends ChangeNotifier {
+class CityWeatherNotifier extends WeatherDataExtractor with ChangeNotifier {
   CityWeatherNotifier(this._data, this._selectedDay);
   CityWeatherRecord _data;
 
@@ -29,15 +30,6 @@ class CityWeatherNotifier extends ChangeNotifier {
     );
 
     return (forecast: forecast, dayForecast: dailyData);
-  }
-
-  /// if missing returns empty
-  WeatherMeasurement? _getItem(
-    List<WeatherMeasurement>? items,
-    MeasurementType type,
-  ) {
-    final result = items?.firstWhereOrNull((e) => e.measurementType == type);
-    return result;
   }
 
   List<ForecastData> _mergeSunriseAndSunset(List<HourlyForecast> forecast) {
@@ -63,7 +55,6 @@ class CityWeatherNotifier extends ChangeNotifier {
     return combinedResult;
   }
 
-  // TODO: inject sunrise and sunset
   List<HourlyForecast> _todaysHourlyForecast = [];
   UnmodifiableListView<ForecastData> get todaysHourlyForecast {
     return UnmodifiableListView(_mergeSunriseAndSunset(_todaysHourlyForecast));
@@ -73,91 +64,13 @@ class CityWeatherNotifier extends ChangeNotifier {
   UnmodifiableListView<DailyForecast> get weeklyForecast =>
       UnmodifiableListView(_dailyForecast);
 
-  ///TODO: Can use single loop for all
-  List<HourlyForecast> _parseTodaysHourlyForecast() {
-    final List<HourlyForecast> result = [];
-
-    final now = DateTime.now();
-
-    final groupByHour = groupBy(_data.hourlyItems, (e) => e.time);
-    final times = groupByHour.keys.toList();
-    times.removeWhere(
-      (e) =>
-          e.isBefore(now.tilHour) ||
-          !e.isBefore(now.tilHour.add(const Duration(days: 1))),
-    );
-
-    for (final t in times) {
-      final items = groupByHour[t];
-      final weatherCode = _getItem(items, .weatherCode);
-      final temp = _getItem(items, .temperature);
-      final rain = _getItem(items, .rain);
-      final humadity = _getItem(items, .relativeHumidity);
-
-      assert(
-        [weatherCode, temp, rain, humadity].every((e) => e != null),
-        'temp:${temp != null} rain:${rain != null} humadity:${humadity != null}',
-      );
-
-      final forecast = HourlyForecast(
-        time: t,
-        weatherCode: weatherCode!,
-        temp: temp!,
-        rain: rain!,
-        humadity: humadity!,
-      );
-
-      result.add(forecast);
-    }
-
-    if (result.isNotEmpty) result[0] = result[0].updateSelected(true);
-
-    return result;
-  }
-
-  List<DailyForecast> _parseWeeklyForecast() {
-    final List<DailyForecast> result = [];
-
-    final groupByHour = groupBy(_data.dailyItems, (e) => e.time);
-    final times = groupByHour.keys.toList();
-
-    for (final t in times) {
-      final items = groupByHour[t];
-      final tempMax = _getItem(items, .temperatureMax);
-      final tempMin = _getItem(items, .temperatureMin);
-      final rain = _getItem(items, .precipitationProbability);
-      final weatherCode = _getItem(items, .weatherCode);
-      final sunrise = _getItem(items, .sunrise);
-      final sunset = _getItem(items, .sunset);
-
-      assert(
-        [tempMin, tempMax, rain, weatherCode].every((e) => e != null),
-        'tempMin:${tempMin != null}  tempMax:${tempMax != null} rain:${rain != null}',
-      );
-
-      result.add(
-        DailyForecast(
-          time: t,
-          tempMin: tempMin!,
-          tempMax: tempMax!,
-          rain: rain!,
-          weatherCode: weatherCode!,
-          sunrise: sunrise!,
-          sunset: sunset!,
-          moonPhase: _getItem(items, .moonPhase)!,
-          moonRise: _getItem(items, .moonRise) ?? WeatherMeasurement.emptyW,
-          moonSet: _getItem(items, .moonSet) ?? WeatherMeasurement.emptyW,
-        ),
-      );
-    }
-
-    return result;
-  }
-
+  @override
   void updateCity(CityWeatherRecord record) {
+    super.updateCity(record);
     _data = record;
-    _dailyForecast = _parseWeeklyForecast();
-    _todaysHourlyForecast = _parseTodaysHourlyForecast();
+
+    _dailyForecast = super.parseDailyForecast();
+    _todaysHourlyForecast = super.parseTodaysHourlyForecast();
 
     notifyListeners();
   }
@@ -166,6 +79,4 @@ class CityWeatherNotifier extends ChangeNotifier {
     _selectedDay = date;
     notifyListeners();
   }
-
-  // daily items for grid, note this combine hourlyItems as well
 }
