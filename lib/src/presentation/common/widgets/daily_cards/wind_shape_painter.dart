@@ -1,10 +1,13 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 //FIXME: Little bit off but will get there, just need some tweak on D,E
 class WindShapePainter extends CustomPainter {
-  const WindShapePainter([this.pointyAngle = 45]);
+  const WindShapePainter([this.pointyAngle = 45, this.color = Colors.blue]);
 
   final int pointyAngle;
+  final Color color;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -12,7 +15,7 @@ class WindShapePainter extends CustomPainter {
     assert(pointyAngle >= 0 && pointyAngle <= 360);
 
     final paint = Paint()
-      ..color = Colors.blue
+      ..color = color
       ..style = PaintingStyle.fill;
 
     final width = size.width;
@@ -68,7 +71,15 @@ class WindShapePainter extends CustomPainter {
       ..close();
     // dart format on
 
+    canvas.save();
+
+    canvas.translate(width / 2, height / 2);
+    canvas.rotate(pointyAngle * pi / 180);
+    canvas.translate(-width / 2, -height / 2);
+
     canvas.drawPath(path, paint);
+
+    canvas.restore();
   }
 
   @override

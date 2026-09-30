@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../domain/entity/weather_record.dart' show WeatherMeasurement;
+import '../../../domain/entity/weather_record.dart';
 
 class UVIndexParser {
   const UVIndexParser(this.data);

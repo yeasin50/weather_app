@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../provider/weather_provider.dart';
 import '/src/presentation/widgets/weather_card_view.dart';
-import '../../infrastructure/extension/city_weather_ext.dart';
+import '../common/models/city_weather_ext.dart';
 import '../widgets/gradient_background.dart';
 import 'widgets/saved_city_appbar.dart';
 

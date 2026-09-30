@@ -1,7 +1,8 @@
 import 'package:collection/collection.dart';
-import '../../domain/weather_db.dart';
-import '../infrastructure.dart' show WeatherMood;
 import '/src/domain/entity/weather_record.dart';
+
+import '../../../domain/weather_db.dart';
+import 'weather_mood.dart';
 
 // used t feed the ui
 

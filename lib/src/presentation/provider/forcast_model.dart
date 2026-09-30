@@ -28,21 +28,27 @@ class HourlyForecast extends ForecastData {
     required this.temp,
     required this.rain,
     required this.humadity,
+    required this.dewPoint,
     required this.uvIndex,
     required this.wind,
+    required this.windDirection,
     // required this.airQuality,
-    // required this.visibility,
+    required this.visibility,
     required this.precipitationProbability,
   });
 
   final WeatherMeasurement temp;
   final WeatherMeasurement rain;
   final WeatherMeasurement humadity;
+  final WeatherMeasurement dewPoint;
   final WeatherMeasurement precipitationProbability;
   final WeatherMeasurement uvIndex;
+
+  // 10m above ground
   final WeatherMeasurement wind;
+  final WeatherMeasurement windDirection;
   // final WeatherMeasurement airQuality;
-  // final WeatherMeasurement visibility;
+  final WeatherMeasurement visibility;
 
   WeatherMood get mood => WeatherMood.midRain; //TODO: calculate
 
@@ -64,10 +70,12 @@ class HourlyForecast extends ForecastData {
     temp: _empty(.temperature),
     rain: _empty(.rain),
     humadity: _empty(.relativeHumidity),
+    dewPoint: _empty(.dewPoint),
     uvIndex: _empty(.uvIndex),
     wind: _empty(.windSpeed),
+    windDirection: _empty(.windDirection),
     // airQuality: _empty(.airQuality),
-    // visibility: _empty(.visiblity),
+    visibility: _empty(.visiblity),
     precipitationProbability: _empty(.precipitationProbability),
   );
 
@@ -79,10 +87,12 @@ class HourlyForecast extends ForecastData {
       temp: temp,
       rain: rain,
       humadity: humadity,
+      dewPoint: dewPoint,
       uvIndex: uvIndex,
       wind: wind,
+      windDirection: windDirection,
       // airQuality: airQuality,
-      // visibility: visibility,
+      visibility: visibility,
       precipitationProbability: precipitationProbability,
     );
   }

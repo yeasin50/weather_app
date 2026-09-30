@@ -63,12 +63,15 @@ extension MetroApiExt on MetroApiResponse {
 final Map<String, MeasurementType> _measureTypeMap = {
   // Hourly strings
   "temperature_2m": MeasurementType.temperature,
-  "relative_humidity_2m": MeasurementType.relativeHumidity,
+  "relative_humidity_2m": .relativeHumidity,
+  "dew_point_2m": .dewPoint,
   "rain": MeasurementType.rain,
   "precipitation_probability": MeasurementType.precipitationProbability,
   "precipitation_probability_max": MeasurementType.precipitationProbability,
   "uv_index": MeasurementType.uvIndex,
-  "wind_speed_10m": MeasurementType.windSpeed,
+  "wind_speed_10m": .windSpeed,
+  "wind_direction_10m": .windDirection,
+  "visibility": .visiblity,
 
   // Daily strings
   "temperature_2m_max": MeasurementType.temperatureMax,

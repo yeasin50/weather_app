@@ -43,8 +43,10 @@ const _$HourlyItemEnumMap = {
   HourlyItem.relativeHumidity2m: 'relative_humidity_2m',
   HourlyItem.rain: 'rain',
   HourlyItem.precipitationProbability: 'precipitation_probability',
+  HourlyItem.dewPoint: 'dew_point_2m',
   HourlyItem.uvIndex: 'uv_index',
   HourlyItem.windSpeed10m: 'wind_speed_10m',
+  HourlyItem.windDirection10m: 'wind_direction_10m',
   HourlyItem.visibility: 'visibility',
 };
 

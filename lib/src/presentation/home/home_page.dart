@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../infrastructure/infrastructure.dart';
+import '../common/models/models.dart';
 import '/src/presentation/common/widgets/daily_cards/wind_shape_painter.dart';
 
 import '../common/widgets/daily_cards/daily_weather_card.dart';
@@ -87,8 +87,13 @@ class DailyForecastItems extends StatelessWidget {
         final sunSet = DateTime.parse(hourData.dayForecast.sunset.value);
 
         final moon = value.activeMoonArc;
-        return Column(
+        final precipitation = value.preceptionData;
+        final wind = value.wind;
+        final visibility = VisibilityData(hourData.forecast.visibility);
+
+        return Wrap(
           spacing: 24,
+          runSpacing: 24,
           children: [
             DailyWeatherCard(
               title: "UV index",
@@ -103,10 +108,41 @@ class DailyForecastItems extends StatelessWidget {
             SunView(rise: sunRise, down: sunSet),
 
             MoonView(
-              // previousRise: moon.activeRise,
               progress: moon.progress,
               todayRise: moon.activeRise!,
               todayDown: moon.activeFall!,
+            ),
+
+            HumadityView(data: value.humidityData),
+
+            DailyWeatherCard(
+              title: "perception",
+              icon: Icon(Icons.water_outlined),
+              value: precipitation.value,
+              description: precipitation.decription,
+              unit: precipitation.unit,
+              onTap: () {},
+              shape: RoundedRectangleBorder(borderRadius: .circular(24)),
+            ),
+
+            DailyWeatherCard(
+              title: "Wind",
+              icon: Icon(Icons.wind_power),
+              value: wind.value,
+              description: wind.description,
+              unit: wind.unit,
+              painter: WindShapePainter(wind.rotation, wind.color),
+              onTap: () {},
+            ),
+
+            DailyWeatherCard(
+              title: "Visiblity",
+              icon: Icon(Icons.visibility_outlined),
+              value: visibility.value,
+              unit: visibility.unit,
+              description: visibility.label,
+              painter: VisibilityPainter(visibility.color),
+              onTap: () {},
             ),
           ].map((e) => SizedBox.square(dimension: 250, child: e)).toList(),
         );
@@ -115,44 +151,12 @@ class DailyForecastItems extends StatelessWidget {
         spacing: 24,
         runSpacing: 24,
         children: [
-          HumadityView(measurement: WeatherMeasurement.emptyW),
-
-          DailyWeatherCard(
-            title: "Perception",
-            icon: Icon(Icons.water_outlined),
-            value: "0.04",
-            description: "no rain for 2 hours",
-            unit: "in",
-            onTap: () {},
-            shape: RoundedRectangleBorder(borderRadius: .circular(24)),
-          ),
-
-          DailyWeatherCard(
-            title: "Wind",
-            icon: Icon(Icons.wind_power),
-            value: "3",
-            description: "Gust: 5mph",
-            unit: "mph",
-            painter: WindShapePainter(),
-            onTap: () {},
-          ),
-
           DailyWeatherCard(
             title: "Air quality",
             icon: Icon(Icons.air),
             value: "150",
             description: "Very unhealthy",
             unit: "",
-            onTap: () {},
-          ),
-
-          DailyWeatherCard(
-            title: "Visiblity",
-            icon: Icon(Icons.visibility_outlined),
-            value: "5.9",
-            unit: "mi",
-            description: "Moderate",
-            painter: VisibilityPainter(),
             onTap: () {},
           ),
 

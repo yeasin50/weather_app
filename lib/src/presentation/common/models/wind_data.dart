@@ -1,0 +1,28 @@
+import 'package:flutter/material.dart';
+import '/src/domain/entity/weather_record.dart';
+
+/// to present on UI  layer
+/// NOTE: both  fetched 10m above ground
+class WindData {
+  WindData({required this.windSpeed, required this.windDirection});
+
+  final WeatherMeasurement windSpeed;
+  final WeatherMeasurement windDirection;
+
+  String get value => windSpeed.value;
+  String get unit => windSpeed.unit;
+  String get description => windSpeed.unit;
+
+  /// this is always in degree
+  int get rotation {
+    return int.tryParse(windDirection.value) ?? 0;
+  }
+
+  //EOF: FIXME: ig I might want a fixed color
+  Color get color => switch (double.parse(windSpeed.value).round()) {
+    < 5 => Colors.green,
+    < 10 => Colors.yellow,
+    < 15 => Colors.orange,
+    _ => Colors.red,
+  }.withAlpha(100);
+}

@@ -1,17 +1,16 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import '/src/presentation/common/weather_value_formatter.dart';
-import '../../../../domain/entity/weather_record.dart';
+import '../../models/models.dart';
 
 class HumadityView extends StatelessWidget {
-  const HumadityView({super.key, required this.measurement});
-  final WeatherMeasurement measurement;
+  const HumadityView({super.key, required this.data});
+
+  final HumidityDuePointData data;
 
   @override
   Widget build(BuildContext context) {
-    final int? percentage = int.tryParse(measurement.value.toString());
-    assert(percentage != null);
+    assert(data.humidity >= 0 && data.humidity <= 100);
 
     final style = TextTheme.of(context);
     final scheme = Theme.of(context).colorScheme;
@@ -27,7 +26,12 @@ class HumadityView extends StatelessWidget {
               clipBehavior: .hardEdge,
               color: scheme.surfaceContainer,
               shape: shapeBorder,
-              child: CustomPaint(painter: _HumidityPainter()),
+              child: CustomPaint(
+                painter: _HumidityPainter(
+                  height: data.humidity / 100,
+                  color: data.humidityColor,
+                ),
+              ),
             ),
           ),
 
@@ -54,8 +58,24 @@ class HumadityView extends StatelessWidget {
                 Row(
                   children: [Icon(Icons.water_drop_outlined), Text("humidity")],
                 ),
-                Text(measurement.formatValue, style: style.displayLarge),
-                Row(spacing: 8, children: [CircleAvatar(), Text("Dew point")]),
+                Text("${data.humidity}%", style: style.displayLarge),
+                Row(
+                  spacing: 8,
+                  children: [
+                    Material(
+                      color: data.dewPointColor,
+                      shape: CircleBorder(),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          "${data.dewPoint.toString()}\u00B0",
+                          textAlign: .center,
+                        ), //FIXME: move to specific place
+                      ),
+                    ),
+                    Text("Dew point"),
+                  ],
+                ),
               ],
             ),
           ),
@@ -72,6 +92,7 @@ class _HumidityPainter extends CustomPainter {
     this.frequency = .12,
     this.height = .75,
     this.shift = 2.88,
+    required this.color,
   });
 
   /// range 0-1
@@ -82,11 +103,13 @@ class _HumidityPainter extends CustomPainter {
 
   final double shift;
 
+  final Color color;
+
   @override
   void paint(Canvas canvas, Size size) {
     assert(height > 0 && height < 1);
     final paint = Paint()
-      ..color = Colors.blue
+      ..color = color
       ..strokeWidth = 3
       ..style = PaintingStyle.fill;
 

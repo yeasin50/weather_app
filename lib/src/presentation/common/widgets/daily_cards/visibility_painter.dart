@@ -10,7 +10,7 @@ class VisibilityPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
-      ..color = Colors.blue
+      ..color = color
       ..strokeWidth = 3
       ..style = PaintingStyle.fill;
 
