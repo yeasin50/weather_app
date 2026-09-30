@@ -79,4 +79,27 @@ class CityWeatherNotifier extends WeatherDataExtractor with ChangeNotifier {
     _selectedDay = date;
     notifyListeners();
   }
+
+  ({DateTime? prevDayRise, DateTime? todayRise, DateTime? todayFall})
+  get moonRiseFall {
+    final index = _dailyForecast.indexWhere((e) => e.time == selectedDay);
+
+    if (index == -1) {
+      return (prevDayRise: null, todayRise: null, todayFall: null);
+    }
+
+    final today = _dailyForecast[index];
+
+    DateTime? prevRise;
+
+    if (index > 0) {
+      prevRise = DateTime.tryParse(_dailyForecast[index - 1].moonRise.value);
+    }
+
+    return (
+      prevDayRise: prevRise,
+      todayRise: DateTime.tryParse(today.moonRise.value),
+      todayFall: DateTime.tryParse(today.moonSet.value),
+    );
+  }
 }

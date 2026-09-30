@@ -5,64 +5,81 @@ import '/src/presentation/common/common.dart';
 import '../../../../domain/entity/weather_record.dart';
 import 'daily_card_wrapper.dart';
 
-class SunMoonView extends StatefulWidget {
-  const SunMoonView({
+class MoonView extends StatefulWidget {
+  const MoonView({
     super.key,
-    required this.rise,
-    required this.down,
+    this.previousRise,
+    this.todayRise,
+    this.todayDown,
     this.phase,
-    this.isSun = true,
   });
 
-  final DateTime rise;
-  final DateTime down;
+  final DateTime? previousRise;
+  final DateTime? todayRise;
+  final DateTime? todayDown;
   final WeatherMeasurement? phase;
 
-  ///also  can get from  here instead of bool; or just from rise and down
-  final bool isSun;
-
   @override
-  State<SunMoonView> createState() => _SunMoonViewState();
+  State<MoonView> createState() => _MoonViewState();
 }
 
-class _SunMoonViewState extends State<SunMoonView> {
+class _MoonViewState extends State<MoonView> {
   double value = 0;
 
-  DateTime get rise => widget.rise;
-  DateTime get fall => widget.down;
+  DateTime? rise;
+  DateTime? fall;
 
   @override
   void initState() {
     super.initState();
-
-    final now = DateTime.now();
-
-    if (now.isBefore(rise)) {
-      value = 0;
-    } else if (now.isAfter(fall)) {
-      value = 1;
-      print("here ${widget.isSun}: now $now fall: $fall ");
-    } else {
-      final duration = fall.difference(rise);
-      final currentSpan = now.difference(rise);
-
-      value = currentSpan.inMinutes / duration.inMinutes;
-    }
+    caluculateProgress();
   }
 
+  DateTime now = DateTime.now();
+  void caluculateProgress() {
+    DateTime? start;
+    DateTime? end;
+
+    if (widget.previousRise != null &&
+        widget.todayDown != null &&
+        (widget.todayRise == null || now.isBefore(widget.todayRise!))) {
+      start = widget.previousRise;
+      end = widget.todayDown;
+    }
+    if (widget.todayRise != null &&
+        widget.todayDown != null &&
+        now.isAfter(widget.todayRise!) &&
+        now.isBefore(widget.todayDown!)) {
+      start = widget.todayRise;
+      end = widget.todayDown;
+    }
+
+    // moon has set
+    if (widget.todayDown != null && now.isAfter(widget.todayDown!)) {
+      value = 1;
+    }
+
+    if (start != null && end != null) {
+      final total = end.difference(start).inSeconds;
+      final elapsed = now.difference(start).inSeconds;
+
+      value = (elapsed / total).clamp(0.0, 1.0);
+    }
+
+    print("Moon now:$now start:$start end:$end value:$value");
+  }
+
+  double progress = 0;
   @override
   Widget build(BuildContext context) {
-    final style = TextTheme.of(context);
-    final scheme = Theme.of(context).colorScheme;
+    final String label = "Moon";
 
-    final shapeBorder = RoundedRectangleBorder(borderRadius: .circular(24));
-    final String label = widget.isSun ? "Sun" : "Moon";
-
-    final border = RoundedRectangleBorder(borderRadius: .circular(24));
     return Column(
       children: [
         Slider(
           value: value,
+          min: 0,
+          max: 1,
           onChanged: (v) {
             value = v;
             setState(() {});
@@ -79,18 +96,16 @@ class _SunMoonViewState extends State<SunMoonView> {
                   child: CustomPaint(
                     painter: _StarTrajectoryPainer(
                       AlwaysStoppedAnimation(value),
-                      color: widget.isSun
-                          ? Colors.amberAccent
-                          : Colors.blueGrey,
+                      color: Colors.blueGrey,
                     ),
                     child: Placeholder(color: Colors.grey.withAlpha(14)),
                   ),
                 ), // paintu....
                 Row(
                   children: [
-                    Text(widget.rise.formatHMa),
+                    Text(rise?.formatHMa ?? ""),
                     Spacer(),
-                    Text(widget.down.formatHMa),
+                    Text(fall?.formatHMa ?? ""),
                   ],
                 ),
                 Text("phase view..."),

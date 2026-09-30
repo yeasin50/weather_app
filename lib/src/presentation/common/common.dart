@@ -6,4 +6,6 @@ export './date_formatter.dart';
 
 export './widgets/daily_cards/uvindex_view.dart';
 export './widgets/daily_cards/humadity_view.dart';
-export './widgets/daily_cards/sun_moon_view.dart';
+export 'widgets/daily_cards/sun_view.dart';
+export 'widgets/daily_cards/moon_view.dart';
+export 'widgets/daily_cards/sun_moon_painter.dart';
