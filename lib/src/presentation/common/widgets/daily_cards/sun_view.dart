@@ -49,13 +49,13 @@ class _SunViewState extends State<SunView> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Slider(
-          value: value,
-          onChanged: (v) {
-            value = v;
-            setState(() {});
-          },
-        ),
+        // Slider(
+        //   value: value,
+        //   onChanged: (v) {
+        //     value = v;
+        //     setState(() {});
+        //   },
+        // ),
         Expanded(
           child: DailyItemCard(
             onTap: () {},

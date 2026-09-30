@@ -86,11 +86,7 @@ class DailyForecastItems extends StatelessWidget {
         final sunRise = DateTime.parse(hourData.dayForecast.sunrise.value);
         final sunSet = DateTime.parse(hourData.dayForecast.sunset.value);
 
-        final moonRise = DateTime.tryParse(hourData.dayForecast.moonRise.value);
-        final moonSet = DateTime.tryParse(hourData.dayForecast.moonSet.value);
-
-        final moon = value.moonRiseFall; // TODO: AM  I missing something
-
+        final moon = value.activeMoonArc;
         return Column(
           spacing: 24,
           children: [
@@ -105,12 +101,12 @@ class DailyForecastItems extends StatelessWidget {
             ),
 
             SunView(rise: sunRise, down: sunSet),
+
             MoonView(
-              previousRise: moon.prevDayRise,
-              todayRise: moon.todayRise,
-              todayDown: moon.todayFall,
-              // todayRise: DateTime.now().subtract(Duration(hours: 5)),
-              // todayDown: DateTime.now().add(Duration(hours: 12)),
+              // previousRise: moon.activeRise,
+              progress: moon.progress,
+              todayRise: moon.activeRise!,
+              todayDown: moon.activeFall!,
             ),
           ].map((e) => SizedBox.square(dimension: 250, child: e)).toList(),
         );

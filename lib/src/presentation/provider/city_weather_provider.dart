@@ -80,26 +80,68 @@ class CityWeatherNotifier extends WeatherDataExtractor with ChangeNotifier {
     notifyListeners();
   }
 
-  ({DateTime? prevDayRise, DateTime? todayRise, DateTime? todayFall})
-  get moonRiseFall {
-    final index = _dailyForecast.indexWhere((e) => e.time == selectedDay);
+  ({DateTime? activeRise, DateTime? activeFall, double progress})
+  get activeMoonArc {
+    final prevDay = selectedDay.subtract(Duration(days: 1));
+    final nextDay = selectedDay.add(Duration(days: 1));
 
-    if (index == -1) {
-      return (prevDayRise: null, todayRise: null, todayFall: null);
-    }
+    ///! THIS is what I can think so  far, THe risk missing dates two day's in a row
+    // TO be safe, I should fetch past 1 days at least
+    /// 1. if rise is null we get previous days' rise
+    /// 2. if set is null, we get next days' set
+    /// 3. if todayRise is after today's moon-set , we use tomorrows moonSet as today's moonset.
 
-    final today = _dailyForecast[index];
+    // dart format off
 
-    DateTime? prevRise;
-
-    if (index > 0) {
-      prevRise = DateTime.tryParse(_dailyForecast[index - 1].moonRise.value);
-    }
-
-    return (
-      prevDayRise: prevRise,
-      todayRise: DateTime.tryParse(today.moonRise.value),
-      todayFall: DateTime.tryParse(today.moonSet.value),
+    DateTime? todayRise = DateTime.tryParse(
+      _dailyForecast
+              .firstWhereOrNull((e) => DateUtils.isSameDay(e.time, selectedDay))
+              ?.moonRise.value ?? "",
     );
+
+    todayRise ??= DateTime.tryParse( // if todayRise is null, get previous day rise
+      _dailyForecast
+              .firstWhereOrNull((e) => DateUtils.isSameDay(e.time, prevDay))
+              ?.moonRise.value ?? "",
+    );
+
+    DateTime? todayFall = DateTime.tryParse(
+      _dailyForecast
+              .firstWhereOrNull((e) => DateUtils.isSameDay(e.time, selectedDay))
+              ?.moonSet.value ?? "",
+    );
+
+    todayFall ??= DateTime.tryParse(
+      _dailyForecast
+              .firstWhereOrNull((e) => DateUtils.isSameDay(e.time, nextDay))
+              ?.moonSet.value ?? "",
+    );
+
+    assert(todayRise != null && todayFall != null); //let's just hope there won't be continuous  null
+
+    if (todayRise!.isAfter(todayFall!)) {
+      todayFall = DateTime.tryParse(
+        _dailyForecast
+                .firstWhereOrNull((e) => DateUtils.isSameDay(e.time, nextDay))
+                ?.moonSet.value ?? "");
+    }
+   // dart format on
+
+    final progress = caluculateProgress(todayRise, todayFall!);
+    print("moon  rise:$todayRise set $todayFall progress $progress");
+    return (activeRise: todayRise, activeFall: todayFall, progress: progress);
+  }
+
+  double caluculateProgress(DateTime start, DateTime end) {
+    double value = 0;
+    if (end.isAfter(start)) {
+      final total = end.difference(start).inSeconds;
+      final elapsed = selectedDay.difference(start).inSeconds;
+      value = (elapsed / total).clamp(0.0, 1.0);
+    } else {
+      value = 1.0;
+    }
+
+    return value;
   }
 }
