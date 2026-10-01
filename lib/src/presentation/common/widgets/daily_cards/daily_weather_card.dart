@@ -45,6 +45,17 @@ class DailyWeatherCard extends StatelessWidget {
           shape is RoundedRectangleBorder,
     );
 
+    final EdgeInsets bodyPadding = shape is RoundedRectangleBorder
+        ? .all(4)
+        : .all(16.0);
+
+    final CrossAxisAlignment bodyCrossAxisAlignment =
+        shape is CircleBorder ||
+            shape is UVIndexShape ||
+            painter is WindShapePainter
+        ? .center
+        : .stretch;
+
     return DailyItemCard(
       onTap: onTap,
       border: shape,
@@ -58,32 +69,32 @@ class DailyWeatherCard extends StatelessWidget {
                   CircularProgressPainter(AlwaysStoppedAnimation(.2)),
             ),
           Padding(
-            // TODO: Progress indicator
-            padding: const EdgeInsets.all(24.0),
+            padding: bodyPadding,
             child: Column(
               mainAxisAlignment: .spaceBetween,
-              crossAxisAlignment:
-                  shape is CircleBorder ||
-                      shape is UVIndexShape ||
-                      painter is WindShapePainter
-                  ? .center
-                  : .stretch,
+              crossAxisAlignment: bodyCrossAxisAlignment,
               children: [
                 Row(
                   mainAxisSize: .min,
                   spacing: 4,
                   children: [
                     icon,
-                    Text(title, style: style.titleMedium),
+                    Text(
+                      title,
+                      style: style.bodyMedium?.copyWith(fontWeight: .bold),
+                    ),
                   ],
                 ),
-                Row(
-                  mainAxisSize: .min,
-                  crossAxisAlignment: .end,
-                  children: [
-                    Text(value, style: style.displayLarge),
-                    Text(unit, style: style.displaySmall),
-                  ],
+                RichText(
+                  text: TextSpan(
+                    children: [
+                      TextSpan(text: value, style: style.displayMedium),
+                      TextSpan(
+                        text: unit,
+                        style: style.bodyLarge?.copyWith(fontWeight: .w400),
+                      ),
+                    ],
+                  ),
                 ),
 
                 Text(description),

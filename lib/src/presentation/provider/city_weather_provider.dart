@@ -82,11 +82,11 @@ class CityWeatherNotifier extends WeatherDataExtractor with ChangeNotifier {
     notifyListeners();
   }
 
-  ({DateTime? activeRise, DateTime? activeFall, double progress})
-  get activeMoonArc => super.parseMoonData(
-    selectedDay: selectedDay,
-    dailyForecast: _dailyForecast,
-  );
+  ({DateTime rise, DateTime fall, double progress}) get sundata => super
+      .parseSunData(selectedDay: selectedDay, dailyForecast: _dailyForecast);
+
+  ({DateTime rise, DateTime fall, double progress}) get moonData => super
+      .parseMoonData(selectedDay: selectedDay, dailyForecast: _dailyForecast);
 
   HumidityDuePointData get humidityData {
     return HumidityDuePointData(

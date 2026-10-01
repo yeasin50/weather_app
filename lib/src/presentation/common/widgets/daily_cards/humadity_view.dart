@@ -1,16 +1,50 @@
 import 'dart:math';
+import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import '../../models/models.dart';
 
-class HumadityView extends StatelessWidget {
+//TODO: cleanup
+class HumadityView extends StatefulWidget {
   const HumadityView({super.key, required this.data});
 
   final HumidityDuePointData data;
 
   @override
+  State<HumadityView> createState() => _HumadityViewState();
+}
+
+class _HumadityViewState extends State<HumadityView>
+    with SingleTickerProviderStateMixin {
+  late final humadityController = AnimationController(
+    vsync: this,
+    duration: Durations.medium3,
+    upperBound: 100,
+  );
+
+  int get humadity => humadityController.value.toInt();
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      humadityController.animateTo(
+        widget.data.humidity.toDouble(),
+        duration: Duration(seconds: 4),
+        curve: Curves.decelerate,
+      );
+    });
+  }
+
+  @override
+  void dispose() {
+    humadityController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    assert(data.humidity >= 0 && data.humidity <= 100);
+    assert(widget.data.humidity >= 0 && widget.data.humidity <= 100);
 
     final style = TextTheme.of(context);
     final scheme = Theme.of(context).colorScheme;
@@ -28,8 +62,8 @@ class HumadityView extends StatelessWidget {
               shape: shapeBorder,
               child: CustomPaint(
                 painter: _HumidityPainter(
-                  height: data.humidity / 100,
-                  color: data.humidityColor,
+                  humadity: humadityController.view,
+                  color: widget.data.humidityColor, // update color?
                 ),
               ),
             ),
@@ -48,37 +82,57 @@ class HumadityView extends StatelessWidget {
           ),
 
           Positioned.fill(
-            top: 32,
-            bottom: 32,
+            top: 16, //TODO: align  after font selection
+            bottom: 16,
             left: 12,
-            child: Column(
-              mainAxisAlignment: .spaceBetween,
-              crossAxisAlignment: .stretch,
-              children: [
-                Row(
-                  children: [Icon(Icons.water_drop_outlined), Text("humidity")],
-                ),
-                Text("${data.humidity}%", style: style.displayLarge),
-                Row(
-                  spacing: 8,
+            child: ValueListenableBuilder(
+              valueListenable: humadityController,
+              builder: (context, value, child) {
+                return Column(
+                  mainAxisAlignment: .spaceBetween,
+                  crossAxisAlignment: .stretch,
                   children: [
-                    Material(
-                      color: data.dewPointColor,
-                      shape: CircleBorder(),
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          "${data.dewPoint.toString()}\u00B0",
-                          textAlign: .center,
-                        ), //FIXME: move to specific place
-                      ),
+                    Row(
+                      children: [
+                        Icon(Icons.water_drop_outlined),
+                        Text("humidity"),
+                      ],
                     ),
-                    Text("Dew point"),
+                    Text("$humadity%", style: style.displayMedium),
+                    Row(
+                      spacing: 8,
+                      children: [
+                        Material(
+                          color: widget.data.dewPointColor,
+                          shape: CircleBorder(),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              "${widget.data.dewPoint.toString()}\u00B0",
+                              textAlign: .center,
+                              style: style.bodyMedium?.copyWith(
+                                fontWeight: .w600,
+                              ),
+                            ), //FIXME: move to specific place
+                          ),
+                        ),
+                        Text("Dew point"),
+                      ],
+                    ),
                   ],
-                ),
-              ],
+                );
+              },
             ),
           ),
+
+          // Slider(
+          //   value: value,
+          //   max: 100,
+          //   onChanged: (v) {
+          //     value = v;
+          //     setState(() {});
+          //   },
+          // ),
         ],
       ),
     );
@@ -87,18 +141,15 @@ class HumadityView extends StatelessWidget {
 
 class _HumidityPainter extends CustomPainter {
   const _HumidityPainter({
-    super.repaint,
-    this.amplitude = 8,
+    required this.humadity,
     this.frequency = .12,
-    this.height = .75,
     this.shift = 2.88,
     required this.color,
-  });
+  }) : super(repaint: humadity);
 
   /// range 0-1
-  final double height;
+  final Animation humadity;
 
-  final double amplitude;
   final double frequency;
 
   final double shift;
@@ -107,7 +158,12 @@ class _HumidityPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    assert(height > 0 && height < 1);
+    final height = humadity.value / 100;
+    assert(height >= 0 && height <= 1);
+
+    //wonder if I should reverse it
+    final double amplitude = lerpDouble(8, 3, height)!;
+
     final paint = Paint()
       ..color = color
       ..strokeWidth = 3

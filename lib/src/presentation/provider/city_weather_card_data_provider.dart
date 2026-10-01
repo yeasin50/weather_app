@@ -185,8 +185,7 @@ abstract class WeatherDataExtractor {
   }
 
   /// what I  truly care is nearest moonRise and continuous set; might adjust some delay 1-2h later
-  ({DateTime? activeRise, DateTime? activeFall, double progress})
-  parseMoonData({
+  ({DateTime rise, DateTime fall, double progress}) parseMoonData({
     required DateTime selectedDay,
     required List<DailyForecast> dailyForecast,
   }) {
@@ -215,8 +214,8 @@ abstract class WeatherDataExtractor {
 
     print(" moonRise $moonRise  Moonset $moonSet ");
     return (
-      activeRise: moonRise,
-      activeFall: moonSet,
+      rise: moonRise,
+      fall: moonSet,
       progress: caluculateProgress(moonRise, moonSet, selectedDay),
     );
   }
@@ -236,5 +235,27 @@ abstract class WeatherDataExtractor {
     }
 
     return value;
+  }
+
+  ({DateTime rise, DateTime fall, double progress}) parseSunData({
+    required DateTime selectedDay,
+    required List<DailyForecast> dailyForecast,
+  }) {
+    final hourData = dailyForecast.firstWhere(
+      (e) => DateUtils.isSameDay(e.time, selectedDay),
+    );
+    final sunrise = DateTime.parse(hourData.sunrise.value);
+    final sunset = DateTime.parse(hourData.sunset.value);
+    double progress = 0;
+
+    if (selectedDay.isAfter(sunset)) {
+      progress = 1;
+    } else {
+      final duration = sunset.difference(sunrise);
+      final currentSpan = selectedDay.difference(sunrise);
+      progress = currentSpan.inMinutes / duration.inMinutes;
+    }
+
+    return (rise: sunrise, fall: sunset, progress: progress);
   }
 }

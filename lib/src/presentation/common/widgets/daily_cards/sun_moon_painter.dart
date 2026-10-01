@@ -11,8 +11,9 @@ class StarTrajectoryPainer extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final center = Offset(size.width / 2, size.height * 1.1);
+    final center = Offset(size.width / 2, size.height * 1.25);
     final radius = size.width / 2;
+    // final radius = min(size.width / 2, size.height);
     final rect = Rect.fromLTWH(0, 0, size.width, size.height);
 
     final path = Path.combine(
@@ -29,7 +30,7 @@ class StarTrajectoryPainer extends CustomPainter {
       ..style = PaintingStyle.stroke
       ..strokeJoin
       ..strokeWidth = 1
-      ..color = color.withAlpha(200);
+      ..color = color.withAlpha(150);
 
     drawDottedPath(canvas, path, paint);
 
@@ -51,6 +52,8 @@ class StarTrajectoryPainer extends CustomPainter {
         ).createShader(rect),
     );
 
+    if (progress <= 0) return;
+
     /// moving sun/moon
     final x = size.width * progress;
     final dx = x - center.dx;
@@ -64,7 +67,8 @@ class StarTrajectoryPainer extends CustomPainter {
     Canvas canvas,
     Path path,
     Paint paint, {
-    double gap = 20,
+    double gap = 10,
+    double tangentVM = 4,
   }) {
     assert(gap > 0);
     for (final metric in path.computeMetrics()) {
@@ -74,7 +78,7 @@ class StarTrajectoryPainer extends CustomPainter {
         if (tangent != null) {
           canvas.drawLine(
             tangent.position,
-            tangent.position + tangent.vector * 10,
+            tangent.position + tangent.vector * tangentVM,
             paint,
           );
         }

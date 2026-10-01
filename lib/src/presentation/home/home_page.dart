@@ -19,7 +19,7 @@ class HomePage extends StatelessWidget {
     return Consumer<CityWeatherNotifier>(
       builder: (context, data, child) {
         final city = data.city;
-        final title = city.name + ", " + city.countryCode; //TODO: update view
+        final title = "${city.name}, ${city.countryCode}"; //TODO: update view
 
         if (city == CityRecord.none) return EmptyCityView();
 
@@ -48,11 +48,11 @@ class HomePage extends StatelessWidget {
                               crossAxisAlignment: .stretch,
                               spacing: 16,
                               children: [
-                                // TodaysWeather(),
-                                // HourlyForecastListView(),
-                                // ForecastHorizontalListview<DailyForecast>(
-                                //   data: data.weeklyForecast,
-                                // ),
+                                TodaysWeather(),
+                                HourlyForecastListView(),
+                                ForecastHorizontalListview<DailyForecast>(
+                                  data: data.weeklyForecast,
+                                ),
                                 SizedBox(height: 48),
                                 DailyForecastItems(),
                               ],
@@ -77,27 +77,27 @@ class DailyForecastItems extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final boxWidth = MediaQuery.sizeOf(context).width / 2 - 24;
     return Consumer<CityWeatherNotifier>(
       builder: (context, value, child) {
         final hourData = value.selectedHourForcast;
         final uv = UVIndexParser(hourData.forecast.uvIndex);
 
         //FIXME: value aren't good, have some confusion how api  providing me
-        final sunRise = DateTime.parse(hourData.dayForecast.sunrise.value);
-        final sunSet = DateTime.parse(hourData.dayForecast.sunset.value);
 
-        final moon = value.activeMoonArc;
+        final sun = value.sundata;
+        final moon = value.moonData;
         final precipitation = value.preceptionData;
         final wind = value.wind;
         final visibility = VisibilityData(hourData.forecast.visibility);
 
         return Wrap(
-          spacing: 24,
-          runSpacing: 24,
+          spacing: 12,
+          runSpacing: 12,
           children: [
             DailyWeatherCard(
               title: "UV index",
-              icon: Icon(Icons.sunny),
+              icon: Icon(Icons.lightbulb_outlined, size: 16),
               value: uv.value.toString(),
               description: uv.level,
               unit: "",
@@ -105,22 +105,23 @@ class DailyForecastItems extends StatelessWidget {
               onTap: () {},
             ),
 
-            SunView(rise: sunRise, down: sunSet),
-
-            MoonView(
-              progress: moon.progress,
-              todayRise: moon.activeRise!,
-              todayDown: moon.activeFall!,
-            ),
-
             HumadityView(data: value.humidityData),
+
+            SunView(rise: sun.rise, down: sun.fall, progress: sun.progress),
+            SunView(
+              isSun: false,
+              rise: moon.rise,
+              down: moon.fall,
+              progress: moon.progress,
+              phase: "phase",
+            ),
 
             DailyWeatherCard(
               title: "perception",
               icon: Icon(Icons.water_outlined),
-              value: precipitation.value,
+              value: precipitation.value + precipitation.unit,
               description: precipitation.decription,
-              unit: precipitation.unit,
+              unit: '',
               onTap: () {},
               shape: RoundedRectangleBorder(borderRadius: .circular(24)),
             ),
@@ -144,7 +145,7 @@ class DailyForecastItems extends StatelessWidget {
               painter: VisibilityPainter(visibility.color),
               onTap: () {},
             ),
-          ].map((e) => SizedBox.square(dimension: 250, child: e)).toList(),
+          ].map((e) => SizedBox.square(dimension: boxWidth, child: e)).toList(),
         );
       },
       child: Wrap(

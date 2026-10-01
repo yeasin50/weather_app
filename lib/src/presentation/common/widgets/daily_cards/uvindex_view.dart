@@ -47,13 +47,14 @@ class UVIndexShape extends ShapeBorder {
     double startAngle = -pi + stepAngle;
     final radius = rect.width / 2 * .85;
 
+    final dotRadius = rect.width * .045;
     for (int i = 0; i < 5; i++) {
       final x = rect.center.dx + cos(startAngle + i * stepAngle) * radius;
       final y = rect.center.dy + sin(startAngle + i * stepAngle) * radius;
 
       canvas.drawCircle(
         Offset(x, y),
-        15,
+        i == colorIndex ? dotRadius : dotRadius * .7,
         Paint()
           ..color = colors[i].withAlpha(i == colorIndex ? 255 : 100)
           ..style = PaintingStyle.fill,
