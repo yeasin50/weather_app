@@ -120,8 +120,16 @@ abstract class WeatherDataExtractor {
   ///
   /// You have no light, yet you carry such pride!
   /// Would you bless this earthling with your sight?
+  /// ---
+  /// I am  the moon, whenever I please roam around
+  /// Poor earthling... Searching me beneath the day,
+  /// stunted by appearance, forgetting my essence.
+  /// Neither yesterday nor tomorrow knows where I am,
+  /// I will be gone when you arrive.
+  /// Fall with me, and wander through our memories.
+  /// Only then,in the echoes, you can find me. 🫠
   ({DateTime? activeRise, DateTime? activeFall, double progress})
-  parseMoonData({
+  parseMoonDataHalfFailure({
     required DateTime selectedDay,
     required List<DailyForecast> dailyForecast,
   }) {
@@ -174,6 +182,43 @@ abstract class WeatherDataExtractor {
     log("moon  rise:$todayRise set $todayFall progress $progress");
 
     return (activeRise: todayRise, activeFall: todayFall, progress: progress);
+  }
+
+  /// what I  truly care is nearest moonRise and continuous set; might adjust some delay 1-2h later
+  ({DateTime? activeRise, DateTime? activeFall, double progress})
+  parseMoonData({
+    required DateTime selectedDay,
+    required List<DailyForecast> dailyForecast,
+  }) {
+    assert(
+      dailyForecast.length > 6 &&
+          dailyForecast.first.time.isBefore(selectedDay),
+    );
+
+    // dart format off
+     DateTime moonSet = DateTime.parse(
+      dailyForecast
+          .firstWhere((e) {
+            final date = DateTime.tryParse(e.moonSet.value);
+            return date != null && date.isAfter(selectedDay);
+          }).moonSet.value);
+
+ 
+    DateTime moonRise = DateTime.parse(
+      dailyForecast
+          .firstWhere((e) {
+            final date = DateTime.tryParse(e.moonRise.value);
+            return date != null  && date.isBefore(moonSet);
+          }).moonRise.value);
+
+    // dart format on
+
+    print(" moonRise $moonRise  Moonset $moonSet ");
+    return (
+      activeRise: moonRise,
+      activeFall: moonSet,
+      progress: caluculateProgress(moonRise, moonSet, selectedDay),
+    );
   }
 
   double caluculateProgress(

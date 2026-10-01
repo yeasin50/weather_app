@@ -18,7 +18,7 @@ _MetroWeatherPayload _$MetroWeatherPayloadFromJson(Map<String, dynamic> json) =>
           .map((e) => $enumDecode(_$DailyItemEnumMap, e))
           .toList(),
       timezone: json['timezone'] as String? ?? "auto",
-      pastDays: (json['past_days'] as num?)?.toInt() ?? 0,
+      pastDays: (json['past_days'] as num?)?.toInt() ?? 1,
     );
 
 Map<String, dynamic> _$MetroWeatherPayloadToJson(

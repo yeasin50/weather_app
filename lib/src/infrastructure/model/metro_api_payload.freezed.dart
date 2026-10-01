@@ -224,7 +224,7 @@ return $default(_that.city,_that.latitude,_that.longitude,_that.hourlyItems,_tha
 @JsonSerializable()
 
 class _MetroWeatherPayload extends MetroWeatherPayload {
-   _MetroWeatherPayload({required this.city, @deprecated required this.latitude, @deprecated required this.longitude, required final  List<HourlyItem> hourlyItems, required final  List<DailyItem> dailyItems, this.timezone = "auto", this.pastDays = 0}): _hourlyItems = hourlyItems,_dailyItems = dailyItems,super._();
+   _MetroWeatherPayload({required this.city, @deprecated required this.latitude, @deprecated required this.longitude, required final  List<HourlyItem> hourlyItems, required final  List<DailyItem> dailyItems, this.timezone = "auto", this.pastDays = 1}): _hourlyItems = hourlyItems,_dailyItems = dailyItems,super._();
   factory _MetroWeatherPayload.fromJson(Map<String, dynamic> json) => _$MetroWeatherPayloadFromJson(json);
 
 @override final  CityInfo city;
