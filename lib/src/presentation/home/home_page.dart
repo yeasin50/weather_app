@@ -120,7 +120,7 @@ class DailyForecastItems extends StatelessWidget {
               title: "perception",
               icon: Icon(Icons.water_outlined),
               value: precipitation.value + precipitation.unit,
-              description: precipitation.decription,
+              description: precipitation.description,
               unit: '',
               onTap: () {},
               shape: RoundedRectangleBorder(borderRadius: .circular(24)),

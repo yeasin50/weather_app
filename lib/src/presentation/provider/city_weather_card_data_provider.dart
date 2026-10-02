@@ -1,13 +1,12 @@
-import 'dart:developer';
-
 import 'package:collection/collection.dart';
-import 'package:flutter/material.dart' show DateUtils;
 import '../../domain/domain.dart';
 import '../common/common.dart' show DateExtention;
 import 'providers.dart';
 
 /// it offers the daily and hourly specific data for a city
 /// humidity, uvIndex, perception, sun and moon ->rise+set, wind, air quality, visibility and pressure
+///
+// perhaps Mixin ?
 abstract class WeatherDataExtractor {
   WeatherDataExtractor();
 
@@ -108,154 +107,5 @@ abstract class WeatherDataExtractor {
     }
 
     return result;
-  }
-
-  // moon  data
-  /// OH  moon.. The beauty, Why you are getting over my head?
-  /// Am I stunted by your beauty, forgot how to think properly?
-  /// & yet.. I can't abound you.
-  /// Why is this deception, sometimes in the day and sometimes at night?
-  /// I asked your neighbor(last-day), she told you were there yesterday..
-  /// I took the path of yesterday, and again I miss you today.
-  ///
-  /// You have no light, yet you carry such pride!
-  /// Would you bless this earthling with your sight?
-  /// ---
-  /// I am  the moon, whenever I please roam around
-  /// Poor earthling... Searching me beneath the day,
-  /// stunted by appearance, forgetting my essence.
-  /// Neither yesterday nor tomorrow knows where I am,
-  /// I will be gone when you arrive.
-  /// Fall with me, and wander through our memories.
-  /// Only then,in the echoes, you can find me. 🫠
-  ({DateTime? activeRise, DateTime? activeFall, double progress})
-  parseMoonDataHalfFailure({
-    required DateTime selectedDay,
-    required List<DailyForecast> dailyForecast,
-  }) {
-    final prevDay = selectedDay.subtract(Duration(days: 1));
-    final nextDay = selectedDay.add(Duration(days: 1));
-
-    ///! THIS is what I can think so  far, THe risk missing dates two day's in a row
-    // TO be safe, I should fetch past 1 days at least
-    /// 1. if rise is null we get previous days' rise
-    /// 2. if set is null, we get next days' set
-    /// 3. if todayRise is after today's moon-set , we use tomorrows moonSet as today's moonset.
-
-    // dart format off
-
-    DateTime? todayRise = DateTime.tryParse(
-      dailyForecast
-              .firstWhereOrNull((e) => DateUtils.isSameDay(e.time, selectedDay))
-              ?.moonRise.value ?? "",
-    );
-
-    todayRise ??= DateTime.tryParse( // if todayRise is null, get previous day rise
-      dailyForecast
-              .firstWhereOrNull((e) => DateUtils.isSameDay(e.time, prevDay))
-              ?.moonRise.value ?? "",
-    );
-
-    DateTime? todayFall = DateTime.tryParse(
-      dailyForecast
-              .firstWhereOrNull((e) => DateUtils.isSameDay(e.time, selectedDay))
-              ?.moonSet.value ?? "",
-    );
-
-    todayFall ??= DateTime.tryParse(
-      dailyForecast
-              .firstWhereOrNull((e) => DateUtils.isSameDay(e.time, nextDay))
-              ?.moonSet.value ?? "",
-    );
-
-    assert(todayRise != null && todayFall != null); //let's just hope there won't be continuous  null
-
-    if (todayRise!.isAfter(todayFall!)) {
-      todayFall = DateTime.tryParse(
-        dailyForecast
-                .firstWhereOrNull((e) => DateUtils.isSameDay(e.time, nextDay))
-                ?.moonSet.value ?? "");
-    }
-   // dart format on
-
-    final progress = caluculateProgress(todayRise, todayFall!, selectedDay);
-    log("moon  rise:$todayRise set $todayFall progress $progress");
-
-    return (activeRise: todayRise, activeFall: todayFall, progress: progress);
-  }
-
-  /// what I  truly care is nearest moonRise and continuous set; might adjust some delay 1-2h later
-  ({DateTime rise, DateTime fall, double progress}) parseMoonData({
-    required DateTime selectedDay,
-    required List<DailyForecast> dailyForecast,
-  }) {
-    assert(
-      dailyForecast.length > 6 &&
-          dailyForecast.first.time.isBefore(selectedDay),
-    );
-
-    // dart format off
-     DateTime moonSet = DateTime.parse(
-      dailyForecast
-          .firstWhere((e) {
-            final date = DateTime.tryParse(e.moonSet.value);
-            return date != null && date.isAfter(selectedDay);
-          }).moonSet.value);
-
- 
-    DateTime moonRise = DateTime.parse(
-      dailyForecast
-          .firstWhere((e) {
-            final date = DateTime.tryParse(e.moonRise.value);
-            return date != null  && date.isBefore(moonSet);
-          }).moonRise.value);
-
-    // dart format on
-
-    print(" moonRise $moonRise  Moonset $moonSet ");
-    return (
-      rise: moonRise,
-      fall: moonSet,
-      progress: caluculateProgress(moonRise, moonSet, selectedDay),
-    );
-  }
-
-  double caluculateProgress(
-    DateTime start,
-    DateTime end,
-    DateTime selectedDay,
-  ) {
-    double value = 0;
-    if (end.isAfter(start)) {
-      final total = end.difference(start).inSeconds;
-      final elapsed = selectedDay.difference(start).inSeconds;
-      value = (elapsed / total).clamp(0.0, 1.0);
-    } else {
-      value = 1.0;
-    }
-
-    return value;
-  }
-
-  ({DateTime rise, DateTime fall, double progress}) parseSunData({
-    required DateTime selectedDay,
-    required List<DailyForecast> dailyForecast,
-  }) {
-    final hourData = dailyForecast.firstWhere(
-      (e) => DateUtils.isSameDay(e.time, selectedDay),
-    );
-    final sunrise = DateTime.parse(hourData.sunrise.value);
-    final sunset = DateTime.parse(hourData.sunset.value);
-    double progress = 0;
-
-    if (selectedDay.isAfter(sunset)) {
-      progress = 1;
-    } else {
-      final duration = sunset.difference(sunrise);
-      final currentSpan = selectedDay.difference(sunrise);
-      progress = currentSpan.inMinutes / duration.inMinutes;
-    }
-
-    return (rise: sunrise, fall: sunset, progress: progress);
   }
 }

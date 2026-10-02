@@ -82,11 +82,9 @@ class CityWeatherNotifier extends WeatherDataExtractor with ChangeNotifier {
     notifyListeners();
   }
 
-  ({DateTime rise, DateTime fall, double progress}) get sundata => super
-      .parseSunData(selectedDay: selectedDay, dailyForecast: _dailyForecast);
-
-  ({DateTime rise, DateTime fall, double progress}) get moonData => super
-      .parseMoonData(selectedDay: selectedDay, dailyForecast: _dailyForecast);
+  SunInfo get sundata =>
+      SunInfo(dailyForecastItems: _dailyForecast, selectedHour: selectedDay);
+  MoonInfo get moonData => MoonInfo(_dailyForecast, selectedHour: selectedHour);
 
   HumidityDuePointData get humidityData {
     return HumidityDuePointData(
@@ -95,15 +93,10 @@ class CityWeatherNotifier extends WeatherDataExtractor with ChangeNotifier {
     );
   }
 
-  ({String value, String unit, String decription}) get preceptionData {
-    final data = selectedHourForcast.forecast.precipitationProbability;
-    final rainIn = _todaysHourlyForecast.firstWhereOrNull((e) {
-      return e.time.isAfter(selectedHour) && // should I bound N hours ?
-          (int.tryParse(e.precipitationProbability.value) ?? 0) > 0;
-    });
-    // TODO: format good description based on  rain;
-    return (value: data.value, unit: data.unit, decription: "no rain for 2 h");
-  }
+  PreceptionInfo get preceptionData => PreceptionInfo(
+    selectedHour: selectedHour,
+    hourlyData: _todaysHourlyForecast,
+  );
 
   // ...
 
