@@ -20,7 +20,7 @@ class UVIndexShape extends ShapeBorder {
     final cx = rect.size.width / 2;
     final cy = rect.size.height / 2;
 
-    final baseRadius = rect.width / 2;
+    final baseRadius = rect.width / 2 - 8;
     final waveHeight = baseRadius * .05;
     final int waves = 12;
 
@@ -47,19 +47,23 @@ class UVIndexShape extends ShapeBorder {
     double startAngle = -pi + stepAngle;
     final radius = rect.width / 2 * .85;
 
+    // dart format off
     final dotRadius = rect.width * .045;
     for (int i = 0; i < 5; i++) {
-      final x = rect.center.dx + cos(startAngle + i * stepAngle) * radius;
-      final y = rect.center.dy + sin(startAngle + i * stepAngle) * radius;
+      final activeIndex = i == colorIndex;
+      final dotFlexRadius = activeIndex ? radius * .95 : radius;
+      final x = rect.center.dx + cos(startAngle + i * stepAngle) * dotFlexRadius;
+      final y = rect.center.dy + sin(startAngle + i * stepAngle) * dotFlexRadius;
 
       canvas.drawCircle(
         Offset(x, y),
-        i == colorIndex ? dotRadius : dotRadius * .7,
+        activeIndex ? dotRadius : dotRadius * .7,
         Paint()
           ..color = colors[i].withAlpha(i == colorIndex ? 255 : 100)
           ..style = PaintingStyle.fill,
       );
     }
+    // dart format on
   }
 
   @override
