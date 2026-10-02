@@ -30,7 +30,8 @@ class HourlyForecast extends ForecastData {
     required this.humadity,
     required this.dewPoint,
     required this.uvIndex,
-    required this.wind,
+    required this.windspeed,
+    required this.windGusts,
     required this.windDirection,
     // required this.airQuality,
     required this.visibility,
@@ -45,7 +46,8 @@ class HourlyForecast extends ForecastData {
   final WeatherMeasurement uvIndex;
 
   // 10m above ground
-  final WeatherMeasurement wind;
+  final WeatherMeasurement windspeed;
+  final WeatherMeasurement windGusts;
   final WeatherMeasurement windDirection;
   // final WeatherMeasurement airQuality;
   final WeatherMeasurement visibility;
@@ -72,8 +74,9 @@ class HourlyForecast extends ForecastData {
     humadity: _empty(.relativeHumidity),
     dewPoint: _empty(.dewPoint),
     uvIndex: _empty(.uvIndex),
-    wind: _empty(.windSpeed),
+    windspeed: _empty(.windSpeed),
     windDirection: _empty(.windDirection),
+    windGusts: _empty(.windGusts),
     // airQuality: _empty(.airQuality),
     visibility: _empty(.visiblity),
     precipitationProbability: _empty(.precipitationProbability),
@@ -89,7 +92,8 @@ class HourlyForecast extends ForecastData {
       humadity: humadity,
       dewPoint: dewPoint,
       uvIndex: uvIndex,
-      wind: wind,
+      windspeed: windspeed,
+      windGusts: windGusts,
       windDirection: windDirection,
       // airQuality: airQuality,
       visibility: visibility,

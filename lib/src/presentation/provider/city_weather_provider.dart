@@ -102,6 +102,10 @@ class CityWeatherNotifier extends WeatherDataExtractor with ChangeNotifier {
 
   WindData get wind {
     final data = selectedHourForcast.forecast;
-    return WindData(windSpeed: data.wind, windDirection: data.windDirection);
+    return WindData(
+      windSpeed: data.windspeed,
+      windGusts: data.windGusts,
+      windDirection: data.windDirection,
+    );
   }
 }

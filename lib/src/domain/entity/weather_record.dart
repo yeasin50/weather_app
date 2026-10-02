@@ -55,6 +55,7 @@ enum MeasurementType {
   precipitationProbability,
   uvIndex,
   windSpeed,
+  windGusts,
   windDirection,
   sunrise,
   sunset,

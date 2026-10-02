@@ -4,14 +4,19 @@ import '/src/domain/entity/weather_record.dart';
 /// to present on UI  layer
 /// NOTE: both  fetched 10m above ground
 class WindData {
-  WindData({required this.windSpeed, required this.windDirection});
+  WindData({
+    required this.windSpeed,
+    required this.windGusts,
+    required this.windDirection,
+  });
 
   final WeatherMeasurement windSpeed;
+  final WeatherMeasurement windGusts;
   final WeatherMeasurement windDirection;
 
   String get value => windSpeed.value;
   String get unit => windSpeed.unit;
-  String get description => windSpeed.unit;
+  String get description => "Gusts ${windGusts.value}";
 
   /// this is always in degree
   int get rotation {

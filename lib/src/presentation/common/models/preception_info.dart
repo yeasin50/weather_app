@@ -1,5 +1,5 @@
 import 'package:collection/collection.dart';
-import 'package:weather_app/src/domain/entity/weather_record.dart';
+import '../../../domain/domain.dart' show WeatherMeasurement;
 import '../../provider/providers.dart';
 import '../common.dart';
 

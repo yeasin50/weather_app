@@ -69,8 +69,11 @@ final Map<String, MeasurementType> _measureTypeMap = {
   "precipitation_probability": MeasurementType.precipitationProbability,
   "precipitation_probability_max": MeasurementType.precipitationProbability,
   "uv_index": MeasurementType.uvIndex,
+
   "wind_speed_10m": .windSpeed,
+  "wind_gusts_10m": .windGusts,
   "wind_direction_10m": .windDirection,
+
   "visibility": .visiblity,
 
   // Daily strings

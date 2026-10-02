@@ -62,6 +62,7 @@ enum HourlyItem {
   dewPoint("dew_point_2m"),
   uvIndex("uv_index"),
   windSpeed10m("wind_speed_10m"),
+  windGust10m("wind_gusts_10m"),
   windDirection10m("wind_direction_10m"),
 
   visibility("visibility");
@@ -77,6 +78,7 @@ enum HourlyItem {
     precipitationProbability,
     uvIndex,
     windSpeed10m,
+    windGust10m,
     windDirection10m,
     dewPoint,
     visibility,

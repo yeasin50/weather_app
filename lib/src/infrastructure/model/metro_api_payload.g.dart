@@ -46,6 +46,7 @@ const _$HourlyItemEnumMap = {
   HourlyItem.dewPoint: 'dew_point_2m',
   HourlyItem.uvIndex: 'uv_index',
   HourlyItem.windSpeed10m: 'wind_speed_10m',
+  HourlyItem.windGust10m: 'wind_gusts_10m',
   HourlyItem.windDirection10m: 'wind_direction_10m',
   HourlyItem.visibility: 'visibility',
 };
