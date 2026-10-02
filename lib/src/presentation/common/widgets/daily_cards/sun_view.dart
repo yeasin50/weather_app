@@ -10,6 +10,7 @@ class SunView extends StatefulWidget {
     required this.down,
     this.phase = "",
     required this.progress,
+    this.moonfraction,
   });
 
   final bool isSun;
@@ -17,6 +18,9 @@ class SunView extends StatefulWidget {
   final DateTime down;
   final double progress;
   final String phase;
+
+  /// only used for moon, act a knife how much moon should be visible 0-1
+  final double? moonfraction;
 
   @override
   State<SunView> createState() => _SunViewState();
@@ -36,7 +40,7 @@ class _SunViewState extends State<SunView> with SingleTickerProviderStateMixin {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await Future.delayed(Duration(seconds: 1));
       // TODO: not static 2 sec,consider progress
-      controller.animateTo(widget.progress, duration: Duration(seconds: 2));
+      controller.animateTo(widget.progress, duration: Duration(seconds: 1));
     });
   }
 
@@ -56,10 +60,13 @@ class _SunViewState extends State<SunView> with SingleTickerProviderStateMixin {
           ),
           Expanded(
             child: CustomPaint(
-              painter: StarTrajectoryPainer(
-                controller.view,
-                color: widget.isSun ? Colors.amberAccent : Colors.blueGrey,
-              ),
+              painter: widget.isSun
+                  ? StarTrajectoryPainer(controller, color: Colors.amberAccent)
+                  : MoonPainter(
+                      controller,
+                      color: Colors.blueGrey,
+                      moonFraction: widget.moonfraction ?? 1,
+                    ),
               child: SizedBox.expand(),
             ),
           ),

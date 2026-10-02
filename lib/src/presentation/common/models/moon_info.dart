@@ -76,6 +76,9 @@ class MoonInfo with StarProgress {
   late MoonPhase _phase;
   MoonPhase get phase => _phase;
 
+  double _moonFraction = 1;
+  double get moonFraction => _moonFraction;
+
   void init() {
     assert(
       dailyForecastItems.length > 6 &&
@@ -89,6 +92,7 @@ class MoonInfo with StarProgress {
           .value,
     );
 
+    _moonFraction = moonFraction;
     _phase = MoonPhase.fromFraction(moonFraction);
 
     // dart format off
