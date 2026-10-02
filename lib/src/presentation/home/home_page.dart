@@ -113,7 +113,7 @@ class DailyForecastItems extends StatelessWidget {
               rise: moon.rise,
               down: moon.fall,
               progress: moon.progress,
-              phase: "phase",
+              phase: moon.phase.label,
             ),
 
             DailyWeatherCard(

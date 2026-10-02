@@ -1,4 +1,41 @@
+import 'package:flutter/material.dart';
+
 import '../../provider/providers.dart';
+
+//TODO: adapt BLOOD MOON ,,,event etc 🌚
+
+enum MoonPhase {
+  newMoon,
+  waxingCrescent,
+  firstQuarter,
+  waxingGibbous,
+  fullMoon,
+  waningGibbous,
+  thirdQuarter,
+  waningCrescent;
+
+  static MoonPhase fromFraction(double f) {
+    if (f < 0.125) return newMoon;
+    if (f < 0.25) return waxingCrescent;
+    if (f < 0.375) return firstQuarter;
+    if (f < 0.5) return waxingGibbous;
+    if (f < 0.625) return fullMoon;
+    if (f < 0.75) return waningGibbous;
+    if (f < 0.875) return thirdQuarter;
+    return waningCrescent;
+  }
+
+  String get label => switch (this) {
+    newMoon => 'New Moon',
+    waxingCrescent => 'Waxing Crescent',
+    firstQuarter => 'First Quarter',
+    waxingGibbous => 'Waxing Gibbous',
+    fullMoon => 'Full Moon',
+    waningGibbous => 'Waning Gibbous',
+    thirdQuarter => 'Third Quarter',
+    waningCrescent => 'Waning Crescent',
+  };
+}
 
 mixin StarProgress {
   double caluculateProgress(
@@ -19,6 +56,7 @@ mixin StarProgress {
   }
 }
 
+//FIXME: I doubt it is right, something must be wrong here
 class MoonInfo with StarProgress {
   MoonInfo(this.dailyForecastItems, {required this.selectedHour}) {
     init();
@@ -35,11 +73,23 @@ class MoonInfo with StarProgress {
   DateTime get fall => _fall;
   double get progress => _progress;
 
+  late MoonPhase _phase;
+  MoonPhase get phase => _phase;
+
   void init() {
     assert(
       dailyForecastItems.length > 6 &&
           dailyForecastItems.first.time.isBefore(selectedHour),
     );
+
+    final moonFraction = double.parse(
+      dailyForecastItems
+          .firstWhere((e) => DateUtils.isSameDay(selectedHour, e.time))
+          .moonPhase
+          .value,
+    );
+
+    _phase = MoonPhase.fromFraction(moonFraction);
 
     // dart format off
      DateTime moonSet = DateTime.parse(
