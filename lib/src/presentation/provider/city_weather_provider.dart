@@ -27,7 +27,7 @@ class CityWeatherNotifier extends WeatherDataExtractor with ChangeNotifier {
       return e.time.day == selectedHour.day && e.time.hour == selectedHour.hour;
     });
 
-    final dailyData = weeklyForecast.firstWhere(
+    final dailyData = _dailyForecast.firstWhere(
       (e) => DateUtils.isSameDay(selectedDay, e.time),
     );
 
@@ -64,7 +64,12 @@ class CityWeatherNotifier extends WeatherDataExtractor with ChangeNotifier {
 
   List<DailyForecast> _dailyForecast = [];
   UnmodifiableListView<DailyForecast> get weeklyForecast =>
-      UnmodifiableListView(_dailyForecast);
+      UnmodifiableListView(
+        _dailyForecast.where((e) {
+          return e.time.isAfter(selectedDay) ||
+              DateUtils.isSameDay(selectedDay, e.time);
+        }).toList(),
+      );
 
   @override
   void updateCity(CityWeatherRecord record) {

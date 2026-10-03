@@ -3,11 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import '../../infrastructure/model/metro_api_weather_code.dart';
-import '../common/weather_value_formatter.dart';
 import '/src/presentation/provider/weather_provider.dart';
 
 import '../../domain/weather_service.dart';
-import '../city_weather/widgets/search_city_tile.dart';
 
 class SearchCityPage extends StatefulWidget {
   const SearchCityPage({super.key});
@@ -105,6 +103,26 @@ class _SearchCityPageState extends State<SearchCityPage> {
           ),
         ),
       ),
+    );
+  }
+}
+
+class SearchedCityTile extends StatelessWidget {
+  const SearchedCityTile({
+    super.key,
+    required this.cityInfo,
+    required this.onTap,
+  });
+
+  final CityInfo cityInfo;
+  final VoidCallback? onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      onTap: onTap,
+      title: Text(cityInfo.name),
+      subtitle: Text(cityInfo.location),
     );
   }
 }
