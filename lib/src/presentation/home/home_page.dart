@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../uv_index/uvindex_graph.dart';
 import '../common/models/models.dart';
 import '/src/presentation/common/widgets/daily_cards/wind_shape_painter.dart';
 
@@ -83,8 +84,6 @@ class DailyForecastItems extends StatelessWidget {
         final hourData = value.selectedHourForcast;
         final uv = UVIndexParser(hourData.forecast.uvIndex);
 
-        //FIXME: value aren't good, have some confusion how api  providing me
-
         final sun = value.sundata;
         final moon = value.moonData;
         final precipitation = value.preceptionData;
@@ -102,7 +101,10 @@ class DailyForecastItems extends StatelessWidget {
               description: uv.level,
               unit: "",
               shape: UVIndexShape(uv.colorIndex, colors: UVIndexParser.colors),
-              onTap: () {},
+              onTap: () {
+                final data = value.fullDayforecast(.uvIndex);
+                UVIndexChart.show(context: context, data: data);
+              },
             ),
 
             HumadityView(data: value.humidityData),

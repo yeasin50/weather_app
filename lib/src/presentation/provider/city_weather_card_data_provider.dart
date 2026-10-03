@@ -25,15 +25,13 @@ abstract class WeatherDataExtractor {
   List<HourlyForecast> parseTodaysHourlyForecast() {
     final List<HourlyForecast> result = [];
 
-    final now = DateTime.now();
-
     final groupByHour = groupBy(_data.hourlyItems, (e) => e.time);
     final times = groupByHour.keys.toList();
-    times.removeWhere(
-      (e) =>
-          e.isBefore(now.tilHour) ||
-          !e.isBefore(now.tilHour.add(const Duration(days: 1))),
-    );
+    // times.removeWhere(
+    //   (e) =>
+    //       e.isBefore(now.tilHour) ||
+    //       !e.isBefore(now.tilHour.add(const Duration(days: 1))),
+    // );
 
     for (final t in times) {
       final items = groupByHour[t];

@@ -14,8 +14,11 @@ class UVIndexParser {
     Colors.purple,
   ];
 
-  int get value => double.parse("${data.value.toString()}").toInt();
-  int get colorIndex {
+  double get value => double.parse(data.value.toString());
+
+  int get colorIndex => getColorIndex(value);
+
+  static int getColorIndex(double value) {
     return switch (value) {
       < 3 => 0,
       < 6 => 1,
@@ -24,7 +27,9 @@ class UVIndexParser {
     };
   }
 
-  String get level {
+  String get level => getlevel(value.toDouble());
+
+  static String getlevel(double value) {
     return switch (value) {
       < 0 => "dead",
       < 3 => "low",

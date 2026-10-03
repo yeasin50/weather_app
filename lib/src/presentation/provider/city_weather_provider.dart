@@ -21,6 +21,21 @@ class CityWeatherNotifier extends WeatherDataExtractor with ChangeNotifier {
 
   CityRecord get city => _data.city;
 
+  List<WeatherMeasurement> fullDayforecast(MeasurementType type) {
+    final result = _todaysHourlyForecast
+        .map(
+          (e) => switch (type) {
+            .uvIndex => e.uvIndex,
+            .relativeHumidity => e.humadity,
+            _ => throw "no accepted",
+          },
+        )
+        .toList();
+
+    result.removeWhere((e) => !DateUtils.isSameDay(selectedDay, e.time));
+    return result;
+  }
+
   ({HourlyForecast forecast, DailyForecast dayForecast})
   get selectedHourForcast {
     final forecast = _todaysHourlyForecast.firstWhere((e) {

@@ -26,11 +26,13 @@ dependencies:
   provider: ^6.1.5+1
   google_fonts: ^8.0.0
 
+
   isar_community: 
     version: *isar_version
   isar_community_flutter_libs: 
     version: *isar_version
 
+  fl_chart: ^1.2.0
 
 dev_dependencies:
   flutter_test:
