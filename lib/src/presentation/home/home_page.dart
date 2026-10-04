@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../uv_index/humidity_graph.dart';
+import '../uv_index/perception_graph.dart';
 import '../uv_index/uvindex_graph.dart';
 import '../common/models/models.dart';
+import '../uv_index/visibility_graph.dart';
+import '../uv_index/wind_graph.dart';
 import '/src/presentation/common/widgets/daily_cards/wind_shape_painter.dart';
 
 import '../common/widgets/daily_cards/daily_weather_card.dart';
@@ -49,10 +53,38 @@ class HomePage extends StatelessWidget {
                               crossAxisAlignment: .stretch,
                               spacing: 16,
                               children: [
-                                TodaysWeather(),
-                                HourlyForecastListView(),
-                                ForecastHorizontalListview<DailyForecast>(
-                                  data: data.weeklyForecast,
+                                // TodaysWeather(),
+                                // HourlyForecastListView(),
+                                // ForecastHorizontalListview<DailyForecast>(
+                                //   data: data.weeklyForecast,
+                                // ),
+
+                                // UVIndexChart(
+                                //   data: data.fullDayforecast(.uvIndex),
+                                // ),
+                                // HumidityGraph(
+                                //   humidityData: data.fullDayforecast(
+                                //     .relativeHumidity,
+                                //   ),
+                                //   duePointsData: data.fullDayforecast(
+                                //     .dewPoint,
+                                //   ),
+                                // ),
+                                // PrecipitationGraph(
+                                //   rainData: data.fullDayforecast(.rain),
+                                //   percipitationData: data.fullDayforecast(
+                                //     .precipitationProbability,
+                                //   ),
+                                // ),
+                                // WindGraph(
+                                //   windSpeed: data.fullDayforecast(.windSpeed),
+                                //   windGusts: data.fullDayforecast(.windGusts),
+                                //   windDirection: data.fullDayforecast(
+                                //     .windDirection,
+                                //   ),
+                                // ),
+                                VisibilityGraph(
+                                  data: data.fullDayforecast(.visiblity),
                                 ),
                                 SizedBox(height: 48),
                                 DailyForecastItems(),
@@ -107,7 +139,16 @@ class DailyForecastItems extends StatelessWidget {
               },
             ),
 
-            HumadityView(data: value.humidityData),
+            HumadityView(
+              data: value.humidityData,
+              onTap: () {
+                HumidityGraph.show(
+                  context: context,
+                  humidityData: value.fullDayforecast(.relativeHumidity),
+                  duePointsData: value.fullDayforecast(.dewPoint),
+                );
+              },
+            ),
 
             SunView(rise: sun.rise, down: sun.fall, progress: sun.progress),
             SunView(
@@ -125,7 +166,15 @@ class DailyForecastItems extends StatelessWidget {
               value: precipitation.value + precipitation.unit,
               description: precipitation.description,
               unit: '',
-              onTap: () {},
+              onTap: () {
+                PrecipitationGraph.show(
+                  context: context,
+                  rainData: value.fullDayforecast(.rain),
+                  percipitationData: value.fullDayforecast(
+                    .precipitationProbability,
+                  ),
+                );
+              },
               shape: RoundedRectangleBorder(borderRadius: .circular(24)),
             ),
 
@@ -136,7 +185,14 @@ class DailyForecastItems extends StatelessWidget {
               description: wind.description,
               unit: wind.unit,
               painter: WindShapePainter(wind.rotation, wind.color),
-              onTap: () {},
+              onTap: () {
+                WindGraph.show(
+                  context: context,
+                  windSpeed: value.fullDayforecast(.windSpeed),
+                  windGusts: value.fullDayforecast(.windGusts),
+                  windDirection: value.fullDayforecast(.windDirection),
+                );
+              },
             ),
 
             DailyWeatherCard(
