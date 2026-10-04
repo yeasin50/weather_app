@@ -1,4 +1,5 @@
 import 'package:collection/collection.dart';
+import 'package:flutter/material.dart';
 import '../../../domain/domain.dart' show WeatherMeasurement;
 import '../../provider/providers.dart';
 import '../common.dart';
@@ -12,6 +13,14 @@ class PreceptionInfo {
   }) {
     init();
   }
+
+  static List<Color> colors = [
+    Colors.green,
+    Colors.yellow,
+    Colors.orange,
+    Colors.red,
+    Colors.purple,
+  ];
 
   /// It should contains minutes ig, TODO:
   /// because I want to show the exact TIme when rain gonna happen

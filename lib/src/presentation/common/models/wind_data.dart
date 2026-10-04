@@ -23,6 +23,14 @@ class WindData {
     return int.tryParse(windDirection.value) ?? 0;
   }
 
+  /// maxSpeed in kl/h
+  static List<Color> colors(double maxSpeed) => [
+    const Color(0xFF66BB6A),
+    if (maxSpeed > 10) const Color(0xFFFFD54F),
+    if (maxSpeed > 20) const Color(0xFFFB8C00),
+    if (maxSpeed > 30) const Color(0xFFE53935),
+  ];
+
   //EOF: FIXME: ig I might want a fixed color
   Color get color => switch (double.parse(windSpeed.value).round()) {
     < 5 => Colors.green,

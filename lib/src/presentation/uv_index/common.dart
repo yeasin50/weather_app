@@ -2,9 +2,19 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import 'dart:math' as math;
+
 import '../../domain/entity/weather_record.dart';
 
 mixin ChartMixin {
+  double yInterval(double maxY) {
+    final raw = maxY / 5;
+    final magnitude = math
+        .pow(10, (math.log(raw) / math.ln10).floor())
+        .toDouble();
+    return (raw / magnitude).ceil() * magnitude;
+  }
+
   Widget bottomTitleWidgets(
     double value,
     TitleMeta meta, {
@@ -25,7 +35,7 @@ mixin ChartMixin {
     const style = TextStyle();
 
     final rounded = value.round();
-    if ((value - rounded).abs() > 0.001 || rounded % 3 != 0) {
+    if ((value - rounded).abs() > 0.001) {
       return const SizedBox.shrink();
     }
 

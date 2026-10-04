@@ -34,9 +34,14 @@ String _valueFormatter(WeatherMeasurement data) {
   };
 }
 
-/// we inject user preference d
+/// we inject user preference d , Also  could  just use extension on db layer to show on ui
 class UserFormatter {
   static String temp(double value, [int fractionDigits = 0]) {
     return "${value.toStringAsFixed(fractionDigits)}\u00B0";
+  }
+
+  static String wind(double value, [int fractionDigits = 0]) {
+    //TODO: converter
+    return "${value.toStringAsFixed(fractionDigits)}";
   }
 }

@@ -21,6 +21,7 @@ class CityWeatherNotifier extends WeatherDataExtractor with ChangeNotifier {
 
   CityRecord get city => _data.city;
 
+  // TODO: merge specific feature based and then put into provider to reduce the calculation
   List<WeatherMeasurement> fullDayforecast(MeasurementType type) {
     final List<WeatherMeasurement> result = _todaysHourlyForecast
         .map(
@@ -28,7 +29,14 @@ class CityWeatherNotifier extends WeatherDataExtractor with ChangeNotifier {
             .uvIndex => e.uvIndex,
             .relativeHumidity => e.humadity,
             .dewPoint => e.dewPoint,
-            _ => throw " $type hasn't accepted",
+            .rain => e.rain,
+            .precipitationProbability => e.precipitationProbability,
+            .windGusts => e.windGusts,
+            .windSpeed => e.windspeed,
+            .windDirection => e.windDirection,
+            .visiblity => e.visibility,
+
+            _ => throw " $type hasn't been accepted",
           },
         )
         .toList();

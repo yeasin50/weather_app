@@ -57,9 +57,11 @@ enum HourlyItem {
   weatherCode("weather_code"),
   temperature2m("temperature_2m"),
   relativeHumidity2m("relative_humidity_2m"),
+  dewPoint("dew_point_2m"),
+
   rain("rain"),
   precipitationProbability("precipitation_probability"),
-  dewPoint("dew_point_2m"),
+
   uvIndex("uv_index"),
   windSpeed10m("wind_speed_10m"),
   windGust10m("wind_gusts_10m"),
