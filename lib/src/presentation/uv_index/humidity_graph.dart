@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import '../../domain/domain.dart';
 import '../common/common.dart';
 import '../common/models/models.dart';
+import 'common.dart';
 
 /// shows a specific daily weather item for a day
 /// Top shows duePoint but graphs for humidity
@@ -37,18 +38,13 @@ class HumidityGraph extends StatefulWidget {
           spacing: 24,
           children: [
             //something
-            Row(
-              children: [
-                Text("Humidity", style: TextTheme.of(context).labelMedium),
-                Spacer(),
-                IconButton(
-                  onPressed: () {
-                    ///TODO:  nav to full details page
-                  },
-                  icon: Icon(Icons.open_in_full_outlined),
-                ),
-              ],
+            DialogTitle(
+              title: "Humidity",
+              onTap: () {
+                //Todo: nav to full view
+              },
             ),
+
             HumidityGraph(
               humidityData: humidityData,
               duePointsData: duePointsData,
@@ -63,7 +59,7 @@ class HumidityGraph extends StatefulWidget {
   State<HumidityGraph> createState() => _HumidityChartState();
 }
 
-class _HumidityChartState extends State<HumidityGraph> {
+class _HumidityChartState extends State<HumidityGraph> with ChartMixin {
   List<Color> gradientColors = HumidityDuePointData.humidityColors.reversed
       .toList();
 
@@ -122,44 +118,15 @@ class _HumidityChartState extends State<HumidityGraph> {
 
   @override
   Widget build(BuildContext context) {
-    final style = Theme.of(context).textTheme;
-
     return Column(
       mainAxisSize: .min,
       crossAxisAlignment: .stretch,
       children: [
-        Row(
-          spacing: 12,
-          children: [
-            Material(
-              shape: CircleBorder(),
-              color: Colors.greenAccent,
-              child: SizedBox.square(dimension: 16),
-            ),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: .stretch,
-                spacing: 2,
-                children: [
-                  Text(title, style: style.bodySmall),
-                  Text.rich(
-                    TextSpan(
-                      children: [
-                        TextSpan(
-                          text: UserFormatter.temp(duePointValue, 0),
-                          style: style.titleLarge,
-                        ),
-                        WidgetSpan(child: SizedBox(width: 6)),
-                        TextSpan(text: humidityLabel, style: style.bodyLarge),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
+        buildValueIndicator(
+          title: title,
+          value: UserFormatter.temp(duePointValue, 0),
+          trailingValue: humidityLabel,
         ),
-
         AspectRatio(
           aspectRatio: 1.70, //FIXME:  better view must check  footer
           child: Padding(
@@ -170,47 +137,6 @@ class _HumidityChartState extends State<HumidityGraph> {
       ],
     );
   }
-
-  Widget bottomTitleWidgets(double value, TitleMeta meta) {
-    const style = TextStyle();
-    final date = widget.humidityData.elementAtOrNull(value.toInt())?.time;
-    String text = date == null || date.hour % 6 != 0
-        ? ""
-        : DateFormat("hh:mm a").format(date);
-    return SideTitleWidget(
-      meta: meta,
-      child: Text(text, style: style),
-    );
-  }
-
-  Widget rightTitleWidgets(double value, TitleMeta meta) {
-    const style = TextStyle();
-
-    return SideTitleWidget(
-      meta: meta,
-      child: Text(value.toStringAsFixed(0), style: style),
-    );
-  }
-
-  LineTouchData get lineTouchdate => LineTouchData(
-    enabled: true,
-    handleBuiltInTouches: true,
-    touchTooltipData: LineTouchTooltipData(
-      getTooltipItems: (spots) => spots.map((spot) => null).toList(),
-    ),
-    touchCallback: (FlTouchEvent event, LineTouchResponse? lineTouch) {
-      if (event is FlPointerExitEvent ||
-          event is FlPanEndEvent ||
-          event is FlLongPressEnd) {
-        onChartHover(null);
-        return;
-      }
-      if (lineTouch?.lineBarSpots?.isNotEmpty == true) {
-        final value = lineTouch!.lineBarSpots![0].x;
-        onChartHover(value.toInt());
-      }
-    },
-  );
 
   LineChartData mainData() {
     return LineChartData(
@@ -232,7 +158,8 @@ class _HumidityChartState extends State<HumidityGraph> {
             showTitles: true,
             reservedSize: 30,
             interval: 1,
-            getTitlesWidget: bottomTitleWidgets,
+            getTitlesWidget: (value, meta) =>
+                bottomTitleWidgets(value, meta, data: widget.humidityData),
           ),
         ),
       ),
@@ -241,7 +168,7 @@ class _HumidityChartState extends State<HumidityGraph> {
       maxX: 24,
       minY: 0,
       maxY: maxY,
-      lineTouchData: lineTouchdate,
+      lineTouchData: lineTouchdate(onChartHover),
       lineBarsData: [
         LineChartBarData(
           spots: spots,

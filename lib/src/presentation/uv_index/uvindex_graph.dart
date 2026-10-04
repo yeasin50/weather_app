@@ -7,6 +7,7 @@ import '../../domain/domain.dart';
 import 'package:flutter/material.dart';
 
 import '../common/models/models.dart';
+import 'common.dart';
 
 /// shows a specific daily weather item for a day
 class UVIndexChart extends StatefulWidget {
@@ -29,18 +30,11 @@ class UVIndexChart extends StatefulWidget {
           mainAxisSize: .min,
           spacing: 24,
           children: [
-            //something
-            Row(
-              children: [
-                Text("UV index", style: TextTheme.of(context).labelMedium),
-                Spacer(),
-                IconButton(
-                  onPressed: () {
-                    ///TODO:  nav to full details page
-                  },
-                  icon: Icon(Icons.open_in_full_outlined),
-                ),
-              ],
+            DialogTitle(
+              title: "UV index",
+              onTap: () {
+                //Todo: nav to full view
+              },
             ),
             UVIndexChart(data: data),
           ],
@@ -53,7 +47,7 @@ class UVIndexChart extends StatefulWidget {
   State<UVIndexChart> createState() => _UVIndexChartState();
 }
 
-class _UVIndexChartState extends State<UVIndexChart> {
+class _UVIndexChartState extends State<UVIndexChart> with ChartMixin {
   List<Color> gradientColors = UVIndexParser.colors;
 
   bool showAvg = false;
@@ -75,6 +69,7 @@ class _UVIndexChartState extends State<UVIndexChart> {
   void initState() {
     super.initState();
     calculateSpots();
+    onChartHover(null);
   }
 
   String uvIndexLabel = "Max";
@@ -95,48 +90,19 @@ class _UVIndexChartState extends State<UVIndexChart> {
 
     uvIndexLabel = item.level;
     indexValue = item.value;
-
     setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
-    final style = Theme.of(context).textTheme;
-
     return Column(
       mainAxisSize: .min,
       crossAxisAlignment: .stretch,
       children: [
-        Row(
-          spacing: 12,
-          children: [
-            Material(
-              shape: CircleBorder(),
-              color: Colors.greenAccent,
-              child: SizedBox.square(dimension: 16),
-            ),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: .stretch,
-                spacing: 2,
-                children: [
-                  Text(title, style: style.bodySmall),
-                  Text.rich(
-                    TextSpan(
-                      children: [
-                        TextSpan(
-                          text: indexValue.toStringAsFixed(1),
-                          style: style.titleLarge,
-                        ),
-                        WidgetSpan(child: SizedBox(width: 6)),
-                        TextSpan(text: uvIndexLabel, style: style.bodyLarge),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
+        buildValueIndicator(
+          title: title,
+          value: indexValue.toStringAsFixed(1),
+          trailingValue: uvIndexLabel,
         ),
 
         AspectRatio(
@@ -149,52 +115,6 @@ class _UVIndexChartState extends State<UVIndexChart> {
       ],
     );
   }
-
-  Widget bottomTitleWidgets(double value, TitleMeta meta) {
-    const style = TextStyle();
-    final date = widget.data.elementAtOrNull(value.toInt())?.time;
-    String text = date == null || date.hour % 6 != 0
-        ? ""
-        : DateFormat("hh:mm a").format(date);
-    return SideTitleWidget(
-      meta: meta,
-      child: Text(text, style: style),
-    );
-  }
-
-  Widget rightTitleWidgets(double value, TitleMeta meta) {
-    const style = TextStyle();
-
-    final rounded = value.round();
-    if ((value - rounded).abs() > 0.001 || rounded % 3 != 0) {
-      return const SizedBox.shrink();
-    }
-
-    return SideTitleWidget(
-      meta: meta,
-      child: Text(value.toStringAsFixed(0), style: style),
-    );
-  }
-
-  LineTouchData get lineTouchdate => LineTouchData(
-    enabled: true,
-    handleBuiltInTouches: true,
-    touchTooltipData: LineTouchTooltipData(
-      getTooltipItems: (spots) => spots.map((spot) => null).toList(),
-    ),
-    touchCallback: (FlTouchEvent event, LineTouchResponse? lineTouch) {
-      if (event is FlPointerExitEvent ||
-          event is FlPanEndEvent ||
-          event is FlLongPressEnd) {
-        onChartHover(null);
-        return;
-      }
-      if (lineTouch?.lineBarSpots?.isNotEmpty == true) {
-        final value = lineTouch!.lineBarSpots![0].x;
-        onChartHover(value.toInt());
-      }
-    },
-  );
 
   LineChartData mainData() {
     return LineChartData(
@@ -216,7 +136,8 @@ class _UVIndexChartState extends State<UVIndexChart> {
             showTitles: true,
             reservedSize: 30,
             interval: 1,
-            getTitlesWidget: bottomTitleWidgets,
+            getTitlesWidget: (value, meta) =>
+                bottomTitleWidgets(value, meta, data: widget.data),
           ),
         ),
       ),
@@ -225,7 +146,7 @@ class _UVIndexChartState extends State<UVIndexChart> {
       maxX: 24,
       minY: 0,
       maxY: maxY,
-      lineTouchData: lineTouchdate,
+      lineTouchData: lineTouchdate(onChartHover),
       lineBarsData: [
         LineChartBarData(
           spots: spots,
