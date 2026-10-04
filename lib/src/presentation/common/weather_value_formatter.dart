@@ -33,3 +33,10 @@ String _valueFormatter(WeatherMeasurement data) {
     }(),
   };
 }
+
+/// we inject user preference d
+class UserFormatter {
+  static String temp(double value, [int fractionDigits = 0]) {
+    return "${value.toStringAsFixed(fractionDigits)}\u00B0";
+  }
+}

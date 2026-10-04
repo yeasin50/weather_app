@@ -22,12 +22,13 @@ class CityWeatherNotifier extends WeatherDataExtractor with ChangeNotifier {
   CityRecord get city => _data.city;
 
   List<WeatherMeasurement> fullDayforecast(MeasurementType type) {
-    final result = _todaysHourlyForecast
+    final List<WeatherMeasurement> result = _todaysHourlyForecast
         .map(
           (e) => switch (type) {
             .uvIndex => e.uvIndex,
             .relativeHumidity => e.humadity,
-            _ => throw "no accepted",
+            .dewPoint => e.dewPoint,
+            _ => throw " $type hasn't accepted",
           },
         )
         .toList();
@@ -74,7 +75,16 @@ class CityWeatherNotifier extends WeatherDataExtractor with ChangeNotifier {
 
   List<HourlyForecast> _todaysHourlyForecast = [];
   UnmodifiableListView<ForecastData> get todaysHourlyForecast {
-    return UnmodifiableListView(_mergeSunriseAndSunset(_todaysHourlyForecast));
+    final data = _todaysHourlyForecast
+        .where(
+          (e) =>
+              e.time.isAfter(
+                selectedHour.subtract(Duration(minutes: _selectedDay.minute)),
+              ) &&
+              e.time.isBefore(selectedHour.add(Duration(hours: 48))),
+        )
+        .toList();
+    return UnmodifiableListView(_mergeSunriseAndSunset(data));
   }
 
   List<DailyForecast> _dailyForecast = [];

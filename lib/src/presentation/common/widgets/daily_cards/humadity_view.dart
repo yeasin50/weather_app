@@ -4,11 +4,11 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import '../../models/models.dart';
 
-//TODO: cleanup
 class HumadityView extends StatefulWidget {
-  const HumadityView({super.key, required this.data});
+  const HumadityView({super.key, required this.data, this.onTap});
 
   final HumidityDuePointData data;
+  final VoidCallback? onTap;
 
   @override
   State<HumadityView> createState() => _HumadityViewState();
@@ -74,7 +74,7 @@ class _HumadityViewState extends State<HumadityView>
               // this is required because I want splash over CustomPaint
               color: Colors.transparent,
               child: InkWell(
-                onTap: () {},
+                onTap: widget.onTap,
                 customBorder: shapeBorder,
                 splashColor: Colors.greenAccent.withAlpha(100),
               ),

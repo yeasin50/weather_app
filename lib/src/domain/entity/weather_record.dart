@@ -102,4 +102,9 @@ class WeatherMeasurement {
     value: "12",
     interval: .daily,
   );
+
+  @override
+  String toString() {
+    return "WeatherMeasurement(time:$time, value:$value, unit:$unit)";
+  }
 }
