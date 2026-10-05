@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import 'package:weather_app/src/domain/entity/user_preference.dart';
+import '/src/domain/entity/user_preference.dart';
 
 import '../provider/providers.dart';
 import 'widgets/setting_tile.dart';
@@ -103,7 +103,7 @@ class _UnitsSettingsGroup extends StatelessWidget {
                 _SettingPickerDialog.show(
                   context: context,
                   title: "precipitation_unit",
-                  items: PreciptationUnit.values,
+                  items: PrecipitationUnit.values,
                   selected: pref.preciptationUnit,
                 );
               },

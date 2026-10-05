@@ -5,6 +5,13 @@ part 'metro_api_payload.freezed.dart';
 part 'metro_api_payload.g.dart';
 
 //TODO: Might change into  simple objects for daily &  hourly items
+
+/// Units are fixed and should be persistence in this maner.
+/// temperature unit -> Celsius
+/// speed unit  -> kilometer per hour
+/// precipitation_unit  -> millimeter
+/// TimeStamp -> ISO  8601
+/// some stuff like visibility is meter so need handle before presenting
 @freezed
 abstract class MetroWeatherPayload extends WeatherRequest
     with _$MetroWeatherPayload {

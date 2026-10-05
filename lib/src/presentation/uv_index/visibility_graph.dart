@@ -1,6 +1,7 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../domain/domain.dart';
 import '../common/common.dart';
@@ -49,11 +50,15 @@ class VisibilityGraph extends StatefulWidget {
 }
 
 class _VisibilityGraphState extends State<VisibilityGraph> with ChartMixin {
-  late List<Color> gradientColors = WindData.colors(maxY);
+  late final gradient = VisibilityData.colors(double.parse(maxVisiblity.value));
 
   List<FlSpot> visiblitySpots = [];
 
-  double get maxY => double.parse(maxVisiblity.value) + 1;
+  // if becomes more hassle , create a separate class
+  double _parseValue(WeatherMeasurement wm) =>
+      context.read<UserFormatter>().distanceValue(double.parse(wm.value));
+
+  double get maxY => _parseValue(maxVisiblity) + 1;
 
   late WeatherMeasurement maxVisiblity = widget.data.first;
   late WeatherMeasurement minVisiblity = widget.data.first;
@@ -61,12 +66,12 @@ class _VisibilityGraphState extends State<VisibilityGraph> with ChartMixin {
   void calculateSpots() {
     for (int i = 0; i < widget.data.length; i++) {
       final item = widget.data[i];
-      final double value =
-          double.tryParse(item.value) ?? 0; // parse specific format km
-      visiblitySpots.add(FlSpot(item.time.hour.toDouble(), value.toDouble()));
+      final double value = _parseValue(item);
 
-      if (double.parse(maxVisiblity.value) < value) maxVisiblity = item;
-      if (double.parse(minVisiblity.value) > value) minVisiblity = item;
+      visiblitySpots.add(FlSpot(item.time.hour.toDouble(), value));
+
+      if (_parseValue(maxVisiblity) < value) maxVisiblity = item;
+      if (_parseValue(minVisiblity) > value) minVisiblity = item;
     }
   }
 
@@ -93,9 +98,9 @@ class _VisibilityGraphState extends State<VisibilityGraph> with ChartMixin {
       timeLabel = DateFormat("h:mm a").format(item.time);
     }
 
-    visibilityabel = UserFormatter.wind(double.parse(item.value));
-    labelSmall =
-        "${item.unit}"; //TODO: wonder what will be good way  to have unit from parser
+    final formatter = context.read<UserFormatter>();
+    visibilityabel = formatter.distance(_parseValue(item));
+    labelSmall = formatter.distanceUnit;
 
     setState(() {});
   }
@@ -158,7 +163,7 @@ class _VisibilityGraphState extends State<VisibilityGraph> with ChartMixin {
           spots: visiblitySpots,
           isCurved: true,
           gradient: LinearGradient(
-            colors: gradientColors.map((e) => e.withValues(alpha: 1)).toList(),
+            colors: gradient.colors.map((e) => e.withValues(alpha: 1)).toList(),
             begin: .bottomCenter,
             end: .topCenter,
           ),
@@ -170,7 +175,8 @@ class _VisibilityGraphState extends State<VisibilityGraph> with ChartMixin {
             gradient: LinearGradient(
               begin: .bottomCenter,
               end: .topCenter,
-              colors: gradientColors
+              stops: gradient.stops,
+              colors: gradient.colors
                   .map((color) => color.withValues(alpha: 0.3))
                   .toList(),
             ),

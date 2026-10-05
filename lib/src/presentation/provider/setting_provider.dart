@@ -24,7 +24,7 @@ class SettingProvider with ChangeNotifier {
   void update(Object item) async {
     _preference = switch (item) {
       TemperatureUnit value => _preference.copyWith(tempUnit: value),
-      PreciptationUnit value => _preference.copyWith(preciptationUnit: value),
+      PrecipitationUnit value => _preference.copyWith(preciptationUnit: value),
       SpeedUnit value => _preference.copyWith(speedUnit: value),
       DistanceUnit value => _preference.copyWith(distanceUnit: value),
       _ => throw ArgumentError('unsupported item $item'),

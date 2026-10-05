@@ -21,9 +21,7 @@ class HomeAppBar extends StatelessWidget {
             spacing: 24,
             children: [
               IconButton(
-                onPressed: () {
-                  context.go(AppRoute.setting);
-                },
+                onPressed: () => context.push(AppRoute.setting),
                 icon: Icon(Icons.menu),
               ),
               Expanded(

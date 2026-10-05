@@ -11,7 +11,11 @@ class SettingPage extends StatelessWidget {
     return Scaffold(
       body: CustomScrollView(
         slivers: [
-          SliverAppBar.large(title: Text("Settings"), actions: []),
+          SliverAppBar.large(
+            title: Text("Settings"),
+            actions: [],
+            leading: BackButton(onPressed: context.pop),
+          ),
 
           SliverToBoxAdapter(
             child: SettingTile(

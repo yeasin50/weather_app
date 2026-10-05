@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:isar_community/isar.dart';
 import 'package:provider/provider.dart';
 
+import '../presentation/common/common.dart';
 import '/src/app/theme_config.dart';
 import '/src/domain/weather_service.dart';
 import '/src/infrastructure/repository/weather_records_db.dart';
@@ -54,11 +55,6 @@ class _WeatherAppState extends State<WeatherApp> {
               )..loadData(),
             ),
 
-            ChangeNotifierProvider(
-              create: (context) =>
-                  SettingProvider(context.read<IWeatherDatabase>())..load(),
-            ),
-
             ChangeNotifierProxyProvider<WeatherNotifier, CityWeatherNotifier>(
               create: (_) =>
                   CityWeatherNotifier(CityWeatherRecord.none, DateTime.now()),
@@ -66,6 +62,19 @@ class _WeatherAppState extends State<WeatherApp> {
                 cityNotifier!.updateCity(weather.activeCity ?? .none);
                 return cityNotifier;
               },
+            ),
+
+            ChangeNotifierProvider(
+              lazy: false,
+              create: (context) =>
+                  SettingProvider(context.read<IWeatherDatabase>())..load(),
+            ),
+
+            ProxyProvider<SettingProvider, UserFormatter>(
+              create: (context) =>
+                  UserFormatter(context.read<SettingProvider>().preference),
+              update: (_, setting, formatter) =>
+                  UserFormatter(setting.preference),
             ),
           ],
           child: MaterialApp.router(

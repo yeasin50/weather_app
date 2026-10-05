@@ -26,7 +26,7 @@ class UserPreference {
   @Enumerated(.name)
   TemperatureUnit tempUnit;
   @Enumerated(.name)
-  PreciptationUnit preciptationUnit;
+  PrecipitationUnit preciptationUnit;
 
   @Enumerated(.name)
   SpeedUnit speedUnit;
@@ -42,7 +42,7 @@ class UserPreference {
 
   UserPreference copyWith({
     TemperatureUnit? tempUnit,
-    PreciptationUnit? preciptationUnit,
+    PrecipitationUnit? preciptationUnit,
     SpeedUnit? speedUnit,
     DistanceUnit? distanceUnit,
   }) {

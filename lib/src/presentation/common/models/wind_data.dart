@@ -24,8 +24,10 @@ class WindData {
   }
 
   /// maxSpeed in kl/h
+  /// TODO: come with better approach or add stops on gradient
   static List<Color> colors(double maxSpeed) => [
     const Color(0xFF66BB6A),
+    const Color(0xFF81C784),
     if (maxSpeed > 10) const Color(0xFFFFD54F),
     if (maxSpeed > 20) const Color(0xFFFB8C00),
     if (maxSpeed > 30) const Color(0xFFE53935),

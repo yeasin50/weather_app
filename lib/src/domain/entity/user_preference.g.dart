@@ -131,12 +131,12 @@ UserPreference _userPreferenceDeserialize(
         _UserPreferencepreciptationUnitValueEnumMap[reader.readStringOrNull(
           offsets[4],
         )] ??
-        PreciptationUnit.milimeters,
+        PrecipitationUnit.millimeters,
     speedUnit:
         _UserPreferencespeedUnitValueEnumMap[reader.readStringOrNull(
           offsets[5],
         )] ??
-        SpeedUnit.meterePerSecond,
+        SpeedUnit.meterPerSecond,
     tempUnit:
         _UserPreferencetempUnitValueEnumMap[reader.readStringOrNull(
           offsets[6],
@@ -170,13 +170,13 @@ P _userPreferenceDeserializeProp<P>(
     case 4:
       return (_UserPreferencepreciptationUnitValueEnumMap[reader
                   .readStringOrNull(offset)] ??
-              PreciptationUnit.milimeters)
+              PrecipitationUnit.millimeters)
           as P;
     case 5:
       return (_UserPreferencespeedUnitValueEnumMap[reader.readStringOrNull(
                 offset,
               )] ??
-              SpeedUnit.meterePerSecond)
+              SpeedUnit.meterPerSecond)
           as P;
     case 6:
       return (_UserPreferencetempUnitValueEnumMap[reader.readStringOrNull(
@@ -208,19 +208,19 @@ const _UserPreferencedistanceUnitValueEnumMap = {
   r'feet': DistanceUnit.feet,
 };
 const _UserPreferencepreciptationUnitEnumValueMap = {
-  r'milimeters': r'milimeters',
+  r'millimeters': r'millimeters',
   r'centimeters': r'centimeters',
   r'inches': r'inches',
   r'litersPerSquareMeter': r'litersPerSquareMeter',
 };
 const _UserPreferencepreciptationUnitValueEnumMap = {
-  r'milimeters': PreciptationUnit.milimeters,
-  r'centimeters': PreciptationUnit.centimeters,
-  r'inches': PreciptationUnit.inches,
-  r'litersPerSquareMeter': PreciptationUnit.litersPerSquareMeter,
+  r'millimeters': PrecipitationUnit.millimeters,
+  r'centimeters': PrecipitationUnit.centimeters,
+  r'inches': PrecipitationUnit.inches,
+  r'litersPerSquareMeter': PrecipitationUnit.litersPerSquareMeter,
 };
 const _UserPreferencespeedUnitEnumValueMap = {
-  r'meterePerSecond': r'meterePerSecond',
+  r'meterPerSecond': r'meterPerSecond',
   r'kilometerPerHour': r'kilometerPerHour',
   r'milesPerHour': r'milesPerHour',
   r'knots': r'knots',
@@ -228,7 +228,7 @@ const _UserPreferencespeedUnitEnumValueMap = {
   r'beaufort': r'beaufort',
 };
 const _UserPreferencespeedUnitValueEnumMap = {
-  r'meterePerSecond': SpeedUnit.meterePerSecond,
+  r'meterPerSecond': SpeedUnit.meterPerSecond,
   r'kilometerPerHour': SpeedUnit.kilometerPerHour,
   r'milesPerHour': SpeedUnit.milesPerHour,
   r'knots': SpeedUnit.knots,
@@ -880,7 +880,10 @@ extension UserPreferenceQueryFilter
   }
 
   QueryBuilder<UserPreference, UserPreference, QAfterFilterCondition>
-  preciptationUnitEqualTo(PreciptationUnit value, {bool caseSensitive = true}) {
+  preciptationUnitEqualTo(
+    PrecipitationUnit value, {
+    bool caseSensitive = true,
+  }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         FilterCondition.equalTo(
@@ -894,7 +897,7 @@ extension UserPreferenceQueryFilter
 
   QueryBuilder<UserPreference, UserPreference, QAfterFilterCondition>
   preciptationUnitGreaterThan(
-    PreciptationUnit value, {
+    PrecipitationUnit value, {
     bool include = false,
     bool caseSensitive = true,
   }) {
@@ -912,7 +915,7 @@ extension UserPreferenceQueryFilter
 
   QueryBuilder<UserPreference, UserPreference, QAfterFilterCondition>
   preciptationUnitLessThan(
-    PreciptationUnit value, {
+    PrecipitationUnit value, {
     bool include = false,
     bool caseSensitive = true,
   }) {
@@ -930,8 +933,8 @@ extension UserPreferenceQueryFilter
 
   QueryBuilder<UserPreference, UserPreference, QAfterFilterCondition>
   preciptationUnitBetween(
-    PreciptationUnit lower,
-    PreciptationUnit upper, {
+    PrecipitationUnit lower,
+    PrecipitationUnit upper, {
     bool includeLower = true,
     bool includeUpper = true,
     bool caseSensitive = true,
@@ -1886,7 +1889,7 @@ extension UserPreferenceQueryProperty
     });
   }
 
-  QueryBuilder<UserPreference, PreciptationUnit, QQueryOperations>
+  QueryBuilder<UserPreference, PrecipitationUnit, QQueryOperations>
   preciptationUnitProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'preciptationUnit');
