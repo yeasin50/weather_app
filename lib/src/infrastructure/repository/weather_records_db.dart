@@ -97,11 +97,11 @@ class IsarWeatherDatabase extends IWeatherDatabase {
   }
 
   @override
-  Future<UserPreference> getPreference() async {
+  Future<UserPreference> getPreference([UnitRegion region = .metric]) async {
     final pref = await _db.userPreferences.get(0);
     if (pref == null) {
       return await _db.writeTxn<UserPreference>(() async {
-        final record = UserPreference();
+        final record = UserPreference.fromMetric(region);
         await _db.userPreferences.put(record);
         return record;
       });

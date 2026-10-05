@@ -14,7 +14,9 @@ abstract class IWeatherDatabase {
   Future<bool> deleteRecord(int id);
 
   Future<UserPreference> updatePreference(UserPreference pref);
-  Future<UserPreference> getPreference();
+
+  /// [region] only used for default value, later gonna design  better
+  Future<UserPreference> getPreference([UnitRegion region = .metric]);
 }
 
 class CityWeatherRecord {

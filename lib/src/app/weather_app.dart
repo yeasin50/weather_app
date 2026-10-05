@@ -54,6 +54,11 @@ class _WeatherAppState extends State<WeatherApp> {
               )..loadData(),
             ),
 
+            ChangeNotifierProvider(
+              create: (context) =>
+                  SettingProvider(context.read<IWeatherDatabase>())..load(),
+            ),
+
             ChangeNotifierProxyProvider<WeatherNotifier, CityWeatherNotifier>(
               create: (_) =>
                   CityWeatherNotifier(CityWeatherRecord.none, DateTime.now()),
