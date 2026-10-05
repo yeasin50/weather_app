@@ -53,39 +53,12 @@ class HomePage extends StatelessWidget {
                               crossAxisAlignment: .stretch,
                               spacing: 16,
                               children: [
-                                // TodaysWeather(),
-                                // HourlyForecastListView(),
-                                // ForecastHorizontalListview<DailyForecast>(
-                                //   data: data.weeklyForecast,
-                                // ),
-
-                                // UVIndexChart(
-                                //   data: data.fullDayforecast(.uvIndex),
-                                // ),
-                                // HumidityGraph(
-                                //   humidityData: data.fullDayforecast(
-                                //     .relativeHumidity,
-                                //   ),
-                                //   duePointsData: data.fullDayforecast(
-                                //     .dewPoint,
-                                //   ),
-                                // ),
-                                // PrecipitationGraph(
-                                //   rainData: data.fullDayforecast(.rain),
-                                //   percipitationData: data.fullDayforecast(
-                                //     .precipitationProbability,
-                                //   ),
-                                // ),
-                                // WindGraph(
-                                //   windSpeed: data.fullDayforecast(.windSpeed),
-                                //   windGusts: data.fullDayforecast(.windGusts),
-                                //   windDirection: data.fullDayforecast(
-                                //     .windDirection,
-                                //   ),
-                                // ),
-                                VisibilityGraph(
-                                  data: data.fullDayforecast(.visiblity),
+                                TodaysWeather(),
+                                HourlyForecastListView(),
+                                ForecastHorizontalListview<DailyForecast>(
+                                  data: data.weeklyForecast,
                                 ),
+
                                 SizedBox(height: 48),
                                 DailyForecastItems(),
                               ],
@@ -202,7 +175,12 @@ class DailyForecastItems extends StatelessWidget {
               unit: visibility.unit,
               description: visibility.label,
               painter: VisibilityPainter(visibility.color),
-              onTap: () {},
+              onTap: () {
+                VisibilityGraph.show(
+                  context: context,
+                  data: value.fullDayforecast(.visiblity),
+                );
+              },
             ),
           ].map((e) => SizedBox.square(dimension: boxWidth, child: e)).toList(),
         );
@@ -212,6 +190,7 @@ class DailyForecastItems extends StatelessWidget {
         runSpacing: 24,
         children: [
           DailyWeatherCard(
+            // Diff api
             title: "Air quality",
             icon: Icon(Icons.air),
             value: "150",
@@ -222,6 +201,8 @@ class DailyForecastItems extends StatelessWidget {
 
           DailyWeatherCard(
             title: "Pressure",
+
+            /// idc
             icon: Icon(Icons.electric_meter),
             value: "29.79",
             unit: "",

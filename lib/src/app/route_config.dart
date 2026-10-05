@@ -21,6 +21,7 @@ class AppRoute {
   static const String appearance = "/setting/appearance";
 
   static final _rootNavigatorKey = GlobalKey<NavigatorState>();
+  static final _shellNavigatorKey = GlobalKey<NavigatorState>();
 
   static GoRouter routeConfig() {
     return GoRouter(
@@ -44,6 +45,7 @@ class AppRoute {
 
         ShellRoute(
           parentNavigatorKey: _rootNavigatorKey,
+          navigatorKey: _shellNavigatorKey,
           builder: (context, state, child) => Theme(
             data: Theme.of(context).copyWith(
               appBarTheme: const AppBarTheme(

@@ -23,7 +23,7 @@ class SettingPage extends StatelessWidget {
               description: "Language, unit, theme, icons",
               leading: Icon(Icons.palette_outlined),
               onTap: () {
-                context.go(AppRoute.appearance);
+                context.push(AppRoute.appearance);
               },
             ),
           ),
