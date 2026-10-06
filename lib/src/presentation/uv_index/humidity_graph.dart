@@ -1,6 +1,7 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../domain/domain.dart';
 import '../common/common.dart';
@@ -95,10 +96,10 @@ class _HumidityChartState extends State<HumidityGraph> with ChartMixin {
 
   String humidityLabel = "Max";
   String title = "maximum due point";
-  double duePointValue = 0;
+  late WeatherMeasurement duePoint;
 
   void onChartHover(int? hoveredHour) {
-    late WeatherMeasurement humidity, duePoint;
+    late WeatherMeasurement humidity;
 
     if (hoveredHour == null) {
       humidity = maxHumidity;
@@ -111,7 +112,6 @@ class _HumidityChartState extends State<HumidityGraph> with ChartMixin {
     }
 
     humidityLabel = "on ${int.parse(humidity.value)}% humidity";
-    duePointValue = double.parse(duePoint.value);
 
     setState(() {});
   }
@@ -124,7 +124,7 @@ class _HumidityChartState extends State<HumidityGraph> with ChartMixin {
       children: [
         buildValueIndicator(
           title: title,
-          value: UserFormatter.temp(duePointValue, 0),
+          value: context.read<UserFormatter>().temp(duePoint),
           trailingValue: humidityLabel,
         ),
         AspectRatio(

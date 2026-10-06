@@ -80,10 +80,6 @@ class HourlyForecastListView extends StatelessWidget {
                 child: Row(
                   spacing: 12,
                   children: data.mapIndexed((i, e) {
-                    final color = e.isSelected
-                        ? schema.surfaceContainerHigh
-                        : Colors.transparent;
-
                     return GestureDetector(
                       onTap: () {
                         ///nav to day  view

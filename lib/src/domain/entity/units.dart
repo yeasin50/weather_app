@@ -1,8 +1,8 @@
 part of 'user_preference.dart';
 
 enum TemperatureUnit {
-  celsius('°C'),
-  fahrenheit('°F'),
+  celsius('C'),
+  fahrenheit('F'),
   kelvin('K');
 
   final String unit;

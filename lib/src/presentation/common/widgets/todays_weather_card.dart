@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../../infrastructure/model/metro_api_weather_code.dart';
 import '../../provider/providers.dart';
 import '../common.dart';
 import '../weather_value_formatter.dart';
@@ -18,13 +17,19 @@ class TodaysWeather extends StatelessWidget {
       builder: (context, weather, _) {
         final data = weather.selectedHourForcast;
         final mood = data.forecast.weatherCode.formatValue;
-        final minTemp = data.dayForecast.tempMin.formatValue;
-        final maxtemp = data.dayForecast.tempMax.formatValue;
-        final feelsLike =
-            data.dayForecast.tempMax.formatValue; //TODO: update it
-        final moodIcon = WeatherType.fromCode(
-          data.forecast.weatherCode.value,
-        ).icon;
+
+        final formatter = context.read<UserFormatter>();
+
+        final tempUnit = formatter.tempUnit;
+        final currentTemp = formatter.temp(data.forecast.temp);
+
+        final minTemp = formatter.temp(data.dayForecast.tempMin);
+        final maxtemp = formatter.temp(data.dayForecast.tempMax);
+
+        final feelsLike = formatter.temp(data.forecast.tempFeelLike);
+
+        final moodIcon = formatter.moodIcon(data.forecast.weatherCode, 120);
+
         return Material(
           color: schema.surfaceContainerLow,
           shape: RoundedRectangleBorder(borderRadius: .circular(9)),
@@ -44,23 +49,29 @@ class TodaysWeather extends StatelessWidget {
                       Text(mood, style: textTheme.titleMedium),
                       Text("Feels like $feelsLike"),
                       SizedBox(height: 16),
-                      Text(
-                        data.forecast.temp.formatValue +
-                            "c", //richText with user preference
-                        textAlign: TextAlign.center,
-                        style: textTheme.displayLarge?.copyWith(
-                          color: Colors.white,
+                      Text.rich(
+                        TextSpan(
+                          text: currentTemp,
+                          style: textTheme.displayLarge?.copyWith(),
+                          children: [
+                            TextSpan(
+                              text: tempUnit,
+                              style: textTheme.displayMedium?.copyWith(
+                                color: textTheme.displayMedium?.color
+                                    ?.withValues(alpha: .7),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                       Text(
-                        "${maxtemp} ${minTemp}",
-                        textAlign: .center,
+                        '↑ $maxtemp ↓ $minTemp',
                         style: textTheme.bodyLarge?.copyWith(fontWeight: .w300),
                       ),
                     ],
                   ),
                 ),
-                Icon(moodIcon, size: 120),
+                moodIcon,
               ],
             ),
           ),

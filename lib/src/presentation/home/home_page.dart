@@ -31,45 +31,49 @@ class HomePage extends StatelessWidget {
         return Scaffold(
           extendBodyBehindAppBar: true,
           body: SafeArea(
-            child: Column(
-              children: [
-                HomeAppBar(title: title),
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 16,
-                    ),
-                    child: RefreshIndicator(
-                      onRefresh: () async {
-                        await context.read<WeatherNotifier>().refreshHomeCity();
-                        await Future.delayed(Duration(seconds: 2));
-                      },
-                      child: SingleChildScrollView(
-                        physics: AlwaysScrollableScrollPhysics(),
-                        child: Consumer<CityWeatherNotifier>(
-                          builder: (context, data, _) {
-                            return Column(
-                              crossAxisAlignment: .stretch,
-                              spacing: 16,
-                              children: [
-                                TodaysWeather(),
-                                HourlyForecastListView(),
-                                ForecastHorizontalListview<DailyForecast>(
-                                  data: data.weeklyForecast,
-                                ),
+            child: Consumer<SettingProvider>(
+              builder: (context, value, child) => Column(
+                children: [
+                  HomeAppBar(title: title),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 16,
+                      ),
+                      child: RefreshIndicator(
+                        onRefresh: () async {
+                          await context
+                              .read<WeatherNotifier>()
+                              .refreshHomeCity();
+                          await Future.delayed(Duration(seconds: 2));
+                        },
+                        child: SingleChildScrollView(
+                          physics: AlwaysScrollableScrollPhysics(),
+                          child: Consumer<CityWeatherNotifier>(
+                            builder: (context, data, _) {
+                              return Column(
+                                crossAxisAlignment: .stretch,
+                                spacing: 16,
+                                children: [
+                                  TodaysWeather(),
+                                  HourlyForecastListView(),
+                                  ForecastHorizontalListview<DailyForecast>(
+                                    data: data.weeklyForecast,
+                                  ),
 
-                                SizedBox(height: 48),
-                                DailyForecastItems(),
-                              ],
-                            );
-                          },
+                                  SizedBox(height: 48),
+                                  DailyForecastItems(),
+                                ],
+                              );
+                            },
+                          ),
                         ),
                       ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         );

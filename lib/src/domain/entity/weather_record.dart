@@ -49,6 +49,8 @@ enum MeasurementType {
   temperature,
   temperatureMax,
   temperatureMin,
+  tempFeelsLike,
+
   relativeHumidity,
   dewPoint,
   rain,

@@ -49,6 +49,7 @@ abstract class WeatherDataExtractor {
         time: t,
         weatherCode: weatherCode!,
         temp: temp!,
+        tempFeelLike: _getItem(items, .tempFeelsLike)!,
         rain: rain!,
         uvIndex: _getItem(items, .uvIndex)!,
         windspeed: _getItem(items, .windSpeed)!,

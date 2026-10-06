@@ -2,6 +2,8 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../../common.dart';
 import '../../models/models.dart';
 
 class HumadityView extends StatefulWidget {
@@ -108,7 +110,9 @@ class _HumadityViewState extends State<HumadityView>
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Text(
-                              "${widget.data.dewPoint.toString()}\u00B0",
+                              context.read<UserFormatter>().temp(
+                                widget.data.duePointData,
+                              ),
                               textAlign: .center,
                               style: style.bodyMedium?.copyWith(
                                 fontWeight: .w600,

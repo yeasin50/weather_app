@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart' show IconData, Icons;
-
 enum WeatherType {
   clear,
   cloudy,
@@ -52,24 +50,6 @@ enum WeatherType {
       .snowShowers => "Snow showers slight and heavy",
       .thunderstorm => "Thunderstorm: Slight or moderate",
       .unknown => "Thunderstorm with slight and heavy hail",
-    };
-  }
-
-  IconData get icon {
-    return switch (this) {
-      .clear => Icons.wb_sunny,
-      .cloudy => Icons.cloud,
-      .fog => Icons.blur_on,
-      .drizzle => Icons.grain,
-      .freezingDrizzle => Icons.ac_unit,
-      .rain => Icons.water_drop,
-      .freezingRain => Icons.ac_unit,
-      .snow => Icons.ac_unit,
-      .snowGrains => Icons.ac_unit,
-      .showers => Icons.cloudy_snowing,
-      .snowShowers => Icons.cloudy_snowing,
-      .thunderstorm => Icons.thunderstorm,
-      .unknown => Icons.help_outline,
     };
   }
 }

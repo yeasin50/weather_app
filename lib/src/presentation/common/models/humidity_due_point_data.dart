@@ -6,6 +6,8 @@ class HumidityDuePointData {
   final WeatherMeasurement _humadity;
   final WeatherMeasurement _duePoint;
 
+  WeatherMeasurement get duePointData => _duePoint;
+
   int get humidity => double.parse("${_humadity.value.toString()}").toInt();
   int get dewPoint => double.parse("${_duePoint.value.toString()}").toInt();
 

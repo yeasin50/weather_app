@@ -26,6 +26,7 @@ class HourlyForecast extends ForecastData {
     required super.weatherCode,
     super.isSelected = false,
     required this.temp,
+    required this.tempFeelLike,
     required this.rain,
     required this.humadity,
     required this.dewPoint,
@@ -39,6 +40,7 @@ class HourlyForecast extends ForecastData {
   });
 
   final WeatherMeasurement temp;
+  final WeatherMeasurement tempFeelLike;
   final WeatherMeasurement rain;
   final WeatherMeasurement humadity;
   final WeatherMeasurement dewPoint;
@@ -70,6 +72,7 @@ class HourlyForecast extends ForecastData {
     time: DateTime.now(),
     weatherCode: _empty(.weatherCode),
     temp: _empty(.temperature),
+    tempFeelLike: _empty(.tempFeelsLike),
     rain: _empty(.rain),
     humadity: _empty(.relativeHumidity),
     dewPoint: _empty(.dewPoint),
@@ -88,6 +91,7 @@ class HourlyForecast extends ForecastData {
       time: time,
       weatherCode: weatherCode,
       temp: temp,
+      tempFeelLike: tempFeelLike,
       rain: rain,
       humadity: humadity,
       dewPoint: dewPoint,

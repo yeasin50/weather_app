@@ -39,6 +39,7 @@ Map<String, dynamic> _$MetroWeatherPayloadToJson(
 
 const _$HourlyItemEnumMap = {
   HourlyItem.weatherCode: 'weather_code',
+  HourlyItem.tempFeelsLike: 'apparent_temperature',
   HourlyItem.temperature2m: 'temperature_2m',
   HourlyItem.relativeHumidity2m: 'relative_humidity_2m',
   HourlyItem.dewPoint: 'dew_point_2m',

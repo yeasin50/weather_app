@@ -62,6 +62,7 @@ abstract class MetroWeatherPayload extends WeatherRequest
 @JsonEnum(valueField: "value")
 enum HourlyItem {
   weatherCode("weather_code"),
+  tempFeelsLike("apparent_temperature"),
   temperature2m("temperature_2m"),
   relativeHumidity2m("relative_humidity_2m"),
   dewPoint("dew_point_2m"),
@@ -82,6 +83,7 @@ enum HourlyItem {
   static List<HourlyItem> get defaultItems => [
     weatherCode,
     temperature2m,
+    tempFeelsLike,
     relativeHumidity2m,
     rain,
     precipitationProbability,

@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '/src/presentation/common/common.dart';
-import '../../../infrastructure/model/metro_api_weather_code.dart';
 import '../../provider/providers.dart';
-import '../weather_value_formatter.dart';
 
 class ForecastListTile<T extends ForecastData> extends StatelessWidget {
   const ForecastListTile({super.key, required this.info});
@@ -32,6 +31,9 @@ class _HourlyForecastTile extends StatelessWidget {
     assert(info is HourlyForecast || info is StarForecast);
 
     final textTheme = Theme.of(context).textTheme;
+
+    final formmater = context.read<UserFormatter>();
+
     return Padding(
       padding: const .symmetric(horizontal: 8, vertical: 8),
       child: InkWell(
@@ -45,9 +47,9 @@ class _HourlyForecastTile extends StatelessWidget {
           children: info is HourlyForecast
               ? [
                   Text(AppDateFormatter.hourly(info.time)),
-                  Icon(WeatherType.fromCode(info.weatherCode.value).icon),
+                  formmater.moodIcon(info.weatherCode),
                   Text(
-                    (info as HourlyForecast).temp.formatValue,
+                    formmater.temp((info as HourlyForecast).temp),
                     style: textTheme.bodyLarge,
                   ),
                 ]
@@ -76,6 +78,7 @@ class _DailyForecastTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
+    final formatter = context.read<UserFormatter>();
 
     return InkWell(
       onTap: () {
@@ -93,7 +96,7 @@ class _DailyForecastTile extends StatelessWidget {
                 spacing: 4,
                 mainAxisAlignment: .start,
                 children: [
-                  Icon(WeatherType.fromCode(info.weatherCode.value).icon),
+                  formatter.moodIcon(info.weatherCode),
                   Flexible(child: Text(info.weatherCode.formatValue)),
                 ],
               ),
@@ -105,11 +108,17 @@ class _DailyForecastTile extends StatelessWidget {
                 mainAxisAlignment: .end,
                 children: [
                   Text(
-                    info.tempMax.formatValue,
+                    formatter.temp(info.tempMax),
                     style: textTheme.bodyMedium?.copyWith(fontWeight: .w500),
                   ),
-                  Text("/"),
-                  Text(info.tempMin.formatValue, style: textTheme.bodyMedium),
+                  Text(
+                    "/",
+                    style: textTheme.bodyMedium?.copyWith(color: Colors.grey),
+                  ),
+                  Text(
+                    formatter.temp(info.tempMin),
+                    style: textTheme.bodyMedium,
+                  ),
                 ],
               ),
             ),

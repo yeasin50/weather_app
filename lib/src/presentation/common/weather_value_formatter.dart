@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 import '../../domain/domain.dart';
 import '../../infrastructure/model/metro_api_weather_code.dart'
     show WeatherType;
@@ -41,17 +43,28 @@ class UserFormatter {
   // one thing is to format string but....
   final UserPreference _preference;
 
-  static String temp(double value, [int fractionDigits = 0]) {
-    return "${value.toStringAsFixed(fractionDigits)}\u00B0";
+  // dart format off
+
+  String get tempUnit => _preference.tempUnit.unit;
+
+  /// if [celcius] is not null, it override [temp] and returns format string
+  String temp(
+    WeatherMeasurement temp, [double? celcius, int fractionDigits = 0]) {
+    String unitStr = [TemperatureUnit.celsius, TemperatureUnit.fahrenheit].contains(_preference.tempUnit)
+        ? "\u00B0" : "";
+    return "${tempValue(temp, celcius).toStringAsFixed(fractionDigits)}$unitStr";
+  }
+
+  // dart format  on 
+
+  double tempValue(WeatherMeasurement temp, [double? celcius]) {
+    celcius ??= double.parse(temp.value);
+    return TemperatureUnit.convert(celcius, _preference.tempUnit);
   }
 
   static String wind(double value, [int fractionDigits = 0]) {
     //TODO: converter
     return "${value.toStringAsFixed(fractionDigits)}";
-  }
-
-  double tempValue(double celcius) {
-    return TemperatureUnit.convert(celcius, _preference.tempUnit);
   }
 
   double windValue(double kiloPerHour) {
@@ -66,4 +79,31 @@ class UserFormatter {
     //TODO: converter
     return "${value.toStringAsFixed(fractionDigits)}";
   }
+
+  /// ...Icons
+
+  Widget moodIcon(WeatherMeasurement weatherCode, [double iconSize = 24]) {
+    return _weatherIcon(WeatherType.fromCode(weatherCode.value), iconSize);
+  }
+}
+
+/// todo: adapt UserPreference into separate class
+Widget _weatherIcon(WeatherType type, [double iconSize = 24]) {
+  final iconData = switch (type) {
+    .clear => Icons.wb_sunny,
+    .cloudy => Icons.cloud,
+    .fog => Icons.blur_on,
+    .drizzle => Icons.grain,
+    .freezingDrizzle => Icons.ac_unit,
+    .rain => Icons.water_drop,
+    .freezingRain => Icons.ac_unit,
+    .snow => Icons.ac_unit,
+    .snowGrains => Icons.ac_unit,
+    .showers => Icons.cloudy_snowing,
+    .snowShowers => Icons.cloudy_snowing,
+    .thunderstorm => Icons.thunderstorm,
+    .unknown => Icons.help_outline,
+  };
+
+  return Icon(iconData, size: iconSize);
 }

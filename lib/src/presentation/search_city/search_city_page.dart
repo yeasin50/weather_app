@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import '../../infrastructure/model/metro_api_weather_code.dart';
+import '../common/common.dart';
 import '/src/presentation/provider/weather_provider.dart';
 
 import '../../domain/weather_service.dart';
@@ -139,8 +140,8 @@ class SavedCitiesOnSearchView extends StatelessWidget {
           children: [
             ...cities.map((e) {
               return ListTile(
-                leading: Icon(
-                  WeatherType.fromCode(e.currentHourCode.value).icon,
+                leading: context.read<UserFormatter>().moodIcon(
+                  e.currentHourCode,
                 ),
                 title: Text(e.city.name),
                 subtitle: Text(e.city.location),

@@ -78,6 +78,8 @@ class CityWeatherNotifier extends WeatherDataExtractor with ChangeNotifier {
 
     final combinedResult = [...forecast, ...dailyStuff];
     combinedResult.sort((a, b) => a.time.compareTo(b.time));
+
+    assert(combinedResult.first.time.hour == DateTime.now().hour);
     return combinedResult;
   }
 
