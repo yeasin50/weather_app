@@ -61,7 +61,7 @@ class MetroApiServce implements IWeatherService {
 
       final cities = List<MetroApiCityInfo>.from(
         cityData.map((e) => MetroApiCityInfo.fromJson(e)),
-      ).map((e) => e.toDB()).toList();
+      ).map((e) => e.toDB(null)).toList();
 
       return cities;
     } catch (e, trace) {
@@ -92,7 +92,9 @@ class MetroApiServce implements IWeatherService {
       final data = jsonDecode(response.body);
       MetroApiResponse result = MetroApiResponse.fromJson(data);
 
-      final city = (req as MetroWeatherPayload).city;
+      final city = (req as MetroWeatherPayload).city.copyWith(
+        utcOffsetSeconds: result.utcOffsetSeconds,
+      );
 
       return WeatherResponse(
         city: city,

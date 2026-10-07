@@ -82,8 +82,11 @@ class WeatherNotifier extends ChangeNotifier {
 
       final response = await service.fetchWeather(req);
 
+      city = city.copyWith(utcOffsetSeconds: response.city.utcOffsetSeconds);
+
       final cityRecord = CityRecord(
         id: city.id ?? DateTime.now().millisecondsSinceEpoch,
+        utcSecondOffset: city.utcOffsetSeconds!,
         latitude: city.latitude,
         longitude: city.longitude,
         name: city.name,

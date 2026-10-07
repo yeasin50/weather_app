@@ -7,6 +7,7 @@ class SettingTile extends StatelessWidget {
     required this.description,
     this.leading,
     this.onTap,
+    this.enableBorder = false,
   });
 
   final String title;
@@ -15,11 +16,16 @@ class SettingTile extends StatelessWidget {
   final Widget? leading;
   final VoidCallback? onTap;
 
+  // default is false, handle by  parent & handled on top level
+  /// if true then  it will have 24 circular border
+  final bool enableBorder;
+
   @override
   Widget build(BuildContext context) {
     final style = TextTheme.of(context);
 
     return Material(
+      borderRadius: enableBorder ? .circular(24) : null,
       child: InkWell(
         onTap: onTap,
         child: Padding(

@@ -25,9 +25,10 @@ abstract class MetroApiCityInfo with _$MetroApiCityInfo {
   factory MetroApiCityInfo.fromJson(Map<String, dynamic> json) =>
       _$MetroApiCityInfoFromJson(json);
 
-  CityInfo toDB() {
+  CityInfo toDB(int? utcOffsetSeconds) {
     return CityInfo(
       id: id ?? DateTime.now().millisecondsSinceEpoch,
+      utcOffsetSeconds: utcOffsetSeconds,
       name: name,
       latitude: latitude,
       longitude: longitude,
@@ -45,6 +46,7 @@ abstract class MetroApiResponse with _$MetroApiResponse {
     required double latitude,
     required double longitude,
     required String timezone,
+    required int utcOffsetSeconds,
     required Map<String, String> hourlyUnits,
     required Map<String, List<dynamic>> hourly,
     required Map<String, String> dailyUnits,

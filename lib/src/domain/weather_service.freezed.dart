@@ -15,7 +15,8 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$CityInfo {
 
- int? get id; String get name; double get latitude; double get longitude; String get countryCode; String get location;
+ int? get id; String get name; double get latitude; double get longitude; String get countryCode; String get location;//except city
+ int? get utcOffsetSeconds;
 /// Create a copy of CityInfo
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +29,16 @@ $CityInfoCopyWith<CityInfo> get copyWith => _$CityInfoCopyWithImpl<CityInfo>(thi
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is CityInfo&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.latitude, latitude) || other.latitude == latitude)&&(identical(other.longitude, longitude) || other.longitude == longitude)&&(identical(other.countryCode, countryCode) || other.countryCode == countryCode)&&(identical(other.location, location) || other.location == location));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is CityInfo&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.latitude, latitude) || other.latitude == latitude)&&(identical(other.longitude, longitude) || other.longitude == longitude)&&(identical(other.countryCode, countryCode) || other.countryCode == countryCode)&&(identical(other.location, location) || other.location == location)&&(identical(other.utcOffsetSeconds, utcOffsetSeconds) || other.utcOffsetSeconds == utcOffsetSeconds));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,name,latitude,longitude,countryCode,location);
+int get hashCode => Object.hash(runtimeType,id,name,latitude,longitude,countryCode,location,utcOffsetSeconds);
 
 @override
 String toString() {
-  return 'CityInfo(id: $id, name: $name, latitude: $latitude, longitude: $longitude, countryCode: $countryCode, location: $location)';
+  return 'CityInfo(id: $id, name: $name, latitude: $latitude, longitude: $longitude, countryCode: $countryCode, location: $location, utcOffsetSeconds: $utcOffsetSeconds)';
 }
 
 
@@ -48,7 +49,7 @@ abstract mixin class $CityInfoCopyWith<$Res>  {
   factory $CityInfoCopyWith(CityInfo value, $Res Function(CityInfo) _then) = _$CityInfoCopyWithImpl;
 @useResult
 $Res call({
- int? id, String name, double latitude, double longitude, String countryCode, String location
+ int? id, String name, double latitude, double longitude, String countryCode, String location, int? utcOffsetSeconds
 });
 
 
@@ -65,7 +66,7 @@ class _$CityInfoCopyWithImpl<$Res>
 
 /// Create a copy of CityInfo
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = freezed,Object? name = null,Object? latitude = null,Object? longitude = null,Object? countryCode = null,Object? location = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = freezed,Object? name = null,Object? latitude = null,Object? longitude = null,Object? countryCode = null,Object? location = null,Object? utcOffsetSeconds = freezed,}) {
   return _then(_self.copyWith(
 id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as int?,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
@@ -73,7 +74,8 @@ as String,latitude: null == latitude ? _self.latitude : latitude // ignore: cast
 as double,longitude: null == longitude ? _self.longitude : longitude // ignore: cast_nullable_to_non_nullable
 as double,countryCode: null == countryCode ? _self.countryCode : countryCode // ignore: cast_nullable_to_non_nullable
 as String,location: null == location ? _self.location : location // ignore: cast_nullable_to_non_nullable
-as String,
+as String,utcOffsetSeconds: freezed == utcOffsetSeconds ? _self.utcOffsetSeconds : utcOffsetSeconds // ignore: cast_nullable_to_non_nullable
+as int?,
   ));
 }
 
@@ -155,10 +157,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int? id,  String name,  double latitude,  double longitude,  String countryCode,  String location)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int? id,  String name,  double latitude,  double longitude,  String countryCode,  String location,  int? utcOffsetSeconds)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _CityInfo() when $default != null:
-return $default(_that.id,_that.name,_that.latitude,_that.longitude,_that.countryCode,_that.location);case _:
+return $default(_that.id,_that.name,_that.latitude,_that.longitude,_that.countryCode,_that.location,_that.utcOffsetSeconds);case _:
   return orElse();
 
 }
@@ -176,10 +178,10 @@ return $default(_that.id,_that.name,_that.latitude,_that.longitude,_that.country
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int? id,  String name,  double latitude,  double longitude,  String countryCode,  String location)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int? id,  String name,  double latitude,  double longitude,  String countryCode,  String location,  int? utcOffsetSeconds)  $default,) {final _that = this;
 switch (_that) {
 case _CityInfo():
-return $default(_that.id,_that.name,_that.latitude,_that.longitude,_that.countryCode,_that.location);}
+return $default(_that.id,_that.name,_that.latitude,_that.longitude,_that.countryCode,_that.location,_that.utcOffsetSeconds);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -193,10 +195,10 @@ return $default(_that.id,_that.name,_that.latitude,_that.longitude,_that.country
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int? id,  String name,  double latitude,  double longitude,  String countryCode,  String location)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int? id,  String name,  double latitude,  double longitude,  String countryCode,  String location,  int? utcOffsetSeconds)?  $default,) {final _that = this;
 switch (_that) {
 case _CityInfo() when $default != null:
-return $default(_that.id,_that.name,_that.latitude,_that.longitude,_that.countryCode,_that.location);case _:
+return $default(_that.id,_that.name,_that.latitude,_that.longitude,_that.countryCode,_that.location,_that.utcOffsetSeconds);case _:
   return null;
 
 }
@@ -208,7 +210,7 @@ return $default(_that.id,_that.name,_that.latitude,_that.longitude,_that.country
 @JsonSerializable()
 
 class _CityInfo implements CityInfo {
-  const _CityInfo({this.id, required this.name, required this.latitude, required this.longitude, required this.countryCode, required this.location});
+  const _CityInfo({this.id, required this.name, required this.latitude, required this.longitude, required this.countryCode, required this.location, required this.utcOffsetSeconds});
   factory _CityInfo.fromJson(Map<String, dynamic> json) => _$CityInfoFromJson(json);
 
 @override final  int? id;
@@ -217,6 +219,8 @@ class _CityInfo implements CityInfo {
 @override final  double longitude;
 @override final  String countryCode;
 @override final  String location;
+//except city
+@override final  int? utcOffsetSeconds;
 
 /// Create a copy of CityInfo
 /// with the given fields replaced by the non-null parameter values.
@@ -231,16 +235,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _CityInfo&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.latitude, latitude) || other.latitude == latitude)&&(identical(other.longitude, longitude) || other.longitude == longitude)&&(identical(other.countryCode, countryCode) || other.countryCode == countryCode)&&(identical(other.location, location) || other.location == location));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _CityInfo&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.latitude, latitude) || other.latitude == latitude)&&(identical(other.longitude, longitude) || other.longitude == longitude)&&(identical(other.countryCode, countryCode) || other.countryCode == countryCode)&&(identical(other.location, location) || other.location == location)&&(identical(other.utcOffsetSeconds, utcOffsetSeconds) || other.utcOffsetSeconds == utcOffsetSeconds));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,name,latitude,longitude,countryCode,location);
+int get hashCode => Object.hash(runtimeType,id,name,latitude,longitude,countryCode,location,utcOffsetSeconds);
 
 @override
 String toString() {
-  return 'CityInfo(id: $id, name: $name, latitude: $latitude, longitude: $longitude, countryCode: $countryCode, location: $location)';
+  return 'CityInfo(id: $id, name: $name, latitude: $latitude, longitude: $longitude, countryCode: $countryCode, location: $location, utcOffsetSeconds: $utcOffsetSeconds)';
 }
 
 
@@ -251,7 +255,7 @@ abstract mixin class _$CityInfoCopyWith<$Res> implements $CityInfoCopyWith<$Res>
   factory _$CityInfoCopyWith(_CityInfo value, $Res Function(_CityInfo) _then) = __$CityInfoCopyWithImpl;
 @override @useResult
 $Res call({
- int? id, String name, double latitude, double longitude, String countryCode, String location
+ int? id, String name, double latitude, double longitude, String countryCode, String location, int? utcOffsetSeconds
 });
 
 
@@ -268,7 +272,7 @@ class __$CityInfoCopyWithImpl<$Res>
 
 /// Create a copy of CityInfo
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = freezed,Object? name = null,Object? latitude = null,Object? longitude = null,Object? countryCode = null,Object? location = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = freezed,Object? name = null,Object? latitude = null,Object? longitude = null,Object? countryCode = null,Object? location = null,Object? utcOffsetSeconds = freezed,}) {
   return _then(_CityInfo(
 id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as int?,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
@@ -276,7 +280,8 @@ as String,latitude: null == latitude ? _self.latitude : latitude // ignore: cast
 as double,longitude: null == longitude ? _self.longitude : longitude // ignore: cast_nullable_to_non_nullable
 as double,countryCode: null == countryCode ? _self.countryCode : countryCode // ignore: cast_nullable_to_non_nullable
 as String,location: null == location ? _self.location : location // ignore: cast_nullable_to_non_nullable
-as String,
+as String,utcOffsetSeconds: freezed == utcOffsetSeconds ? _self.utcOffsetSeconds : utcOffsetSeconds // ignore: cast_nullable_to_non_nullable
+as int?,
   ));
 }
 
@@ -286,7 +291,8 @@ as String,
 /// @nodoc
 mixin _$WeatherResponse {
 
- CityInfo get city; List<WeatherMeasurement> get dailyRecords; List<WeatherMeasurement> get hourlyRecord;
+ CityInfo get city;// required int utcOffsetSeconds,
+ List<WeatherMeasurement> get dailyRecords; List<WeatherMeasurement> get hourlyRecord;
 /// Create a copy of WeatherResponse
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -493,7 +499,9 @@ class _WeatherResponse implements WeatherResponse {
   
 
 @override final  CityInfo city;
+// required int utcOffsetSeconds,
  final  List<WeatherMeasurement> _dailyRecords;
+// required int utcOffsetSeconds,
 @override List<WeatherMeasurement> get dailyRecords {
   if (_dailyRecords is EqualUnmodifiableListView) return _dailyRecords;
   // ignore: implicit_dynamic_type

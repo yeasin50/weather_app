@@ -20,6 +20,7 @@ sealed class CityInfo with _$CityInfo {
     required double longitude,
     required String countryCode,
     required String location, //except city
+    required int? utcOffsetSeconds,
   }) = _CityInfo;
 
   factory CityInfo.fromJson(Map<String, dynamic> json) =>
@@ -33,6 +34,7 @@ sealed class CityInfo with _$CityInfo {
       longitude: r.longitude,
       countryCode: r.countryCode,
       location: r.location,
+      utcOffsetSeconds: r.utcSecondOffset,
     );
   }
 }
@@ -41,6 +43,7 @@ sealed class CityInfo with _$CityInfo {
 abstract class WeatherResponse with _$WeatherResponse {
   const factory WeatherResponse({
     required CityInfo city,
+    // required int utcOffsetSeconds,
     required List<WeatherMeasurement> dailyRecords,
     required List<WeatherMeasurement> hourlyRecord,
   }) = _WeatherResponse;

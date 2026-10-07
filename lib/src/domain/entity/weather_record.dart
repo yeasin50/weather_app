@@ -13,6 +13,7 @@ class CityRecord {
     required this.country,
     required this.countryCode,
     required this.lastUpdate,
+    required this.utcSecondOffset,
   });
 
   final Id id;
@@ -22,6 +23,9 @@ class CityRecord {
   final String country;
   final String countryCode;
   final String location;
+
+  /// open metro  gives us offset in-case we would like to adjust the time
+  final int utcSecondOffset;
 
   /// expect city[name]
   final DateTime lastUpdate;
@@ -34,6 +38,7 @@ class CityRecord {
     location: "",
     country: "",
     countryCode: "",
+    utcSecondOffset: 0,
     lastUpdate: DateTime.now(),
   );
 }
@@ -104,6 +109,23 @@ class WeatherMeasurement {
     value: "12",
     interval: .daily,
   );
+
+  WeatherMeasurement copyWith({
+    MeasurementType? measurementType,
+    DateTime? time,
+    String? unit,
+    String? value,
+    MeasurementInterval? interval,
+  }) {
+    return WeatherMeasurement(
+      cityId: cityId,
+      measurementType: measurementType ?? this.measurementType,
+      time: time ?? this.time,
+      unit: unit ?? this.unit,
+      value: value ?? this.value,
+      interval: interval ?? this.interval,
+    );
+  }
 
   @override
   String toString() {

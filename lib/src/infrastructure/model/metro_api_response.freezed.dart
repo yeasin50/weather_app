@@ -301,7 +301,7 @@ as String?,
 /// @nodoc
 mixin _$MetroApiResponse {
 
- double get latitude; double get longitude; String get timezone; Map<String, String> get hourlyUnits; Map<String, List<dynamic>> get hourly; Map<String, String> get dailyUnits; Map<String, List<dynamic>> get daily;
+ double get latitude; double get longitude; String get timezone; int get utcOffsetSeconds; Map<String, String> get hourlyUnits; Map<String, List<dynamic>> get hourly; Map<String, String> get dailyUnits; Map<String, List<dynamic>> get daily;
 /// Create a copy of MetroApiResponse
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -314,16 +314,16 @@ $MetroApiResponseCopyWith<MetroApiResponse> get copyWith => _$MetroApiResponseCo
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is MetroApiResponse&&(identical(other.latitude, latitude) || other.latitude == latitude)&&(identical(other.longitude, longitude) || other.longitude == longitude)&&(identical(other.timezone, timezone) || other.timezone == timezone)&&const DeepCollectionEquality().equals(other.hourlyUnits, hourlyUnits)&&const DeepCollectionEquality().equals(other.hourly, hourly)&&const DeepCollectionEquality().equals(other.dailyUnits, dailyUnits)&&const DeepCollectionEquality().equals(other.daily, daily));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is MetroApiResponse&&(identical(other.latitude, latitude) || other.latitude == latitude)&&(identical(other.longitude, longitude) || other.longitude == longitude)&&(identical(other.timezone, timezone) || other.timezone == timezone)&&(identical(other.utcOffsetSeconds, utcOffsetSeconds) || other.utcOffsetSeconds == utcOffsetSeconds)&&const DeepCollectionEquality().equals(other.hourlyUnits, hourlyUnits)&&const DeepCollectionEquality().equals(other.hourly, hourly)&&const DeepCollectionEquality().equals(other.dailyUnits, dailyUnits)&&const DeepCollectionEquality().equals(other.daily, daily));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,latitude,longitude,timezone,const DeepCollectionEquality().hash(hourlyUnits),const DeepCollectionEquality().hash(hourly),const DeepCollectionEquality().hash(dailyUnits),const DeepCollectionEquality().hash(daily));
+int get hashCode => Object.hash(runtimeType,latitude,longitude,timezone,utcOffsetSeconds,const DeepCollectionEquality().hash(hourlyUnits),const DeepCollectionEquality().hash(hourly),const DeepCollectionEquality().hash(dailyUnits),const DeepCollectionEquality().hash(daily));
 
 @override
 String toString() {
-  return 'MetroApiResponse(latitude: $latitude, longitude: $longitude, timezone: $timezone, hourlyUnits: $hourlyUnits, hourly: $hourly, dailyUnits: $dailyUnits, daily: $daily)';
+  return 'MetroApiResponse(latitude: $latitude, longitude: $longitude, timezone: $timezone, utcOffsetSeconds: $utcOffsetSeconds, hourlyUnits: $hourlyUnits, hourly: $hourly, dailyUnits: $dailyUnits, daily: $daily)';
 }
 
 
@@ -334,7 +334,7 @@ abstract mixin class $MetroApiResponseCopyWith<$Res>  {
   factory $MetroApiResponseCopyWith(MetroApiResponse value, $Res Function(MetroApiResponse) _then) = _$MetroApiResponseCopyWithImpl;
 @useResult
 $Res call({
- double latitude, double longitude, String timezone, Map<String, String> hourlyUnits, Map<String, List<dynamic>> hourly, Map<String, String> dailyUnits, Map<String, List<dynamic>> daily
+ double latitude, double longitude, String timezone, int utcOffsetSeconds, Map<String, String> hourlyUnits, Map<String, List<dynamic>> hourly, Map<String, String> dailyUnits, Map<String, List<dynamic>> daily
 });
 
 
@@ -351,12 +351,13 @@ class _$MetroApiResponseCopyWithImpl<$Res>
 
 /// Create a copy of MetroApiResponse
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? latitude = null,Object? longitude = null,Object? timezone = null,Object? hourlyUnits = null,Object? hourly = null,Object? dailyUnits = null,Object? daily = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? latitude = null,Object? longitude = null,Object? timezone = null,Object? utcOffsetSeconds = null,Object? hourlyUnits = null,Object? hourly = null,Object? dailyUnits = null,Object? daily = null,}) {
   return _then(_self.copyWith(
 latitude: null == latitude ? _self.latitude : latitude // ignore: cast_nullable_to_non_nullable
 as double,longitude: null == longitude ? _self.longitude : longitude // ignore: cast_nullable_to_non_nullable
 as double,timezone: null == timezone ? _self.timezone : timezone // ignore: cast_nullable_to_non_nullable
-as String,hourlyUnits: null == hourlyUnits ? _self.hourlyUnits : hourlyUnits // ignore: cast_nullable_to_non_nullable
+as String,utcOffsetSeconds: null == utcOffsetSeconds ? _self.utcOffsetSeconds : utcOffsetSeconds // ignore: cast_nullable_to_non_nullable
+as int,hourlyUnits: null == hourlyUnits ? _self.hourlyUnits : hourlyUnits // ignore: cast_nullable_to_non_nullable
 as Map<String, String>,hourly: null == hourly ? _self.hourly : hourly // ignore: cast_nullable_to_non_nullable
 as Map<String, List<dynamic>>,dailyUnits: null == dailyUnits ? _self.dailyUnits : dailyUnits // ignore: cast_nullable_to_non_nullable
 as Map<String, String>,daily: null == daily ? _self.daily : daily // ignore: cast_nullable_to_non_nullable
@@ -445,10 +446,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( double latitude,  double longitude,  String timezone,  Map<String, String> hourlyUnits,  Map<String, List<dynamic>> hourly,  Map<String, String> dailyUnits,  Map<String, List<dynamic>> daily)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( double latitude,  double longitude,  String timezone,  int utcOffsetSeconds,  Map<String, String> hourlyUnits,  Map<String, List<dynamic>> hourly,  Map<String, String> dailyUnits,  Map<String, List<dynamic>> daily)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _MetroApiResponse() when $default != null:
-return $default(_that.latitude,_that.longitude,_that.timezone,_that.hourlyUnits,_that.hourly,_that.dailyUnits,_that.daily);case _:
+return $default(_that.latitude,_that.longitude,_that.timezone,_that.utcOffsetSeconds,_that.hourlyUnits,_that.hourly,_that.dailyUnits,_that.daily);case _:
   return orElse();
 
 }
@@ -466,10 +467,10 @@ return $default(_that.latitude,_that.longitude,_that.timezone,_that.hourlyUnits,
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( double latitude,  double longitude,  String timezone,  Map<String, String> hourlyUnits,  Map<String, List<dynamic>> hourly,  Map<String, String> dailyUnits,  Map<String, List<dynamic>> daily)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( double latitude,  double longitude,  String timezone,  int utcOffsetSeconds,  Map<String, String> hourlyUnits,  Map<String, List<dynamic>> hourly,  Map<String, String> dailyUnits,  Map<String, List<dynamic>> daily)  $default,) {final _that = this;
 switch (_that) {
 case _MetroApiResponse():
-return $default(_that.latitude,_that.longitude,_that.timezone,_that.hourlyUnits,_that.hourly,_that.dailyUnits,_that.daily);case _:
+return $default(_that.latitude,_that.longitude,_that.timezone,_that.utcOffsetSeconds,_that.hourlyUnits,_that.hourly,_that.dailyUnits,_that.daily);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -486,10 +487,10 @@ return $default(_that.latitude,_that.longitude,_that.timezone,_that.hourlyUnits,
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( double latitude,  double longitude,  String timezone,  Map<String, String> hourlyUnits,  Map<String, List<dynamic>> hourly,  Map<String, String> dailyUnits,  Map<String, List<dynamic>> daily)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( double latitude,  double longitude,  String timezone,  int utcOffsetSeconds,  Map<String, String> hourlyUnits,  Map<String, List<dynamic>> hourly,  Map<String, String> dailyUnits,  Map<String, List<dynamic>> daily)?  $default,) {final _that = this;
 switch (_that) {
 case _MetroApiResponse() when $default != null:
-return $default(_that.latitude,_that.longitude,_that.timezone,_that.hourlyUnits,_that.hourly,_that.dailyUnits,_that.daily);case _:
+return $default(_that.latitude,_that.longitude,_that.timezone,_that.utcOffsetSeconds,_that.hourlyUnits,_that.hourly,_that.dailyUnits,_that.daily);case _:
   return null;
 
 }
@@ -501,12 +502,13 @@ return $default(_that.latitude,_that.longitude,_that.timezone,_that.hourlyUnits,
 @JsonSerializable()
 
 class _MetroApiResponse extends MetroApiResponse {
-  const _MetroApiResponse({required this.latitude, required this.longitude, required this.timezone, required final  Map<String, String> hourlyUnits, required final  Map<String, List<dynamic>> hourly, required final  Map<String, String> dailyUnits, required final  Map<String, List<dynamic>> daily}): _hourlyUnits = hourlyUnits,_hourly = hourly,_dailyUnits = dailyUnits,_daily = daily,super._();
+  const _MetroApiResponse({required this.latitude, required this.longitude, required this.timezone, required this.utcOffsetSeconds, required final  Map<String, String> hourlyUnits, required final  Map<String, List<dynamic>> hourly, required final  Map<String, String> dailyUnits, required final  Map<String, List<dynamic>> daily}): _hourlyUnits = hourlyUnits,_hourly = hourly,_dailyUnits = dailyUnits,_daily = daily,super._();
   factory _MetroApiResponse.fromJson(Map<String, dynamic> json) => _$MetroApiResponseFromJson(json);
 
 @override final  double latitude;
 @override final  double longitude;
 @override final  String timezone;
+@override final  int utcOffsetSeconds;
  final  Map<String, String> _hourlyUnits;
 @override Map<String, String> get hourlyUnits {
   if (_hourlyUnits is EqualUnmodifiableMapView) return _hourlyUnits;
@@ -549,16 +551,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _MetroApiResponse&&(identical(other.latitude, latitude) || other.latitude == latitude)&&(identical(other.longitude, longitude) || other.longitude == longitude)&&(identical(other.timezone, timezone) || other.timezone == timezone)&&const DeepCollectionEquality().equals(other._hourlyUnits, _hourlyUnits)&&const DeepCollectionEquality().equals(other._hourly, _hourly)&&const DeepCollectionEquality().equals(other._dailyUnits, _dailyUnits)&&const DeepCollectionEquality().equals(other._daily, _daily));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _MetroApiResponse&&(identical(other.latitude, latitude) || other.latitude == latitude)&&(identical(other.longitude, longitude) || other.longitude == longitude)&&(identical(other.timezone, timezone) || other.timezone == timezone)&&(identical(other.utcOffsetSeconds, utcOffsetSeconds) || other.utcOffsetSeconds == utcOffsetSeconds)&&const DeepCollectionEquality().equals(other._hourlyUnits, _hourlyUnits)&&const DeepCollectionEquality().equals(other._hourly, _hourly)&&const DeepCollectionEquality().equals(other._dailyUnits, _dailyUnits)&&const DeepCollectionEquality().equals(other._daily, _daily));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,latitude,longitude,timezone,const DeepCollectionEquality().hash(_hourlyUnits),const DeepCollectionEquality().hash(_hourly),const DeepCollectionEquality().hash(_dailyUnits),const DeepCollectionEquality().hash(_daily));
+int get hashCode => Object.hash(runtimeType,latitude,longitude,timezone,utcOffsetSeconds,const DeepCollectionEquality().hash(_hourlyUnits),const DeepCollectionEquality().hash(_hourly),const DeepCollectionEquality().hash(_dailyUnits),const DeepCollectionEquality().hash(_daily));
 
 @override
 String toString() {
-  return 'MetroApiResponse(latitude: $latitude, longitude: $longitude, timezone: $timezone, hourlyUnits: $hourlyUnits, hourly: $hourly, dailyUnits: $dailyUnits, daily: $daily)';
+  return 'MetroApiResponse(latitude: $latitude, longitude: $longitude, timezone: $timezone, utcOffsetSeconds: $utcOffsetSeconds, hourlyUnits: $hourlyUnits, hourly: $hourly, dailyUnits: $dailyUnits, daily: $daily)';
 }
 
 
@@ -569,7 +571,7 @@ abstract mixin class _$MetroApiResponseCopyWith<$Res> implements $MetroApiRespon
   factory _$MetroApiResponseCopyWith(_MetroApiResponse value, $Res Function(_MetroApiResponse) _then) = __$MetroApiResponseCopyWithImpl;
 @override @useResult
 $Res call({
- double latitude, double longitude, String timezone, Map<String, String> hourlyUnits, Map<String, List<dynamic>> hourly, Map<String, String> dailyUnits, Map<String, List<dynamic>> daily
+ double latitude, double longitude, String timezone, int utcOffsetSeconds, Map<String, String> hourlyUnits, Map<String, List<dynamic>> hourly, Map<String, String> dailyUnits, Map<String, List<dynamic>> daily
 });
 
 
@@ -586,12 +588,13 @@ class __$MetroApiResponseCopyWithImpl<$Res>
 
 /// Create a copy of MetroApiResponse
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? latitude = null,Object? longitude = null,Object? timezone = null,Object? hourlyUnits = null,Object? hourly = null,Object? dailyUnits = null,Object? daily = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? latitude = null,Object? longitude = null,Object? timezone = null,Object? utcOffsetSeconds = null,Object? hourlyUnits = null,Object? hourly = null,Object? dailyUnits = null,Object? daily = null,}) {
   return _then(_MetroApiResponse(
 latitude: null == latitude ? _self.latitude : latitude // ignore: cast_nullable_to_non_nullable
 as double,longitude: null == longitude ? _self.longitude : longitude // ignore: cast_nullable_to_non_nullable
 as double,timezone: null == timezone ? _self.timezone : timezone // ignore: cast_nullable_to_non_nullable
-as String,hourlyUnits: null == hourlyUnits ? _self._hourlyUnits : hourlyUnits // ignore: cast_nullable_to_non_nullable
+as String,utcOffsetSeconds: null == utcOffsetSeconds ? _self.utcOffsetSeconds : utcOffsetSeconds // ignore: cast_nullable_to_non_nullable
+as int,hourlyUnits: null == hourlyUnits ? _self._hourlyUnits : hourlyUnits // ignore: cast_nullable_to_non_nullable
 as Map<String, String>,hourly: null == hourly ? _self._hourly : hourly // ignore: cast_nullable_to_non_nullable
 as Map<String, List<dynamic>>,dailyUnits: null == dailyUnits ? _self._dailyUnits : dailyUnits // ignore: cast_nullable_to_non_nullable
 as Map<String, String>,daily: null == daily ? _self._daily : daily // ignore: cast_nullable_to_non_nullable

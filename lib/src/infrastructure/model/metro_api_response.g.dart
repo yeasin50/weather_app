@@ -35,6 +35,7 @@ _MetroApiResponse _$MetroApiResponseFromJson(Map<String, dynamic> json) =>
       latitude: (json['latitude'] as num).toDouble(),
       longitude: (json['longitude'] as num).toDouble(),
       timezone: json['timezone'] as String,
+      utcOffsetSeconds: (json['utc_offset_seconds'] as num).toInt(),
       hourlyUnits: Map<String, String>.from(json['hourly_units'] as Map),
       hourly: (json['hourly'] as Map<String, dynamic>).map(
         (k, e) => MapEntry(k, e as List<dynamic>),
@@ -50,6 +51,7 @@ Map<String, dynamic> _$MetroApiResponseToJson(_MetroApiResponse instance) =>
       'latitude': instance.latitude,
       'longitude': instance.longitude,
       'timezone': instance.timezone,
+      'utc_offset_seconds': instance.utcOffsetSeconds,
       'hourly_units': instance.hourlyUnits,
       'hourly': instance.hourly,
       'daily_units': instance.dailyUnits,

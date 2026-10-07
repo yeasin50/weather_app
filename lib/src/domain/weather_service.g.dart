@@ -13,6 +13,7 @@ _CityInfo _$CityInfoFromJson(Map<String, dynamic> json) => _CityInfo(
   longitude: (json['longitude'] as num).toDouble(),
   countryCode: json['country_code'] as String,
   location: json['location'] as String,
+  utcOffsetSeconds: (json['utc_offset_seconds'] as num?)?.toInt(),
 );
 
 Map<String, dynamic> _$CityInfoToJson(_CityInfo instance) => <String, dynamic>{
@@ -22,4 +23,5 @@ Map<String, dynamic> _$CityInfoToJson(_CityInfo instance) => <String, dynamic>{
   'longitude': instance.longitude,
   'country_code': instance.countryCode,
   'location': instance.location,
+  'utc_offset_seconds': instance.utcOffsetSeconds,
 };

@@ -44,6 +44,11 @@ const CityRecordSchema = CollectionSchema(
       type: IsarType.double,
     ),
     r'name': PropertySchema(id: 6, name: r'name', type: IsarType.string),
+    r'utcSecondOffset': PropertySchema(
+      id: 7,
+      name: r'utcSecondOffset',
+      type: IsarType.long,
+    ),
   },
 
   estimateSize: _cityRecordEstimateSize,
@@ -87,6 +92,7 @@ void _cityRecordSerialize(
   writer.writeString(offsets[4], object.location);
   writer.writeDouble(offsets[5], object.longitude);
   writer.writeString(offsets[6], object.name);
+  writer.writeLong(offsets[7], object.utcSecondOffset);
 }
 
 CityRecord _cityRecordDeserialize(
@@ -104,6 +110,7 @@ CityRecord _cityRecordDeserialize(
     location: reader.readString(offsets[4]),
     longitude: reader.readDouble(offsets[5]),
     name: reader.readString(offsets[6]),
+    utcSecondOffset: reader.readLong(offsets[7]),
   );
   return object;
 }
@@ -129,6 +136,8 @@ P _cityRecordDeserializeProp<P>(
       return (reader.readDouble(offset)) as P;
     case 6:
       return (reader.readString(offset)) as P;
+    case 7:
+      return (reader.readLong(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
   }
@@ -1071,6 +1080,61 @@ extension CityRecordQueryFilter
       );
     });
   }
+
+  QueryBuilder<CityRecord, CityRecord, QAfterFilterCondition>
+  utcSecondOffsetEqualTo(int value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.equalTo(property: r'utcSecondOffset', value: value),
+      );
+    });
+  }
+
+  QueryBuilder<CityRecord, CityRecord, QAfterFilterCondition>
+  utcSecondOffsetGreaterThan(int value, {bool include = false}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.greaterThan(
+          include: include,
+          property: r'utcSecondOffset',
+          value: value,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<CityRecord, CityRecord, QAfterFilterCondition>
+  utcSecondOffsetLessThan(int value, {bool include = false}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.lessThan(
+          include: include,
+          property: r'utcSecondOffset',
+          value: value,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<CityRecord, CityRecord, QAfterFilterCondition>
+  utcSecondOffsetBetween(
+    int lower,
+    int upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.between(
+          property: r'utcSecondOffset',
+          lower: lower,
+          includeLower: includeLower,
+          upper: upper,
+          includeUpper: includeUpper,
+        ),
+      );
+    });
+  }
 }
 
 extension CityRecordQueryObject
@@ -1162,6 +1226,19 @@ extension CityRecordQuerySortBy
   QueryBuilder<CityRecord, CityRecord, QAfterSortBy> sortByNameDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'name', Sort.desc);
+    });
+  }
+
+  QueryBuilder<CityRecord, CityRecord, QAfterSortBy> sortByUtcSecondOffset() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'utcSecondOffset', Sort.asc);
+    });
+  }
+
+  QueryBuilder<CityRecord, CityRecord, QAfterSortBy>
+  sortByUtcSecondOffsetDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'utcSecondOffset', Sort.desc);
     });
   }
 }
@@ -1263,6 +1340,19 @@ extension CityRecordQuerySortThenBy
       return query.addSortBy(r'name', Sort.desc);
     });
   }
+
+  QueryBuilder<CityRecord, CityRecord, QAfterSortBy> thenByUtcSecondOffset() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'utcSecondOffset', Sort.asc);
+    });
+  }
+
+  QueryBuilder<CityRecord, CityRecord, QAfterSortBy>
+  thenByUtcSecondOffsetDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'utcSecondOffset', Sort.desc);
+    });
+  }
 }
 
 extension CityRecordQueryWhereDistinct
@@ -1316,6 +1406,12 @@ extension CityRecordQueryWhereDistinct
       return query.addDistinctBy(r'name', caseSensitive: caseSensitive);
     });
   }
+
+  QueryBuilder<CityRecord, CityRecord, QDistinct> distinctByUtcSecondOffset() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'utcSecondOffset');
+    });
+  }
 }
 
 extension CityRecordQueryProperty
@@ -1365,6 +1461,12 @@ extension CityRecordQueryProperty
   QueryBuilder<CityRecord, String, QQueryOperations> nameProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'name');
+    });
+  }
+
+  QueryBuilder<CityRecord, int, QQueryOperations> utcSecondOffsetProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'utcSecondOffset');
     });
   }
 }
