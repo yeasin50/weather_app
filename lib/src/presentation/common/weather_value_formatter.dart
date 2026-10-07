@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import '../../domain/domain.dart';
 import '../../infrastructure/model/metro_api_weather_code.dart'
@@ -28,6 +29,9 @@ String _valueFormatter(WeatherMeasurement data) {
         "invaid parse ${data.measurementType} value ${data.value}",
       );
       return value == 0 ? "" : "${value ?? "NA"}%";
+    }(),
+    .sunrise || .sunset || .moonRise || .moonSet => () {
+      return DateFormat("d hh:mm a").format(DateTime.parse(data.value));
     }(),
     _ => () {
       assert(false, " missing type ${data.measurementType}");

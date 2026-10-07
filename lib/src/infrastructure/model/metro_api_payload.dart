@@ -4,8 +4,6 @@ import 'package:weather_app/src/domain/weather_service.dart';
 part 'metro_api_payload.freezed.dart';
 part 'metro_api_payload.g.dart';
 
-//TODO: Might change into  simple objects for daily &  hourly items
-
 /// Units are fixed and should be persistence in this maner.
 /// temperature unit -> Celsius
 /// speed unit  -> kilometer per hour
