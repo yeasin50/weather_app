@@ -1,47 +1,18 @@
-import 'package:fl_chart/fl_chart.dart';
-import 'package:intl/intl.dart';
 import 'dart:math' as math;
 
-import '../../domain/domain.dart';
-
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
-import '../common/models/models.dart';
+import '../../../../domain/domain.dart';
+import '../../models/models.dart';
 import 'common.dart';
 
 /// shows a specific daily weather item for a day
 class UVIndexChart extends StatefulWidget {
-  const UVIndexChart({super.key, required this.data});
-
   final List<WeatherMeasurement> data;
 
-  static void show({
-    required BuildContext context,
-    required List<WeatherMeasurement> data,
-  }) {
-    assert(data.length == 24);
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      showDragHandle: true,
-      builder: (context) => Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-        child: Column(
-          mainAxisSize: .min,
-          spacing: 24,
-          children: [
-            DialogTitle(
-              title: "UV index",
-              onTap: () {
-                //Todo: nav to full view
-              },
-            ),
-            UVIndexChart(data: data),
-          ],
-        ),
-      ),
-    );
-  }
+  const UVIndexChart({super.key, required this.data});
 
   @override
   State<UVIndexChart> createState() => _UVIndexChartState();
@@ -53,46 +24,14 @@ class _UVIndexChartState extends State<UVIndexChart> with ChartMixin {
   bool showAvg = false;
   List<FlSpot> spots = [];
 
-  double get maxY => math.max(double.parse(maxUVIndex.value) + 2, 9);
-
   late WeatherMeasurement maxUVIndex = widget.data.first;
-  void calculateSpots() {
-    for (final d in widget.data) {
-      final double value = double.tryParse(d.value) ?? 0;
-      spots.add(FlSpot(d.time.hour.toDouble(), value));
-
-      if (double.parse(maxUVIndex.value) < value) maxUVIndex = d;
-    }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    calculateSpots();
-    onChartHover(null);
-  }
 
   String uvIndexLabel = "Max";
   String title = "maximum value";
+
   double indexValue = 0;
 
-  void onChartHover(int? hoveredHour) {
-    late UVIndexParser item;
-
-    if (hoveredHour == null) {
-      item = UVIndexParser(maxUVIndex);
-      title = "Maximum value";
-    } else {
-      final data = widget.data.elementAt(hoveredHour);
-      item = UVIndexParser(data);
-      title = DateFormat("h:mm a").format(data.time);
-    }
-
-    uvIndexLabel = item.level;
-    indexValue = item.value;
-    setState(() {});
-  }
-
+  double get maxY => math.max(double.parse(maxUVIndex.value) + 2, 9);
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -106,14 +45,28 @@ class _UVIndexChartState extends State<UVIndexChart> with ChartMixin {
         ),
 
         AspectRatio(
-          aspectRatio: 1.70, //FIXME:  better view must check  footer
-          child: Padding(
-            padding: const EdgeInsets.only(left: 26),
-            child: LineChart(mainData()),
-          ),
+          aspectRatio: chartAspectRatio,
+          child: Padding(padding: chartPadding, child: LineChart(mainData())),
         ),
       ],
     );
+  }
+
+  void calculateSpots() {
+    for (final d in widget.data) {
+      final double value = double.tryParse(d.value) ?? 0;
+      spots.add(FlSpot(d.time.hour.toDouble(), value));
+
+      if (double.parse(maxUVIndex.value) < value) maxUVIndex = d;
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    assert(widget.data.length == 24);
+    calculateSpots();
+    onChartHover(null);
   }
 
   LineChartData mainData() {
@@ -172,5 +125,22 @@ class _UVIndexChartState extends State<UVIndexChart> with ChartMixin {
         ),
       ],
     );
+  }
+
+  void onChartHover(int? hoveredHour) {
+    late UVIndexParser item;
+
+    if (hoveredHour == null) {
+      item = UVIndexParser(maxUVIndex);
+      title = "Maximum value";
+    } else {
+      final data = widget.data.elementAt(hoveredHour);
+      item = UVIndexParser(data);
+      title = DateFormat("h:mm a").format(data.time);
+    }
+
+    uvIndexLabel = item.level;
+    indexValue = item.value;
+    setState(() {});
   }
 }

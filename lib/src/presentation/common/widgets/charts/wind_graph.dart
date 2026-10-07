@@ -2,9 +2,9 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 
-import '../../domain/domain.dart';
-import '../common/common.dart';
-import '../common/models/models.dart';
+import '../../../../domain/domain.dart' show WeatherMeasurement;
+import '../../common.dart';
+import '../../models/models.dart' show WindData;
 import 'common.dart';
 
 /// shows a specific daily weather item for a day
@@ -21,45 +21,6 @@ class WindGraph extends StatefulWidget {
   final List<WeatherMeasurement> windSpeed;
   final List<WeatherMeasurement> windGusts;
   final List<WeatherMeasurement> windDirection;
-
-  static void show({
-    required BuildContext context,
-
-    required List<WeatherMeasurement> windSpeed,
-    required List<WeatherMeasurement> windGusts,
-    required List<WeatherMeasurement> windDirection,
-  }) {
-    assert(windDirection.length == 24);
-    assert(windSpeed.length == 24);
-    assert(windGusts.length == 24);
-
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      showDragHandle: true,
-      builder: (context) => Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-        child: Column(
-          mainAxisSize: .min,
-          spacing: 24,
-          children: [
-            //something
-            DialogTitle(
-              title: "Percipitation",
-              onTap: () {
-                //Todo: nav to full view
-              },
-            ),
-            WindGraph(
-              windGusts: windGusts,
-              windSpeed: windSpeed,
-              windDirection: windDirection,
-            ),
-          ],
-        ),
-      ),
-    );
-  }
 
   @override
   State<WindGraph> createState() => _WindGraphState();
@@ -98,6 +59,9 @@ class _WindGraphState extends State<WindGraph> with ChartMixin {
   @override
   void initState() {
     super.initState();
+    assert(widget.windDirection.length == 24);
+    assert(widget.windSpeed.length == 24);
+    assert(widget.windGusts.length == 24);
     calculateSpots();
     onChartHover(null);
   }
@@ -140,9 +104,9 @@ class _WindGraphState extends State<WindGraph> with ChartMixin {
           trailingValue: windLabelSmall,
         ),
         AspectRatio(
-          aspectRatio: 1.70, //FIXME:  better view must check  footer
+          aspectRatio: chartAspectRatio,
           child: Padding(
-            padding: const EdgeInsets.only(left: 26),
+            padding: chartPadding,
             child: LineChart(windSpeedData()),
           ),
         ),

@@ -45,7 +45,7 @@ class UVIndexShape extends ShapeBorder {
 
     double stepAngle = -30 * pi / 180;
     double startAngle = -pi + stepAngle;
-    final radius = rect.width / 2 * .85;
+    final radius = (rect.width / 2 - 8) * .85;
 
     // dart format off
     final dotRadius = rect.width * .045;

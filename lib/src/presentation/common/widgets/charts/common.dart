@@ -1,25 +1,21 @@
+import 'dart:math' as math;
+
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import 'dart:math' as math;
-
-import '../../domain/entity/weather_record.dart';
+import '/src/domain/domain.dart';
 
 mixin ChartMixin {
-  double yInterval(double maxY) {
-    final raw = maxY / 5;
-    final magnitude = math
-        .pow(10, (math.log(raw) / math.ln10).floor())
-        .toDouble();
-    return (raw / magnitude).ceil() * magnitude;
-  }
+  double get chartAspectRatio => 1.75;
+  EdgeInsets get chartPadding => .only(left: 26);
 
   Widget bottomTitleWidgets(
     double value,
     TitleMeta meta, {
     required List<WeatherMeasurement> data,
   }) {
+    assert(data.length == 24);
     const style = TextStyle();
     final date = data.elementAtOrNull(value.toInt())?.time;
     String text = date == null || date.hour % 6 != 0
@@ -31,19 +27,19 @@ mixin ChartMixin {
     );
   }
 
-  Widget rightTitleWidgets(double value, TitleMeta meta) {
-    const style = TextStyle();
-
-    final rounded = value.round();
-    if ((value - rounded).abs() > 0.001) {
-      return const SizedBox.shrink();
-    }
-
-    return SideTitleWidget(
-      meta: meta,
-      child: Text(value.toStringAsFixed(0), style: style),
-    );
-  }
+  /// shows before chart a small row,
+  /// on hover theses value update by [lineTouchdate]'s callback
+  Widget buildValueIndicator({
+    Color color = Colors.cyanAccent,
+    required String title,
+    required String value,
+    required String trailingValue,
+  }) => _ChartHoverDataIndicator(
+    color: color,
+    title: title,
+    value: value,
+    trailingValue: trailingValue,
+  );
 
   LineTouchData lineTouchdate(void Function(int?) onChartHover) =>
       LineTouchData(
@@ -66,33 +62,60 @@ mixin ChartMixin {
         },
       );
 
-  /// shows before chart a small row,
-  /// on hover theses value update by [lineTouchdate]'s callback
-  Widget buildValueIndicator({
-    Color color = Colors.cyanAccent,
-    required String title,
-    required String value,
-    required String trailingValue,
-  }) => _ChartHoverDataIndicator(
-    color: color,
-    title: title,
-    value: value,
-    trailingValue: trailingValue,
-  );
+  Widget rightTitleWidgets(double value, TitleMeta meta) {
+    const style = TextStyle();
+
+    final rounded = value.round();
+    if ((value - rounded).abs() > 0.001) {
+      return const SizedBox.shrink();
+    }
+
+    return SideTitleWidget(
+      meta: meta,
+      child: Text(value.toStringAsFixed(0), style: style),
+    );
+  }
+
+  double yInterval(double maxY) {
+    final raw = maxY / 5;
+    final magnitude = math
+        .pow(10, (math.log(raw) / math.ln10).floor())
+        .toDouble();
+    return (raw / magnitude).ceil() * magnitude;
+  }
+}
+
+/// used for charts dialog
+class DialogTitle extends StatelessWidget {
+  final String title;
+
+  final VoidCallback? onTap;
+  const DialogTitle({super.key, required this.title, this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Text(title, style: TextTheme.of(context).labelMedium),
+        Spacer(),
+        IconButton(onPressed: onTap, icon: Icon(Icons.open_in_full_outlined)),
+      ],
+    );
+  }
 }
 
 class _ChartHoverDataIndicator extends StatelessWidget {
+  final Color color;
+
+  final String title;
+  final String value;
+  final String trailingValue;
   const _ChartHoverDataIndicator({
     required this.color,
     required this.title,
     required this.value,
     required this.trailingValue,
   });
-
-  final Color color;
-  final String title;
-  final String value;
-  final String trailingValue;
 
   @override
   Widget build(BuildContext context) {
@@ -123,25 +146,6 @@ class _ChartHoverDataIndicator extends StatelessWidget {
             ],
           ),
         ),
-      ],
-    );
-  }
-}
-
-/// used for charts dialog
-class DialogTitle extends StatelessWidget {
-  const DialogTitle({super.key, required this.title, this.onTap});
-
-  final String title;
-  final VoidCallback? onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Text(title, style: TextTheme.of(context).labelMedium),
-        Spacer(),
-        IconButton(onPressed: onTap, icon: Icon(Icons.open_in_full_outlined)),
       ],
     );
   }

@@ -47,6 +47,10 @@ class CityWeatherNotifier extends WeatherDataExtractor with ChangeNotifier {
 
   ({HourlyForecast forecast, DailyForecast dayForecast})
   get selectedHourForcast {
+    assert(
+      _todaysHourlyForecast.isNotEmpty,
+      "_todaysHourlyForecast cant be empty",
+    );
     final forecast = _todaysHourlyForecast.firstWhere((e) {
       return e.time.day == selectedHour.day && e.time.hour == selectedHour.hour;
     });

@@ -3,9 +3,9 @@ import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../domain/domain.dart';
-import '../common/common.dart';
-import '../common/models/models.dart';
+import '../../../../domain/domain.dart';
+import '../../common.dart';
+import '../../models/models.dart';
 import 'common.dart';
 
 /// shows a specific daily weather item for a day
@@ -14,36 +14,6 @@ class VisibilityGraph extends StatefulWidget {
   const VisibilityGraph({super.key, required this.data});
 
   final List<WeatherMeasurement> data;
-
-  static void show({
-    required BuildContext context,
-    required List<WeatherMeasurement> data,
-  }) {
-    assert(data.length == 24);
-
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      showDragHandle: true,
-      builder: (context) => Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-        child: Column(
-          mainAxisSize: .min,
-          spacing: 24,
-          children: [
-            //something
-            DialogTitle(
-              title: "Visibility",
-              onTap: () {
-                //Todo: nav to full view
-              },
-            ),
-            VisibilityGraph(data: data),
-          ],
-        ),
-      ),
-    );
-  }
 
   @override
   State<VisibilityGraph> createState() => _VisibilityGraphState();
@@ -78,6 +48,7 @@ class _VisibilityGraphState extends State<VisibilityGraph> with ChartMixin {
   @override
   void initState() {
     super.initState();
+    assert(widget.data.length == 24);
     calculateSpots();
     onChartHover(null);
   }
@@ -117,9 +88,9 @@ class _VisibilityGraphState extends State<VisibilityGraph> with ChartMixin {
           trailingValue: labelSmall,
         ),
         AspectRatio(
-          aspectRatio: 1.70, //FIXME:  better view must check  footer
+          aspectRatio: chartAspectRatio,
           child: Padding(
-            padding: const EdgeInsets.only(left: 26),
+            padding: chartPadding,
             child: LineChart(windSpeedData()),
           ),
         ),

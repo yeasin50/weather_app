@@ -1,7 +1,7 @@
 import 'dart:ui' show PointerDeviceKind;
 
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+
 import 'package:isar_community/isar.dart';
 import 'package:provider/provider.dart';
 
@@ -77,15 +77,20 @@ class _WeatherAppState extends State<WeatherApp> {
                   UserFormatter(setting.preference),
             ),
           ],
-          child: MaterialApp.router(
-            routerConfig: AppRoute.routeConfig(),
-            debugShowCheckedModeBanner: false,
-            //TODO: use provider and dynamic from  system schema
-            theme: AppTheme.theme(context),
-            themeMode: AppTheme.mode,
-            scrollBehavior: const ScrollBehavior().copyWith(
-              dragDevices: PointerDeviceKind.values.toSet(),
-            ),
+          child: Builder(
+            builder: (context) {
+              return MaterialApp.router(
+                routerConfig: AppRoute.routeConfig(
+                  context.read<WeatherNotifier>(),
+                ),
+                debugShowCheckedModeBanner: false,
+                theme: AppTheme.theme(context),
+                themeMode: AppTheme.mode,
+                scrollBehavior: const ScrollBehavior().copyWith(
+                  dragDevices: PointerDeviceKind.values.toSet(),
+                ),
+              );
+            },
           ),
         );
       },

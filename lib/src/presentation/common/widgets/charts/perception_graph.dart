@@ -1,9 +1,9 @@
 import 'package:fl_chart/fl_chart.dart';
-import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
-import '../../domain/domain.dart';
-import '../common/models/models.dart';
+import '/src/domain/domain.dart';
+import '../../models/models.dart';
 import 'common.dart';
 
 /// shows a specific daily weather item for a day
@@ -17,42 +17,6 @@ class PrecipitationGraph extends StatefulWidget {
 
   final List<WeatherMeasurement> percipitationData;
   final List<WeatherMeasurement> rainData;
-
-  static void show({
-    required BuildContext context,
-    required List<WeatherMeasurement> rainData,
-    required List<WeatherMeasurement> percipitationData,
-  }) {
-    assert(rainData.length == 24);
-    assert(percipitationData.length == 24);
-
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      showDragHandle: true,
-      builder: (context) => Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-        child: Column(
-          mainAxisSize: .min,
-          spacing: 24,
-          children: [
-            //something
-            DialogTitle(
-              title: "Percipitation",
-              onTap: () {
-                //Todo: nav to full view
-              },
-            ),
-
-            PrecipitationGraph(
-              rainData: rainData,
-              percipitationData: percipitationData,
-            ),
-          ],
-        ),
-      ),
-    );
-  }
 
   @override
   State<PrecipitationGraph> createState() => _PrecipitationGraphState();
@@ -87,6 +51,8 @@ class _PrecipitationGraphState extends State<PrecipitationGraph>
   @override
   void initState() {
     super.initState();
+    assert(widget.percipitationData.length == 24);
+    assert(widget.rainData.length == 24, "rainData should be 24 items");
     calculateSpots();
     onChartHover(null);
   }
@@ -126,11 +92,8 @@ class _PrecipitationGraphState extends State<PrecipitationGraph>
           trailingValue: rainLabel,
         ),
         AspectRatio(
-          aspectRatio: 1.70, //FIXME:  better view must check  footer
-          child: Padding(
-            padding: const EdgeInsets.only(left: 26),
-            child: LineChart(mainData()),
-          ),
+          aspectRatio: chartAspectRatio,
+          child: Padding(padding: chartPadding, child: LineChart(mainData())),
         ),
       ],
     );

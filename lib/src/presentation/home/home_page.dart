@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../uv_index/humidity_graph.dart';
-import '../uv_index/perception_graph.dart';
-import '../uv_index/uvindex_graph.dart';
+import '../common/widgets/charts/charts_view.dart';
 import '../common/models/models.dart';
-import '../uv_index/visibility_graph.dart';
-import '../uv_index/wind_graph.dart';
 import '/src/presentation/common/widgets/daily_cards/wind_shape_painter.dart';
 
 import '../common/widgets/daily_cards/daily_weather_card.dart';
@@ -62,7 +58,7 @@ class HomePage extends StatelessWidget {
                                     data: data.weeklyForecast,
                                   ),
 
-                                  SizedBox(height: 48),
+                                  SizedBox(height: 4),
                                   DailyForecastItems(),
                                 ],
                               );
@@ -111,18 +107,28 @@ class DailyForecastItems extends StatelessWidget {
               unit: "",
               shape: UVIndexShape(uv.colorIndex, colors: UVIndexParser.colors),
               onTap: () {
-                final data = value.fullDayforecast(.uvIndex);
-                UVIndexChart.show(context: context, data: data);
+                ChartDialogView.show(
+                  context: context,
+                  title: "uv index",
+                  chartView: UVIndexChart(
+                    data: value.fullDayforecast(.uvIndex),
+                  ),
+                  onTap: () {},
+                );
               },
             ),
 
             HumadityView(
               data: value.humidityData,
               onTap: () {
-                HumidityGraph.show(
+                ChartDialogView.show(
                   context: context,
-                  humidityData: value.fullDayforecast(.relativeHumidity),
-                  duePointsData: value.fullDayforecast(.dewPoint),
+                  title: "humidity",
+                  chartView: HumidityGraph(
+                    humidityData: value.fullDayforecast(.relativeHumidity),
+                    duePointsData: value.fullDayforecast(.dewPoint),
+                  ),
+                  onTap: () {},
                 );
               },
             ),
@@ -143,16 +149,20 @@ class DailyForecastItems extends StatelessWidget {
               value: precipitation.value + precipitation.unit,
               description: precipitation.description,
               unit: '',
+              shape: RoundedRectangleBorder(borderRadius: .circular(24)),
               onTap: () {
-                PrecipitationGraph.show(
+                ChartDialogView.show(
                   context: context,
-                  rainData: value.fullDayforecast(.rain),
-                  percipitationData: value.fullDayforecast(
-                    .precipitationProbability,
+                  title: "perception",
+                  chartView: PrecipitationGraph(
+                    rainData: value.fullDayforecast(.rain),
+                    percipitationData: value.fullDayforecast(
+                      .precipitationProbability,
+                    ),
                   ),
+                  onTap: () {},
                 );
               },
-              shape: RoundedRectangleBorder(borderRadius: .circular(24)),
             ),
 
             DailyWeatherCard(
@@ -163,11 +173,15 @@ class DailyForecastItems extends StatelessWidget {
               unit: wind.unit,
               painter: WindShapePainter(wind.rotation, wind.color),
               onTap: () {
-                WindGraph.show(
+                ChartDialogView.show(
                   context: context,
-                  windSpeed: value.fullDayforecast(.windSpeed),
-                  windGusts: value.fullDayforecast(.windGusts),
-                  windDirection: value.fullDayforecast(.windDirection),
+                  title: "wind",
+                  chartView: WindGraph(
+                    windSpeed: value.fullDayforecast(.windSpeed),
+                    windGusts: value.fullDayforecast(.windGusts),
+                    windDirection: value.fullDayforecast(.windDirection),
+                  ),
+                  onTap: () {},
                 );
               },
             ),
@@ -180,9 +194,13 @@ class DailyForecastItems extends StatelessWidget {
               description: visibility.label,
               painter: VisibilityPainter(visibility.color),
               onTap: () {
-                VisibilityGraph.show(
+                ChartDialogView.show(
                   context: context,
-                  data: value.fullDayforecast(.visiblity),
+                  title: "visibility",
+                  chartView: VisibilityGraph(
+                    data: value.fullDayforecast(.visiblity),
+                  ),
+                  onTap: () {},
                 );
               },
             ),

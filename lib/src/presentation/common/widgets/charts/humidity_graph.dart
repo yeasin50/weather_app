@@ -1,60 +1,24 @@
 import 'package:fl_chart/fl_chart.dart';
-import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-import '../../domain/domain.dart';
-import '../common/common.dart';
-import '../common/models/models.dart';
+import '/src/domain/domain.dart';
+import '../../common.dart';
+import '../../models/models.dart';
 import 'common.dart';
 
 /// shows a specific daily weather item for a day
 /// Top shows duePoint but graphs for humidity
 class HumidityGraph extends StatefulWidget {
+  final List<WeatherMeasurement> humidityData;
+
+  final List<WeatherMeasurement> duePointsData;
   const HumidityGraph({
     super.key,
     required this.humidityData,
     required this.duePointsData,
   });
-
-  final List<WeatherMeasurement> humidityData;
-  final List<WeatherMeasurement> duePointsData;
-
-  static void show({
-    required BuildContext context,
-    required List<WeatherMeasurement> humidityData,
-    required List<WeatherMeasurement> duePointsData,
-  }) {
-    assert(humidityData.length == 24);
-    assert(duePointsData.length == 24);
-
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      showDragHandle: true,
-      builder: (context) => Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-        child: Column(
-          mainAxisSize: .min,
-          spacing: 24,
-          children: [
-            //something
-            DialogTitle(
-              title: "Humidity",
-              onTap: () {
-                //Todo: nav to full view
-              },
-            ),
-
-            HumidityGraph(
-              humidityData: humidityData,
-              duePointsData: duePointsData,
-            ),
-          ],
-        ),
-      ),
-    );
-  }
 
   @override
   State<HumidityGraph> createState() => _HumidityChartState();
@@ -67,10 +31,34 @@ class _HumidityChartState extends State<HumidityGraph> with ChartMixin {
   bool showAvg = false;
   List<FlSpot> spots = [];
 
-  double get maxY => 100;
-
   late WeatherMeasurement maxDuePoint = widget.duePointsData.first;
+
   late WeatherMeasurement maxHumidity = widget.humidityData.first;
+  String humidityLabel = "Max";
+
+  String title = "maximum due point";
+
+  late WeatherMeasurement duePoint;
+
+  double get maxY => 100;
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisSize: .min,
+      crossAxisAlignment: .stretch,
+      children: [
+        buildValueIndicator(
+          title: title,
+          value: context.read<UserFormatter>().temp(duePoint),
+          trailingValue: humidityLabel,
+        ),
+        AspectRatio(
+          aspectRatio: chartAspectRatio,
+          child: Padding(padding: chartPadding, child: LineChart(mainData())),
+        ),
+      ],
+    );
+  }
 
   void calculateSpots() {
     for (int i = 0; i < widget.humidityData.length; i++) {
@@ -90,52 +78,10 @@ class _HumidityChartState extends State<HumidityGraph> with ChartMixin {
   @override
   void initState() {
     super.initState();
+    assert(widget.humidityData.length == 24);
+    assert(widget.duePointsData.length == 24);
     calculateSpots();
     onChartHover(null);
-  }
-
-  String humidityLabel = "Max";
-  String title = "maximum due point";
-  late WeatherMeasurement duePoint;
-
-  void onChartHover(int? hoveredHour) {
-    late WeatherMeasurement humidity;
-
-    if (hoveredHour == null) {
-      humidity = maxHumidity;
-      duePoint = maxDuePoint;
-      title = "Maximum due point";
-    } else {
-      humidity = widget.humidityData.elementAt(hoveredHour);
-      duePoint = widget.duePointsData.elementAt(hoveredHour);
-      title = DateFormat("h:mm a").format(humidity.time);
-    }
-
-    humidityLabel = "on ${int.parse(humidity.value)}% humidity";
-
-    setState(() {});
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: .min,
-      crossAxisAlignment: .stretch,
-      children: [
-        buildValueIndicator(
-          title: title,
-          value: context.read<UserFormatter>().temp(duePoint),
-          trailingValue: humidityLabel,
-        ),
-        AspectRatio(
-          aspectRatio: 1.70, //FIXME:  better view must check  footer
-          child: Padding(
-            padding: const EdgeInsets.only(left: 26),
-            child: LineChart(mainData()),
-          ),
-        ),
-      ],
-    );
   }
 
   LineChartData mainData() {
@@ -194,5 +140,23 @@ class _HumidityChartState extends State<HumidityGraph> with ChartMixin {
         ),
       ],
     );
+  }
+
+  void onChartHover(int? hoveredHour) {
+    late WeatherMeasurement humidity;
+
+    if (hoveredHour == null) {
+      humidity = maxHumidity;
+      duePoint = maxDuePoint;
+      title = "Maximum due point";
+    } else {
+      humidity = widget.humidityData.elementAt(hoveredHour);
+      duePoint = widget.duePointsData.elementAt(hoveredHour);
+      title = DateFormat("h:mm a").format(humidity.time);
+    }
+
+    humidityLabel = "on ${int.parse(humidity.value)}% humidity";
+
+    setState(() {});
   }
 }
