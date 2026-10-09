@@ -47,6 +47,14 @@ class UserFormatter {
   // one thing is to format string but....
   final UserPreference _preference;
 
+  String time(WeatherMeasurement wm) {
+    //TODO: add 24h config here
+    final date = DateTime.tryParse(wm.value);
+    if (date == null) throw Exception("invalid data ${wm.value}");
+
+    return DateFormat("hh:mm a").format(date);
+  }
+
   // dart format off
 
   String get tempUnit => _preference.tempUnit.unit;

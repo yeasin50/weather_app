@@ -11,6 +11,7 @@ class SunView extends StatefulWidget {
     this.phase = "",
     required this.progress,
     this.moonfraction,
+    this.ontap,
   });
 
   final bool isSun;
@@ -18,6 +19,8 @@ class SunView extends StatefulWidget {
   final DateTime down;
   final double progress;
   final String phase;
+
+  final VoidCallback? ontap;
 
   /// only used for moon, act a knife how much moon should be visible 0-1
   final double? moonfraction;
@@ -50,7 +53,7 @@ class _SunViewState extends State<SunView> with SingleTickerProviderStateMixin {
     final timeStyle = style.bodyMedium?.copyWith(fontWeight: .w600);
 
     return DailyItemCard(
-      onTap: () {},
+      onTap: widget.ontap,
       child: Column(
         spacing: 8,
         children: [

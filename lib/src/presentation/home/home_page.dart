@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import '../../app/route_config.dart';
 import '../common/widgets/charts/charts_view.dart';
 import '../common/models/models.dart';
+import '../common/widgets/charts/sun_moon_rise_set_graph.dart';
 import '/src/presentation/common/widgets/daily_cards/wind_shape_painter.dart';
 
 import '../common/widgets/daily_cards/daily_weather_card.dart';
@@ -31,6 +34,8 @@ class HomePage extends StatelessWidget {
               builder: (context, value, child) => Column(
                 children: [
                   HomeAppBar(title: title),
+
+                  SunMoonChart(),
                   Expanded(
                     child: Padding(
                       padding: const EdgeInsets.symmetric(
@@ -133,7 +138,14 @@ class DailyForecastItems extends StatelessWidget {
               },
             ),
 
-            SunView(rise: sun.rise, down: sun.fall, progress: sun.progress),
+            SunView(
+              rise: sun.rise,
+              down: sun.fall,
+              progress: sun.progress,
+              ontap: () {
+                context.push(AppRoute.sunMoonRisePage);
+              },
+            ),
             SunView(
               isSun: false,
               rise: moon.rise,
@@ -141,6 +153,7 @@ class DailyForecastItems extends StatelessWidget {
               progress: moon.progress,
               phase: moon.phase.label,
               moonfraction: moon.moonFraction,
+              ontap: () => context.push(AppRoute.sunMoonRisePage),
             ),
 
             DailyWeatherCard(

@@ -25,6 +25,15 @@ class AppTheme {
 
     return base.copyWith(
       textTheme: GoogleFonts.manropeTextTheme(base.textTheme),
+      tabBarTheme: TabBarThemeData(
+        dividerColor: Colors.grey.shade50,
+        labelPadding: .symmetric(horizontal: 16),
+        dividerHeight: .5,
+        labelStyle: TextStyle(fontSize: 16),
+        unselectedLabelStyle: TextStyle(fontSize: 16),
+        indicatorSize: .tab,
+        tabAlignment: .start,
+      ),
     );
   }
 }

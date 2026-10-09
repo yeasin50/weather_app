@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import '../../infrastructure/model/metro_api_weather_code.dart';
 import '../common/common.dart';
 import '/src/presentation/provider/weather_provider.dart';
 
