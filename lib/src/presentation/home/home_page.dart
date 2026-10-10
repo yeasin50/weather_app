@@ -35,7 +35,6 @@ class HomePage extends StatelessWidget {
                 children: [
                   HomeAppBar(title: title),
 
-                  SunMoonChart(),
                   Expanded(
                     child: Padding(
                       padding: const EdgeInsets.symmetric(

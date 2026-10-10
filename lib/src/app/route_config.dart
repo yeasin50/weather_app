@@ -32,7 +32,7 @@ class AppRoute {
 
   static GoRouter routeConfig(WeatherNotifier weather) {
     return GoRouter(
-      initialLocation: home,
+      initialLocation: sunMoonRisePage,
       navigatorKey: _rootNavigatorKey,
       refreshListenable: weather,
       redirect: (context, state) {
@@ -47,6 +47,11 @@ class AppRoute {
         return null;
       },
       routes: [
+        GoRoute(
+          path: sunMoonRisePage,
+          builder: (context, state) => SunMoonDetailsPage(),
+        ),
+
         GoRoute(path: empyCity, builder: (context, state) => EmptyCityView()),
         GoRoute(
           path: initLoadingPage,
@@ -85,25 +90,20 @@ class AppRoute {
           ],
         ),
 
-        ShellRoute(
-          //TODO: prep  and perform
-          parentNavigatorKey: _rootNavigatorKey,
-          builder: (context, state, child) => Theme(
-            data: Theme.of(context).copyWith(
-              appBarTheme: const AppBarTheme(
-                // backgroundColor: Colors.transparent,
-              ),
-            ),
-            child: child,
-          ),
-
-          routes: [
-            GoRoute(
-              path: sunMoonRisePage,
-              builder: (context, state) => SunMoonDetailsPage(),
-            ),
-          ],
-        ),
+        // ShellRoute(
+        //   //TODO: prep  and perform
+        //   parentNavigatorKey: _rootNavigatorKey,
+        //   builder: (context, state, child) => Theme(
+        //     data: Theme.of(context).copyWith(
+        //       appBarTheme: const AppBarTheme(
+        //         // backgroundColor: Colors.transparent,
+        //       ),
+        //     ),
+        //     child: child,
+        //   ),
+        //
+        //   routes: [],
+        // ),
       ],
     );
   }

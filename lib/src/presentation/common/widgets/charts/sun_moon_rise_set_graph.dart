@@ -12,9 +12,15 @@ import 'common.dart';
 /// Shows all  day sun-moon rise fall, kinda sloppy graph,
 /// might gonna use [CustomPaint] instead
 class SunMoonChart extends StatefulWidget {
-  const SunMoonChart({super.key, this.graphScrollController});
+  const SunMoonChart({
+    super.key,
+    this.graphScrollController,
+    this.height = 250,
+    this.widthPerDay = 100,
+  });
 
   final ScrollController? graphScrollController;
+  final double height, widthPerDay;
 
   @override
   State<SunMoonChart> createState() => _SunMoonChartState();
@@ -46,9 +52,9 @@ class _SunMoonChartState extends State<SunMoonChart> with ChartMixin {
       final dayDuration = sunSet - sunRise;
 
       sunSpots.add(FlSpot(sunRise, 0));
-      sunSpots.add(FlSpot(sunRise + dayDuration / 2, 1));
+      sunSpots.add(FlSpot(sunRise + dayDuration / 2, -1));
       sunSpots.add(FlSpot(sunSet, 0));
-      sunSpots.add(FlSpot(sunSet + dayDuration / 2, -1));
+      sunSpots.add(FlSpot(sunSet + dayDuration / 2, 1));
 
       final moonRise = minuteSinceEpoch(w.moonRise);
       final moonSet = minuteSinceEpoch(w.moonSet);
@@ -56,9 +62,9 @@ class _SunMoonChartState extends State<SunMoonChart> with ChartMixin {
       final moonDuration = moonSet - moonRise;
 
       moonSpots.add(FlSpot(moonRise, 0));
-      moonSpots.add(FlSpot(moonRise + moonDuration / 2, 1));
+      moonSpots.add(FlSpot(moonRise + moonDuration / 2, -1));
       moonSpots.add(FlSpot(moonSet, 0));
-      moonSpots.add(FlSpot(moonSet + moonDuration / 2, -1));
+      moonSpots.add(FlSpot(moonSet + moonDuration / 2, 1));
     }
 
     final allSpots = [...sunSpots, ...moonSpots];
@@ -70,13 +76,19 @@ class _SunMoonChartState extends State<SunMoonChart> with ChartMixin {
     const style = TextStyle(color: Colors.white);
 
     DateTime date = DateTime.fromMillisecondsSinceEpoch(value.toInt() * 60000);
-    String text = date.hour % 6 != 0 ? "" : DateFormat("hh:mm a").format(date);
+    String text = date.hour % 6 != 0
+        ? ""
+        : date.hour == 0
+        ? DateFormat("d MMM").format(date)
+        : DateFormat("hh:mm a").format(date);
 
     return SideTitleWidget(
       meta: meta,
       child: Text(text, style: style),
     );
   }
+
+  double get charWidth => widget.widthPerDay * sunSpots.length;
 
   @override
   void initState() {
@@ -87,14 +99,14 @@ class _SunMoonChartState extends State<SunMoonChart> with ChartMixin {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 400,
+      height: widget.height,
       child: SingleChildScrollView(
         scrollDirection: .horizontal,
         controller: widget.graphScrollController,
         padding: const .only(left: 12, bottom: 12, right: 20, top: 20),
         child: SizedBox(
-          height: 400 + 24,
-          width: 500 * 7,
+          height: widget.height + 24,
+          width: charWidth,
           child: LineChart(
             LineChartData(
               lineTouchData: LineTouchData(enabled: false),
