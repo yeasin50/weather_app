@@ -62,6 +62,17 @@ mixin ChartMixin {
         },
       );
 
+  FlDotData dotData() {
+    return FlDotData(
+      show: false,
+      getDotPainter: (spot, percent, barData, index) => FlDotCirclePainter(
+        radius: 1,
+        color: barData.color ?? Colors.blue,
+        strokeWidth: 0,
+      ),
+    );
+  }
+
   Widget rightTitleWidgets(double value, TitleMeta meta) {
     const style = TextStyle();
 
@@ -125,7 +136,7 @@ class _ChartHoverDataIndicator extends StatelessWidget {
       children: [
         Material(
           shape: CircleBorder(),
-          color: Colors.greenAccent,
+          color: color,
           child: SizedBox.square(dimension: 16),
         ),
         Expanded(

@@ -10,3 +10,4 @@ export 'sun_info.dart';
 export 'moon_info.dart';
 
 export 'preception_info.dart';
+export 'temperature_data.dart';

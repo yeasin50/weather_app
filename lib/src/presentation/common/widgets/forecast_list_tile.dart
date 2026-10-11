@@ -3,6 +3,8 @@ import 'package:provider/provider.dart';
 
 import '/src/presentation/common/common.dart';
 import '../../provider/providers.dart';
+import 'charts/charts_view.dart';
+import 'charts/temperature_graph.dart';
 
 class ForecastListTile<T extends ForecastData> extends StatelessWidget {
   const ForecastListTile({super.key, required this.info});
@@ -38,8 +40,19 @@ class _HourlyForecastTile extends StatelessWidget {
       padding: const .symmetric(horizontal: 8, vertical: 8),
       child: InkWell(
         onTap: () {
-          ///todo: nav to day view
-          print(info.toString());
+          if (info is! HourlyForecast) return;
+          final value = context.read<CityWeatherNotifier>();
+          ChartDialogView.show(
+            context: context,
+            title: "temperature",
+            chartView: TemperatureGraph(
+              tempData: value.fullDayforecast(
+                .temperature,
+              ), //TODO:  accept date?
+              feelsLikeData: value.fullDayforecast(.tempFeelsLike),
+            ),
+            onTap: () {},
+          );
         },
         child: Column(
           mainAxisAlignment: .spaceBetween,

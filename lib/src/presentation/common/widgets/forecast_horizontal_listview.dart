@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:collection/collection.dart';
 import 'package:provider/provider.dart';
 import '../../provider/providers.dart';
-
 import 'forecast_list_tile.dart';
 
 class ForecastHorizontalListview<T extends ForecastData>

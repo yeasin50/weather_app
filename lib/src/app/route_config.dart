@@ -32,7 +32,7 @@ class AppRoute {
 
   static GoRouter routeConfig(WeatherNotifier weather) {
     return GoRouter(
-      initialLocation: sunMoonRisePage,
+      initialLocation: home,
       navigatorKey: _rootNavigatorKey,
       refreshListenable: weather,
       redirect: (context, state) {
