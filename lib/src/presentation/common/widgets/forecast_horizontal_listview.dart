@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:collection/collection.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import '../../../app/route_config.dart';
 import '../../provider/providers.dart';
 import 'forecast_list_tile.dart';
 
@@ -80,9 +82,7 @@ class HourlyForecastListView extends StatelessWidget {
                   spacing: 12,
                   children: data.mapIndexed((i, e) {
                     return GestureDetector(
-                      onTap: () {
-                        ///nav to day  view
-                      },
+                      onTap: () {},
                       child: ForecastListTile(info: e),
                     );
                   }).toList(),

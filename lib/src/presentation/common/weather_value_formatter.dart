@@ -50,7 +50,8 @@ class UserFormatter {
   String time(WeatherMeasurement wm) {
     //TODO: add 24h config here
     final date = DateTime.tryParse(wm.value);
-    if (date == null) throw Exception("invalid data ${wm.value}");
+    if (date == null) return "---"; // FIXME: adjust moon issue #2
+    // throw Exception("invalid data ${wm.value}");
 
     return DateFormat("hh:mm a").format(date);
   }

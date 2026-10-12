@@ -34,8 +34,10 @@ class _SunMoonChartState extends State<SunMoonChart> with ChartMixin {
   final sunColor = Colors.amberAccent;
   final moonColor = Colors.blueGrey;
 
-  double minuteSinceEpoch(WeatherMeasurement wm) {
-    return DateTime.parse(wm.value).millisecondsSinceEpoch / 60000;
+  double? minuteSinceEpoch(WeatherMeasurement wm) {
+    final date = DateTime.tryParse(wm.value);
+    if (date == null) return null;
+    return date.millisecondsSinceEpoch / 60000;
   }
 
   void calculateSpots() {
@@ -49,6 +51,7 @@ class _SunMoonChartState extends State<SunMoonChart> with ChartMixin {
     for (final w in dailyWeathers) {
       final sunRise = minuteSinceEpoch(w.sunrise);
       final sunSet = minuteSinceEpoch(w.sunset);
+      if (sunRise == null || sunSet == null) continue;
       final dayDuration = sunSet - sunRise;
 
       sunSpots.add(FlSpot(sunRise, 0));
@@ -59,12 +62,19 @@ class _SunMoonChartState extends State<SunMoonChart> with ChartMixin {
       final moonRise = minuteSinceEpoch(w.moonRise);
       final moonSet = minuteSinceEpoch(w.moonSet);
 
-      final moonDuration = moonSet - moonRise;
+      ///NOTE: sometimes moon rise or set can be null
+      final moonDuration = moonSet == null || moonRise == null
+          ? 11.5 * 60 + 25
+          : moonSet - moonRise;
 
-      moonSpots.add(FlSpot(moonRise, 0));
-      moonSpots.add(FlSpot(moonRise + moonDuration / 2, -1));
-      moonSpots.add(FlSpot(moonSet, 0));
-      moonSpots.add(FlSpot(moonSet + moonDuration / 2, 1));
+      if (moonRise != null) {
+        moonSpots.add(FlSpot(moonRise, 0));
+        moonSpots.add(FlSpot(moonRise + moonDuration / 2, -1));
+      }
+      if (moonSet != null) {
+        moonSpots.add(FlSpot(moonSet, 0));
+        moonSpots.add(FlSpot(moonSet + moonDuration / 2, 1));
+      }
     }
 
     final allSpots = [...sunSpots, ...moonSpots];

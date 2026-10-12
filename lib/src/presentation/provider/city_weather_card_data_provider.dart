@@ -1,7 +1,29 @@
 import 'package:collection/collection.dart';
 import '../../domain/domain.dart';
-import '../common/common.dart' show DateExtention;
 import 'providers.dart';
+
+/// All day records of a city
+class CityWeather {
+  const CityWeather({
+    required this.city,
+    required this.sevenDaysDailyRecord,
+    required this.hourlyData,
+  });
+
+  final CityRecord city;
+
+  /// 7 days data  like sunrise,sunset etc
+  final List<DailyForecast> sevenDaysDailyRecord;
+
+  /// eachDay  data like temp, wind, uvIndex etc
+  final Map<DateTime, List<HourlyForecast>> hourlyData;
+
+  // times.removeWhere(
+  //   (e) =>
+  //       e.isBefore(now.tilHour) ||
+  //       !e.isBefore(now.tilHour.add(const Duration(days: 1))),
+  // );
+}
 
 /// it offers the daily and hourly specific data for a city
 /// humidity, uvIndex, perception, sun and moon ->rise+set, wind, air quality, visibility and pressure
@@ -11,7 +33,23 @@ abstract class WeatherDataExtractor {
   WeatherDataExtractor();
 
   late CityWeatherRecord _data;
-  void updateCity(CityWeatherRecord record) => _data = record;
+  CityWeather parseCityRecord(CityWeatherRecord record) {
+    _data = record;
+    return _parseWeather;
+  }
+
+  CityWeather get _parseWeather {
+    final hourData = groupBy(
+      _parseHourlyForecast(),
+      (e) => DateTime(e.time.year, e.time.month, e.time.day),
+    );
+
+    return CityWeather(
+      city: _data.city,
+      sevenDaysDailyRecord: parseDailyForecast(),
+      hourlyData: hourData,
+    );
+  }
 
   /// if missing returns empty
   WeatherMeasurement? _getItem(
@@ -22,16 +60,16 @@ abstract class WeatherDataExtractor {
     return result;
   }
 
+  @Deprecated("use `parseWeather` instead")
   List<HourlyForecast> parseTodaysHourlyForecast() {
+    return _parseHourlyForecast();
+  }
+
+  List<HourlyForecast> _parseHourlyForecast() {
     final List<HourlyForecast> result = [];
 
     final groupByHour = groupBy(_data.hourlyItems, (e) => e.time);
     final times = groupByHour.keys.toList();
-    // times.removeWhere(
-    //   (e) =>
-    //       e.isBefore(now.tilHour) ||
-    //       !e.isBefore(now.tilHour.add(const Duration(days: 1))),
-    // );
 
     for (final t in times) {
       final items = groupByHour[t];
@@ -64,8 +102,6 @@ abstract class WeatherDataExtractor {
 
       result.add(forecast);
     }
-
-    if (result.isNotEmpty) result[0] = result[0].updateSelected(true);
 
     return result;
   }

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
+import '../../../app/route_config.dart';
 import '/src/presentation/common/common.dart';
 import '../../provider/providers.dart';
 import 'charts/charts_view.dart';
@@ -94,9 +96,7 @@ class _DailyForecastTile extends StatelessWidget {
     final formatter = context.read<UserFormatter>();
 
     return InkWell(
-      onTap: () {
-        /// ...
-      },
+      onTap: () => context.push(AppRoute.dailyWeatherPage, extra: info.time),
       child: Padding(
         padding: const .symmetric(horizontal: 8, vertical: 8),
         child: Row(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import '../presentation/home/daily_weather_page.dart';
 import '../presentation/home/empty_city_view.dart';
 import '../presentation/home/sun_moon_details_page.dart';
 import '../presentation/settings/appearance_setting.dart';
@@ -30,6 +31,8 @@ class AppRoute {
   static const sunMoonRisePage = "/sun_moom_rise_set";
   // static final _shellNavigatorKey = GlobalKey<NavigatorState>();
 
+  static const String dailyWeatherPage = "/daily_weather_page";
+
   static GoRouter routeConfig(WeatherNotifier weather) {
     return GoRouter(
       initialLocation: home,
@@ -59,6 +62,15 @@ class AppRoute {
               Center(child: CircularProgressIndicator()),
         ),
         GoRoute(path: home, builder: (context, state) => const HomePage()),
+        GoRoute(
+          parentNavigatorKey: _rootNavigatorKey,
+          path: dailyWeatherPage,
+          builder: (context, state) {
+            final date = state.extra as DateTime;
+            return DailyWeatherPage(date: date);
+          },
+        ),
+
         GoRoute(path: savedPage, builder: (context, state) => SavedCityPage()),
         GoRoute(
           path: searchCity,

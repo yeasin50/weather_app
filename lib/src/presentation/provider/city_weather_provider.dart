@@ -21,6 +21,10 @@ class CityWeatherNotifier extends WeatherDataExtractor with ChangeNotifier {
 
   CityRecord get city => _data.city;
 
+  /// all day,hourlyData  for all  days of a city to reduce load
+  late CityWeather _cityRecord;
+  CityWeather get data => _cityRecord;
+
   // TODO: merge specific feature based and then put into provider to reduce the calculation
   /// [day] which  can feed specific day data, if null then get [todaysHourlyForecast]
   List<WeatherMeasurement> fullDayforecast(
@@ -95,7 +99,8 @@ class CityWeatherNotifier extends WeatherDataExtractor with ChangeNotifier {
     return combinedResult;
   }
 
-  List<HourlyForecast> _todaysHourlyForecast = [];
+  List<HourlyForecast> get _todaysHourlyForecast =>
+      _cityRecord.hourlyData[DateUtils.dateOnly(selectedDay)] ?? [];
   UnmodifiableListView<ForecastData> get todaysHourlyForecast {
     final data = _todaysHourlyForecast
         .where(
@@ -109,22 +114,19 @@ class CityWeatherNotifier extends WeatherDataExtractor with ChangeNotifier {
     return UnmodifiableListView(_mergeSunriseAndSunset(data));
   }
 
-  List<DailyForecast> _dailyForecast = [];
-  UnmodifiableListView<DailyForecast> get weeklyForecast =>
-      UnmodifiableListView(
-        _dailyForecast.where((e) {
-          return e.time.isAfter(selectedDay) ||
-              DateUtils.isSameDay(selectedDay, e.time);
-        }).toList(),
-      );
+  List<DailyForecast> get _dailyForecast => _cityRecord.sevenDaysDailyRecord;
+  UnmodifiableListView<DailyForecast> get weeklyForecast {
+    return UnmodifiableListView(
+      _cityRecord.sevenDaysDailyRecord.where((e) {
+        return e.time.isAfter(selectedDay) ||
+            DateUtils.isSameDay(selectedDay, e.time);
+      }).toList(),
+    );
+  }
 
-  @override
   void updateCity(CityWeatherRecord record) {
-    super.updateCity(record);
+    _cityRecord = super.parseCityRecord(record);
     _data = record;
-
-    _dailyForecast = super.parseDailyForecast();
-    _todaysHourlyForecast = super.parseTodaysHourlyForecast();
 
     notifyListeners();
   }
@@ -134,9 +136,12 @@ class CityWeatherNotifier extends WeatherDataExtractor with ChangeNotifier {
     notifyListeners();
   }
 
-  SunInfo get sundata =>
-      SunInfo(dailyForecastItems: _dailyForecast, selectedHour: selectedDay);
-  MoonInfo get moonData => MoonInfo(_dailyForecast, selectedHour: selectedHour);
+  SunInfo get sundata => SunInfo(
+    dailyForecastItems: _cityRecord.sevenDaysDailyRecord,
+    selectedHour: selectedDay,
+  );
+  MoonInfo get moonData =>
+      MoonInfo(_cityRecord.sevenDaysDailyRecord, selectedHour: selectedHour);
 
   HumidityDuePointData get humidityData {
     return HumidityDuePointData(

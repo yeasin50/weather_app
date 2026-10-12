@@ -4,7 +4,6 @@ import 'package:provider/provider.dart';
 import '../../app/route_config.dart';
 import '../common/widgets/charts/charts_view.dart';
 import '../common/models/models.dart';
-import '../common/widgets/charts/sun_moon_rise_set_graph.dart';
 import '/src/presentation/common/widgets/daily_cards/wind_shape_painter.dart';
 
 import '../common/widgets/daily_cards/daily_weather_card.dart';
