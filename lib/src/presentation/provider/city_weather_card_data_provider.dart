@@ -1,4 +1,5 @@
 import 'package:collection/collection.dart';
+import 'package:flutter/material.dart';
 import '../../domain/domain.dart';
 import 'providers.dart';
 
@@ -18,11 +19,37 @@ class CityWeather {
   /// eachDay  data like temp, wind, uvIndex etc
   final Map<DateTime, List<HourlyForecast>> hourlyData;
 
+  List<HourlyForecast> hourlyRecord(DateTime date) => hourlyData[date] ?? [];
+
   // times.removeWhere(
   //   (e) =>
   //       e.isBefore(now.tilHour) ||
   //       !e.isBefore(now.tilHour.add(const Duration(days: 1))),
   // );
+
+  List<WeatherMeasurement> fullDayforecast(MeasurementType type, DateTime day) {
+    final List<WeatherMeasurement> result = hourlyRecord(day)
+        .map(
+          (e) => switch (type) {
+            .uvIndex => e.uvIndex,
+            .relativeHumidity => e.humadity,
+            .dewPoint => e.dewPoint,
+            .rain => e.rain,
+            .precipitationProbability => e.precipitationProbability,
+            .windGusts => e.windGusts,
+            .windSpeed => e.windspeed,
+            .windDirection => e.windDirection,
+            .visiblity => e.visibility,
+            .tempFeelsLike => e.tempFeelLike,
+            .temperature => e.temp,
+
+            _ => throw " $type hasn't been accepted",
+          },
+        )
+        .toList();
+
+    return result;
+  }
 }
 
 /// it offers the daily and hourly specific data for a city

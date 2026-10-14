@@ -20,7 +20,7 @@ mixin ChartMixin {
     final date = data.elementAtOrNull(value.toInt())?.time;
     String text = date == null || date.hour % 6 != 0
         ? ""
-        : DateFormat("hh:mm a").format(date);
+        : DateFormat("h a").format(date);
     return SideTitleWidget(
       meta: meta,
       child: Text(text, style: style),
