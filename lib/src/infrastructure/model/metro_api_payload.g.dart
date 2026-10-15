@@ -1,0 +1,67 @@
+// GENERATED CODE - DO NOT MODIFY BY HAND
+
+part of 'metro_api_payload.dart';
+
+// **************************************************************************
+// JsonSerializableGenerator
+// **************************************************************************
+
+_MetroWeatherPayload _$MetroWeatherPayloadFromJson(Map<String, dynamic> json) =>
+    _MetroWeatherPayload(
+      city: CityInfo.fromJson(json['city'] as Map<String, dynamic>),
+      latitude: (json['latitude'] as num).toDouble(),
+      longitude: (json['longitude'] as num).toDouble(),
+      hourlyItems: (json['hourly_items'] as List<dynamic>)
+          .map((e) => $enumDecode(_$HourlyItemEnumMap, e))
+          .toList(),
+      dailyItems: (json['daily_items'] as List<dynamic>)
+          .map((e) => $enumDecode(_$DailyItemEnumMap, e))
+          .toList(),
+      timezone: json['timezone'] as String? ?? "auto",
+      pastDays: (json['past_days'] as num?)?.toInt() ?? 1,
+    );
+
+Map<String, dynamic> _$MetroWeatherPayloadToJson(
+  _MetroWeatherPayload instance,
+) => <String, dynamic>{
+  'city': instance.city,
+  'latitude': instance.latitude,
+  'longitude': instance.longitude,
+  'hourly_items': instance.hourlyItems
+      .map((e) => _$HourlyItemEnumMap[e]!)
+      .toList(),
+  'daily_items': instance.dailyItems
+      .map((e) => _$DailyItemEnumMap[e]!)
+      .toList(),
+  'timezone': instance.timezone,
+  'past_days': instance.pastDays,
+};
+
+const _$HourlyItemEnumMap = {
+  HourlyItem.weatherCode: 'weather_code',
+  HourlyItem.tempFeelsLike: 'apparent_temperature',
+  HourlyItem.temperature2m: 'temperature_2m',
+  HourlyItem.relativeHumidity2m: 'relative_humidity_2m',
+  HourlyItem.dewPoint: 'dew_point_2m',
+  HourlyItem.rain: 'rain',
+  HourlyItem.precipitationProbability: 'precipitation_probability',
+  HourlyItem.uvIndex: 'uv_index',
+  HourlyItem.windSpeed10m: 'wind_speed_10m',
+  HourlyItem.windGust10m: 'wind_gusts_10m',
+  HourlyItem.windDirection10m: 'wind_direction_10m',
+  HourlyItem.visibility: 'visibility',
+};
+
+const _$DailyItemEnumMap = {
+  DailyItem.weatherCode: 'weather_code',
+  DailyItem.temperatureMax: 'temperature_2m_max',
+  DailyItem.temperatureMin: 'temperature_2m_min',
+  DailyItem.rainMax: 'precipitation_probability_max',
+  DailyItem.sunrise: 'sunrise',
+  DailyItem.sunset: 'sunset',
+  DailyItem.daylightDuration: 'daylight_duration',
+  DailyItem.sunshineDuration: 'sunshine_duration',
+  DailyItem.moonRise: 'moonrise',
+  DailyItem.moonSet: 'moonset',
+  DailyItem.moonPhase: 'moon_phase',
+};

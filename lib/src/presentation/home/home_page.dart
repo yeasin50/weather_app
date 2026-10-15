@@ -1,85 +1,248 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 import '../../app/route_config.dart';
-import '../../infrastructure/infrastructure.dart';
-import 'widgets/app_nav_bar.dart';
+import '../common/widgets/charts/charts_view.dart';
+import '../common/models/models.dart';
+import '/src/presentation/common/widgets/daily_cards/wind_shape_painter.dart';
 
-import '../../domain/domain.dart';
-import '../widgets/gradient_background.dart';
-import 'widgets/my_city_weather_view.dart';
+import '../common/widgets/daily_cards/daily_weather_card.dart';
+import '../common/widgets/daily_cards/visibility_painter.dart';
+import '/src/domain/entity/weather_record.dart';
+import '/src/presentation/home/widgets/app_bar.dart';
+import '../common/common.dart';
+import '../provider/providers.dart';
+import 'empty_city_view.dart';
 
-class HomePage extends StatefulWidget {
+class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
   @override
-  State<HomePage> createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
-  @override
-  void dispose() {
-    localDB.dispose();
-    super.dispose();
-  }
-
-  MetroApiResponse? weatherData;
-  HourlyWeatherInfo? get todaysWeather => weatherData?.getCurrentHourWeather(DateTime.now());
-
-  void onTabChange(int index) async {
-    if (index == 1) {
-    } else if (index == 2) {
-      context.push(AppRoute.savedPage);
-    } else if (index == 0) {
-      await context.push(AppRoute.searchCity);
-    }
-  }
-
-  late final addMyCityButton = Align(
-    alignment: const Alignment(0, .65),
-    child: ElevatedButton(
-      style: ElevatedButton.styleFrom(
-          foregroundColor: Colors.white,
-          backgroundColor: Colors.deepPurpleAccent,
-          shape: const StadiumBorder(),
-          fixedSize: const Size(220, 64)),
-      onPressed: () => onTabChange(0),
-      child: const Text("Find My City"),
-    ),
-  );
-
-  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      bottomNavigationBar: AppNavBar(onTap: onTabChange),
-      extendBody: true,
-      extendBodyBehindAppBar: true,
-      body: Stack(
-        fit: StackFit.expand,
-        clipBehavior: Clip.none,
-        children: [
-          const GradientBackground(isImage: true, child: SizedBox.expand()),
-          Align(
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 450),
-              child: Image.asset(
-                "assets/images/house.png",
-                fit: BoxFit.cover,
+    return Consumer<CityWeatherNotifier>(
+      builder: (context, data, child) {
+        final city = data.city;
+        final title = "${city.name}, ${city.countryCode}"; //TODO: update view
+
+        if (city == CityRecord.none) return EmptyCityView();
+
+        return Scaffold(
+          extendBodyBehindAppBar: true,
+          body: SafeArea(
+            child: Consumer<SettingProvider>(
+              builder: (context, value, child) => Column(
+                children: [
+                  HomeAppBar(title: title),
+
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 16,
+                      ),
+                      child: RefreshIndicator(
+                        onRefresh: () async {
+                          await context
+                              .read<WeatherNotifier>()
+                              .refreshHomeCity();
+                          await Future.delayed(Duration(seconds: 2));
+                        },
+                        child: SingleChildScrollView(
+                          physics: AlwaysScrollableScrollPhysics(),
+                          child: Consumer<CityWeatherNotifier>(
+                            builder: (context, data, _) {
+                              return Column(
+                                crossAxisAlignment: .stretch,
+                                spacing: 16,
+                                children: [
+                                  TodaysWeather(),
+                                  HourlyForecastListView(),
+                                  ForecastHorizontalListview<DailyForecast>(
+                                    data: data.weeklyForecast,
+                                  ),
+
+                                  SizedBox(height: 4),
+                                  DailyForecastItems(),
+                                ],
+                              );
+                            },
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
           ),
-          StreamBuilder(
-            stream: localDB.myCityInfo,
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(child: CircularProgressIndicator());
-              }
+        );
+      },
+    );
+  }
+}
 
-              return snapshot.data == null //
-                  ? addMyCityButton
-                  : MyCityWeatherView(city: snapshot.data!);
-            },
-          )
-        ],
+class DailyForecastItems extends StatelessWidget {
+  const DailyForecastItems({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final boxWidth = MediaQuery.sizeOf(context).width / 2 - 24;
+    return Consumer<CityWeatherNotifier>(
+      builder: (context, value, child) {
+        final hourData = value.selectedHourForcast;
+        final uv = UVIndexParser(hourData.forecast.uvIndex);
+
+        final sun = value.sundata;
+        final moon = value.moonData;
+        final precipitation = value.preceptionData;
+        final wind = value.wind;
+        final visibility = VisibilityData(hourData.forecast.visibility);
+
+        return Wrap(
+          spacing: 12,
+          runSpacing: 12,
+          children: [
+            DailyWeatherCard(
+              title: "UV index",
+              icon: Icon(Icons.lightbulb_outlined, size: 16),
+              value: uv.value.toString(),
+              description: uv.level,
+              unit: "",
+              shape: UVIndexShape(uv.colorIndex, colors: UVIndexParser.colors),
+              onTap: () {
+                ChartDialogView.show(
+                  context: context,
+                  title: "uv index",
+                  chartView: UVIndexChart(
+                    data: value.fullDayforecast(.uvIndex),
+                  ),
+                  onTap: () {},
+                );
+              },
+            ),
+
+            HumadityView(
+              data: value.humidityData,
+              onTap: () {
+                ChartDialogView.show(
+                  context: context,
+                  title: "humidity",
+                  chartView: HumidityGraph(
+                    humidityData: value.fullDayforecast(.relativeHumidity),
+                    duePointsData: value.fullDayforecast(.dewPoint),
+                  ),
+                  onTap: () {},
+                );
+              },
+            ),
+
+            SunView(
+              rise: sun.rise,
+              down: sun.fall,
+              progress: sun.progress,
+              ontap: () {
+                context.push(AppRoute.sunMoonRisePage);
+              },
+            ),
+            SunView(
+              isSun: false,
+              rise: moon.rise,
+              down: moon.fall,
+              progress: moon.progress,
+              phase: moon.phase.label,
+              moonfraction: moon.moonFraction,
+              ontap: () => context.push(AppRoute.sunMoonRisePage),
+            ),
+
+            DailyWeatherCard(
+              title: "perception",
+              icon: Icon(Icons.water_outlined),
+              value: precipitation.value + precipitation.unit,
+              description: precipitation.description,
+              unit: '',
+              shape: RoundedRectangleBorder(borderRadius: .circular(24)),
+              onTap: () {
+                ChartDialogView.show(
+                  context: context,
+                  title: "perception",
+                  chartView: PrecipitationGraph(
+                    rainData: value.fullDayforecast(.rain),
+                    percipitationData: value.fullDayforecast(
+                      .precipitationProbability,
+                    ),
+                  ),
+                  onTap: () {},
+                );
+              },
+            ),
+
+            DailyWeatherCard(
+              title: "Wind",
+              icon: Icon(Icons.wind_power),
+              value: wind.value,
+              description: wind.description,
+              unit: wind.unit,
+              painter: WindShapePainter(wind.rotation, wind.color),
+              onTap: () {
+                ChartDialogView.show(
+                  context: context,
+                  title: "wind",
+                  chartView: WindGraph(
+                    windSpeed: value.fullDayforecast(.windSpeed),
+                    windGusts: value.fullDayforecast(.windGusts),
+                    windDirection: value.fullDayforecast(.windDirection),
+                  ),
+                  onTap: () {},
+                );
+              },
+            ),
+
+            DailyWeatherCard(
+              title: "Visiblity",
+              icon: Icon(Icons.visibility_outlined),
+              value: visibility.value,
+              unit: visibility.unit,
+              description: visibility.label,
+              painter: VisibilityPainter(visibility.color),
+              onTap: () {
+                ChartDialogView.show(
+                  context: context,
+                  title: "visibility",
+                  chartView: VisibilityGraph(
+                    data: value.fullDayforecast(.visiblity),
+                  ),
+                  onTap: () {},
+                );
+              },
+            ),
+          ].map((e) => SizedBox.square(dimension: boxWidth, child: e)).toList(),
+        );
+      },
+      child: Wrap(
+        spacing: 24,
+        runSpacing: 24,
+        children: [
+          DailyWeatherCard(
+            // Diff api
+            title: "Air quality",
+            icon: Icon(Icons.air),
+            value: "150",
+            description: "Very unhealthy",
+            unit: "",
+            onTap: () {},
+          ),
+
+          DailyWeatherCard(
+            title: "Pressure",
+
+            /// idc
+            icon: Icon(Icons.electric_meter),
+            value: "29.79",
+            unit: "",
+            description: "inHg",
+            onTap: () {},
+          ),
+        ].map((e) => SizedBox.square(dimension: 250, child: e)).toList(),
       ),
     );
   }

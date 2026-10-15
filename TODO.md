@@ -1,0 +1,7 @@
+- [ ] daily listTile tap should show a full day view
+- [ ] font selection
+- [ ] update icons
+- [x] moon paint
+- [x] moonphase
+- [x] perception no rain count
+- [x] windd description

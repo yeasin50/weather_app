@@ -1,72 +1,72 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-import '../../domain/domain.dart';
-import '../../infrastructure/infrastructure.dart';
+import '../provider/weather_provider.dart';
+import '/src/presentation/widgets/weather_card_view.dart';
+import '../common/models/city_weather_ext.dart';
 import '../widgets/gradient_background.dart';
 import 'widgets/saved_city_appbar.dart';
-import 'widgets/saved_city_list_view.dart';
 
+/// todo: remove other stuff than  drawer
 class SavedCityPage extends StatefulWidget {
-  const SavedCityPage({super.key});
+  const SavedCityPage._({super.key, required this.view});
+  final Widget view;
+
+  factory SavedCityPage({Key? key}) {
+    return SavedCityPage._(
+      key: key,
+      view: Scaffold(
+        body: GradientBackground(
+          isImage: false,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+            child: Column(
+              children: [
+                const SavedCityAppBar(),
+                Expanded(child: SavedCityPage()),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  factory SavedCityPage.view({Key? key}) {
+    return SavedCityPage._(key: key, view: SizedBox());
+  }
 
   @override
   State<SavedCityPage> createState() => _SavedCityPageState();
 }
 
 class _SavedCityPageState extends State<SavedCityPage> {
-  late Future<List<CityInfo>> getSavedCity = localDB.fetch();
-
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: GradientBackground(
-        isImage: false,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
-          child: Column(
-            children: [
-              const SavedCityAppBar(),
-              Expanded(
-                child: FutureBuilder<List<CityInfo>>(
-                    future: getSavedCity,
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState != ConnectionState.done) {
-                        return const Center(
-                          child: CircularProgressIndicator(),
-                        );
-                      }
-
-                      final loadedCityData = snapshot.data ?? [];
-                      final payload = loadedCityData
-                          .map((e) => MetroWeatherPayload(
-                                latitude: e.latitude,
-                                longitude: e.longitude,
-                                hourlyItems: HourlyItem.defaultItems,
-                              ))
-                          .toList();
-                      return loadedCityData.isEmpty
-                          ? const Center(
-                              child: Text("You have not saved any city yet"),
-                            )
-                          : FutureBuilder(
-                              future: weatherService.fetchCitiesWeather(payload),
-                              builder: (context, snapshot) {
-                                if (snapshot.connectionState != ConnectionState.done) {
-                                  return const Center(
-                                    child: CircularProgressIndicator(),
-                                  );
-                                }
-                                final data = snapshot.data?.map((e) => e.$1).toList();
-
-                                return LoadCityWeatherListView(cities: loadedCityData, data: data);
-                              },
-                            );
-                    }),
-              ),
-            ],
-          ),
-        ),
-      ),
+    return Consumer<WeatherNotifier>(
+      builder: (context, data, _) {
+        final cities = data.savedCities;
+        return cities.isEmpty
+            ? const Center(child: Text("You have not saved any city yet"))
+            : ListView.builder(
+                itemCount: cities.length,
+                itemBuilder: (context, i) {
+                  final weather = cities[i].currenttemp();
+                  return WeatherCard(
+                    temp: weather.temp,
+                    humidity: weather.humadity,
+                    rain: weather.rain,
+                    location: weather.location,
+                    mode: weather.mood,
+                    onTap: () {
+                      final cityId = cities[i].city.id;
+                      context.read<WeatherNotifier>().changeCity(cityId);
+                      Scaffold.of(context).closeDrawer();
+                    },
+                  );
+                },
+              );
+      },
     );
   }
 }

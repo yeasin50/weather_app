@@ -1,105 +1,97 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-
-import '../../../infrastructure/infrastructure.dart';
+import 'package:collection/collection.dart';
+import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
+import '../../../app/route_config.dart';
+import '../../provider/providers.dart';
 import 'forecast_list_tile.dart';
 
-class ForecastHorizontalListview extends StatefulWidget {
+class ForecastHorizontalListview<T extends ForecastData>
+    extends StatefulWidget {
   const ForecastHorizontalListview({
     super.key,
     required this.data,
-    required this.isHourly,
     this.padding,
   });
 
-  const ForecastHorizontalListview.hourly({
-    super.key,
-    required this.data,
-    this.padding,
-  }) : isHourly = true;
-
-  const ForecastHorizontalListview.weekly({
-    super.key,
-    required this.data,
-    this.padding,
-  }) : isHourly = false;
-
-  /// handle hour/weekly preview
-  final bool isHourly;
-  final List<HourlyWeatherInfo> data;
+  ///  [DailyForecast] or [HourlyForecast]
+  final List<T> data;
 
   final EdgeInsets? padding;
 
   @override
-  State<ForecastHorizontalListview> createState() => _ForecastHorizontalListviewState();
+  State<ForecastHorizontalListview<ForecastData>> createState() =>
+      _ForecastHorizontalListviewState<ForecastData>();
 }
 
-class _ForecastHorizontalListviewState extends State<ForecastHorizontalListview> {
-  String label(int i) => widget.isHourly ? "${widget.data[i].date.hour}" : DateFormat("E").format(widget.data[i].date);
-
-  List<GlobalKey> tileKeys = [];
-  final ScrollController controller = ScrollController();
-
-  int? activeIndex;
-
+class _ForecastHorizontalListviewState<T extends ForecastData>
+    extends State<ForecastHorizontalListview<T>> {
   @override
-  void initState() {
-    super.initState();
-    tileKeys = List.generate(widget.data.length, (_) => GlobalKey());
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (tileKeys.isEmpty) return;
-      int index = 0;
-      final today = DateTime.now();
-      if (widget.isHourly) {
-        index = today.hour;
-      } else {
-        index = widget.data.indexWhere(
-          (element) => element.date.day == today.day,
-        );
-      }
-      setState(() {
-        activeIndex = index;
-      });
-      moveToIndex(index);
-    });
+  Widget build(BuildContext context) {
+    assert(
+      widget.data.first is HourlyForecast || widget.data.first is DailyForecast,
+      'Expected HourlyForecast or DailyForecast but got ${widget.data.first.runtimeType}',
+    );
+
+    final schema = Theme.of(context).colorScheme;
+    return ScrollConfiguration(
+      behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
+      child: Material(
+        color: schema.surfaceContainerLow,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(9)),
+        child: Padding(
+          padding: const EdgeInsets.all(12.0),
+          child: Column(
+            spacing: 16,
+            children: [
+              if (widget.data.first is HourlyForecast) HourlyForecastListView(),
+              if (widget.data.first is DailyForecast)
+                ...widget.data.map((e) {
+                  return ForecastListTile(info: e);
+                }),
+            ],
+          ),
+        ),
+      ),
+    );
   }
+}
 
-  @override
-  void dispose() {
-    controller.dispose();
-    super.dispose();
-  }
+class HourlyForecastListView extends StatelessWidget {
+  const HourlyForecastListView({super.key, this.padding});
 
-  void moveToIndex(int i) {
-    final ctx = tileKeys[i].currentContext;
-    if (ctx == null) return;
-    final target = ctx.findRenderObject() as RenderBox;
-
-    final position = target.localToGlobal(Offset.zero, ancestor: context.findRenderObject());
-
-    controller.animateTo(position.dx, duration: Durations.long4, curve: Curves.easeIn);
-  }
+  final EdgeInsets? padding;
 
   @override
   Widget build(BuildContext context) {
-    return ScrollConfiguration(
-      behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
-      child: SingleChildScrollView(
-        controller: controller,
-        scrollDirection: Axis.horizontal,
-        padding: widget.padding,
-        child: Row(
-          children: [
-            for (int i = 0; i < widget.data.length; i++)
-              ForecastListTile(
-                isActive: activeIndex == i,
-                key: tileKeys.elementAt(i),
-                label: label(i),
-                info: widget.data.elementAt(i),
+    final schema = Theme.of(context).colorScheme;
+    return Consumer<CityWeatherNotifier>(
+      builder: (context, value, child) {
+        final data = value.todaysHourlyForecast;
+        return ScrollConfiguration(
+          behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
+          child: Material(
+            color: schema.surfaceContainerLow,
+            shape: RoundedRectangleBorder(borderRadius: .circular(9)),
+            child: Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: SingleChildScrollView(
+                scrollDirection: .horizontal,
+                padding: padding,
+                child: Row(
+                  spacing: 12,
+                  children: data.mapIndexed((i, e) {
+                    return GestureDetector(
+                      onTap: () {},
+                      child: ForecastListTile(info: e),
+                    );
+                  }).toList(),
+                ),
               ),
-          ],
-        ),
-      ),
+            ),
+          ),
+        );
+      },
     );
   }
 }

@@ -1,12 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:weather_app/src/domain/domain.dart';
-import 'package:weather_app/src/infrastructure/repository/location_repo.dart';
-import 'package:weather_app/src/presentation/widgets/gradient_background.dart';
+import 'package:provider/provider.dart';
+import '../common/common.dart';
+import '/src/presentation/provider/weather_provider.dart';
 
-import '../../app/route_config.dart';
-import '../city_weather/widgets/search_city_tile.dart';
+import '../../domain/weather_service.dart';
 
 class SearchCityPage extends StatefulWidget {
   const SearchCityPage({super.key});
@@ -16,18 +15,15 @@ class SearchCityPage extends StatefulWidget {
 }
 
 class _SearchCityPageState extends State<SearchCityPage> {
-  final LocationRepo repo = LocationRepo();
+  late final repo = context.read<IWeatherService>();
 
   final TextEditingController controller = TextEditingController();
   bool get isEmptySearch => controller.text.trim().isEmpty;
 
-  void onQueryChange(String q) async {
-    repo.searchWithDelay(q);
-  }
+  void onQueryChange(String q) => repo.searchCity(q);
 
   @override
   void dispose() {
-    repo.dispose();
     controller.dispose();
     super.dispose();
   }
@@ -35,63 +31,128 @@ class _SearchCityPageState extends State<SearchCityPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: GradientBackground(
-        isImage: false,
-        child: CustomScrollView(
-          slivers: [
-            const SliverAppBar(
-              backgroundColor: Colors.transparent,
-            ),
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: CupertinoSearchTextField(
-                  controller: controller,
-                  onChanged: onQueryChange,
-                  style: const TextStyle(color: Colors.white),
+      body: SafeArea(
+        child: GestureDetector(
+          onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+          child: CustomScrollView(
+            slivers: [
+              SliverAppBar(),
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 12,
+                  ),
+                  child: CupertinoSearchTextField(
+                    controller: controller,
+                    onChanged: onQueryChange,
+                    autofocus: true,
+                    style: const TextStyle(color: Colors.white),
+                  ),
                 ),
               ),
-            ),
-            StreamBuilder<List<CityInfo>>(
-              initialData: const [],
-              stream: repo.dataStream,
-              builder: (context, snapshot) {
-                if (snapshot.hasError) {
-                  return SliverToBoxAdapter(
-                    child: Center(
-                      child: Text(snapshot.error.toString()),
-                    ),
-                  );
-                }
 
-                if ((snapshot.data ?? []).isEmpty) {
-                  return SliverToBoxAdapter(
-                    child: Center(
-                      child: Text(isEmptySearch ? "" : "No city found, keep searching"),
+              SliverToBoxAdapter(
+                child: ValueListenableBuilder(
+                  valueListenable: controller,
+                  builder: (context, value, child) {
+                    return value.text.trim().isEmpty
+                        ? SavedCitiesOnSearchView()
+                        : SizedBox();
+                  },
+                ),
+              ),
+
+              /// ....
+              StreamBuilder<List<CityInfo>>(
+                initialData: const [],
+                stream: repo.searchedCityResult,
+                builder: (context, snapshot) {
+                  if (snapshot.hasError) {
+                    return SliverFillRemaining(
+                      child: Center(child: Text(snapshot.error.toString())),
+                    );
+                  }
+
+                  if ((snapshot.data ?? []).isEmpty) {
+                    return SliverFillRemaining(
+                      child: Center(
+                        child: Text(
+                          isEmptySearch ? "" : "No city found, keep searching",
+                        ),
+                      ),
+                    );
+                  }
+                  final items = snapshot.data ?? [];
+                  return SliverPadding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    sliver: SliverList.builder(
+                      itemCount: items.length,
+                      itemBuilder: (context, index) => SearchedCityTile(
+                        cityInfo: items[index],
+                        onTap: () {
+                          context.read<WeatherNotifier>().addCity(items[index]);
+                          context.pop();
+                        },
+                      ),
                     ),
                   );
-                }
-                final items = snapshot.data ?? [];
-                return SliverPadding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  sliver: SliverList.builder(
-                    itemCount: items.length,
-                    itemBuilder: (context, index) => SearchedCityTile(
-                      cityInfo: items[index],
-                      onTap: () async {
-                        await context.push(
-                          AppRoute.cityWeatherDetails,
-                          extra: {"city": items[index]},
-                        );
-                      },
-                    ),
-                  ),
-                );
-              },
-            )
-          ],
+                },
+              ),
+            ],
+          ),
         ),
       ),
+    );
+  }
+}
+
+class SearchedCityTile extends StatelessWidget {
+  const SearchedCityTile({
+    super.key,
+    required this.cityInfo,
+    required this.onTap,
+  });
+
+  final CityInfo cityInfo;
+  final VoidCallback? onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      onTap: onTap,
+      title: Text(cityInfo.name),
+      subtitle: Text(cityInfo.location),
+    );
+  }
+}
+
+class SavedCitiesOnSearchView extends StatelessWidget {
+  const SavedCitiesOnSearchView({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<WeatherNotifier>(
+      builder: (context, value, child) {
+        final cities = value.savedCities;
+        return Column(
+          children: [
+            ...cities.map((e) {
+              return ListTile(
+                leading: context.read<UserFormatter>().moodIcon(
+                  e.currentHourCode,
+                ),
+                title: Text(e.city.name),
+                subtitle: Text(e.city.location),
+                onTap: () {
+                  context.read<WeatherNotifier>().changeCity(e.city.id);
+                  context.pop();
+                },
+              );
+            }),
+          ],
+        );
+      },
     );
   }
 }
